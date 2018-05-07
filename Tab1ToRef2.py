@@ -8,7 +8,7 @@
 from Bio import SeqIO
 from subprocess import call
 from pybedtools import BedTool
-import sys, re, os, timeit, tempfile, argparse, warnings
+import sys, re, os, timeit, tempfile, argparse, warnings, io, shutil
 
 parser = argparse.ArgumentParser(add_help=False)
 
@@ -55,41 +55,36 @@ if args.typeF != None and fileTab.file_type != "gff" :
 # Méthode permettant de récupérer l'ID des chromosomes et leurs tailles
 
 def parseFa() :
-    lenChr={}
-    for seqF in SeqIO.parse(args.fasta1,"fasta") :
-        lenChr[seqF.id]=len(seqF)
+    with open("data/fasta/lenChr","w") as lenChr : # A modifier au plus vite avec tempfile ou stringIO but meh
+        for seqF in SeqIO.parse(args.fasta1,"fasta") :
+            lenChr.write(seqF.id+"\t"+str(len(seqF)))
+    return 
 
-    
-    return lenChr
+parseFa()
+#for i in lenChrtmp:
+#    print(i)
 
-lenChr=parseFa()
 # Test si index des chromosomes existant sinon on le réalise
 
 def getFlank() :
+    lenChr= open("data/fasta/lenChr","r")
     if args.verbose :
-        print("\n ----- Création du fichier " +tabOut +". ----- \n") 
-    try :
-        ind=open(args.fasta1+".fai","r")
-        ind.close()
-    except :
-        #call(["samtools","faidx",args.fasta1])
-        pass
-        # On utilise la méthode slop de BedTools pour récupérer les régions flanquantes
-        # de taille passer en argument (50 par défaut)
-    with open("tab.fasta.fai","w") as fil :
-        fil.write("Chr1\t199")
-    
+        print("\n ----- Création du fichier " +tabOut +". ----- \n")
+        
     if (fileTab.file_type != "vcf"):
-        fileTab.slop(b=args.flank, g="tab.fasta"+".fai" ,output=tabOut)
-    
+        fileTab.slop(b=args.flank, g="data/fasta/lenChr" ,output=tabOut)
         # Pour les fichiers VCF, on doit rajouter une colonne. On recrée donc un objet BedTools à partir
         # du fichier VCF original.
-
+        
     else :
         res=""
         for feature in fileTab :
-            if feature.stop+args.flank-1 > lenChr[feature.chrom]:
-                stop=lenChr[feature.chrom]
+            for line in lenChr :
+                lenC=re.search(feature.chrom+"\t(\d+)",line)
+                if lenC :
+                    break
+            if feature.stop+args.flank-1 > int(lenC.group(1)):
+                stop=int(lenC.group(1))
             else :
                 stop=feature.stop+args.flank-1
                 if feature.start-args.flank < 0 :
@@ -98,6 +93,7 @@ def getFlank() :
                     start=feature.start-args.flank
                     res += feature.chrom +" "+str(start)+" "+ str(stop)+"\n"
             BedTool(res, from_string=True).saveas(tabOut)
+    lenChr.close()
     return 
     # Fichier [nom fichier tabulé]_out.[ext] (nom stocké dans tabOut) en sortie
     

@@ -1,6 +1,8 @@
-import subprocess, time, sys, tempfile
+import subprocess, time, sys, tempfile, shutil
 
 #fast=open(sys.argv[1],"r")
-
-print(tempfile.gettempdir())
-
+paoui=tempfile.NamedTemporaryFile()
+r="oskouuuuur"
+paoui.write(oskoksoksok)
+print(paoui.name)
+#shutil.rmtree(paoui)
