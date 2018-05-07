@@ -33,12 +33,11 @@ if args.tabinput == None:
     sys.exit("ERREUR : L'option --tabinput (-ti) est manquant")            
 if args.fasta2 == None:
     sys.exit("ERREUR : L'option --fasta2 (-f2) est manquant")
-
 res1 = re.search("/?(\w+)\.",args.fasta1)
 if args.fasta2 :
     res2 = re.search("/?(\w+)\.",args.fasta2)
     if args.out == None:
-        args.out = "aln_"+res1.group(1)+"_"+res2.group(1)+".sam"
+        args.out = "data/aln_"+res1.group(1)+"_"+res2.group(1)+".sam"
 
         
 tabIn = open(args.tabinput,"r")

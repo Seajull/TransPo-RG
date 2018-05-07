@@ -1,0 +1,100 @@
+# Executer un job sur cluster
+qrsh -q normal.q
+
+(16:21:54) droc@cc2-admin:~$ qrsh -q normal.q
+(16:21:58) droc@cc2-n1:~$
+
+On passe du noeud maitre au noeud esclave cc2-n1.
+
+# Parametre du script:
+Requis :
+ - fasta1 (reference originelle)
+ - fasta2 (reference nouvelle)
+ - type (gff3,bed,vcf)
+ - tab file
+
+Optionnel :
+ - prefix (si pas la meme nomenclature entre fasta et tab file)
+ - window size (defaut 50bp)
+ - mismatch
+ - si gff3, filtre sur la colonne 3 qui definit le type d'objet (gene, mRNA, CDS, exon....)
+
+
+# Outils
+ - bedtools
+ - bwa/bowtie2
+ - tabix (optimize)
+ 
+# Donnee disponible
+
+Reference Sorgho (Fasta file)
+version1
+/gs7k1/projects/BFF/sorghum_bicolor/Sorghum_genome_versions/annotation/formated_files/Sbicolor_79.assembly.fna
+
+version2
+/gs7k1/projects/BFF/sorghum_bicolor/Sorghum_genome_versions/annotation/formated_files/Sbicolor_255_v2.1.assembly.fna
+
+version3
+/gs7k1/projects/BFF/sorghum_bicolor/Sorghum_genome_versions/annotation/formated_files/Sbicolor_313_v3.1.assembly.fna
+
+
+
+Example d'application:
+
+- bed
+/gs7k1/projects/BFF/sorghum_bicolor/Sorghum_genome_versions/annotation/formated_files/gene_sorgh_v1.bed
+
+chromosome_1    2164    2829    ID=Sb01g000200;Name=Sb01g000200;Note=similar to Putative uncharacterized protein
+chromosome_1    11418   14814   ID=Sb01g000210;Name=Sb01g000210;Note=similar to RabGAP/TBC domain-containing protein%2C putative%2C expressed
+chromosome_1    24840   42442   ID=Sb01g000220;Name=Sb01g000220;Note=similar to PDR-like ABC transporter
+chromosome_1    60122   63495   ID=Sb01g000230;Name=Sb01g000230;Note=similar to Putative uncharacterized protein
+chromosome_1    63649   69514   ID=Sb01g000240;Name=Sb01g000240;Note=similar to Expressed protein
+
+- vcf (correct par rapport à reference sorgho v1) 
+/gs7k1/projects/BFF/sorghum_bicolor/Mace_48_Genomes/48_Genomes_vcf/vcf/s10.snp.vcf
+
+
+- vcf (mismatch sur reference chromosome_ absent)
+/gs7k1/projects/BFF/sorghum_bicolor/Sorghum_Mutants/vcf/sorghum_bicolor_v1.4.vcf
+
+
+Recuperer sur Ensembl Plants (https://plants.ensembl.org/Sorghum_bicolor/Info/Index)
+Probleme d'identifiant chromosome. Dans vcf :
+##fileformat=VCFv4.1
+##fileDate=20161008
+##source=ensembl;version=87;url=http://e87.ensembl.org/Sorghum_bicolor;This file was parsed from a GVF file.
+##INFO=<ID=TSA,Number=1,Type=String,Description="A SO term describing the type of sequence_alteration (child term of SO sequence_alteration).">
+##INFO=<ID=Mace_2013,Number=0,Type=Flag,Description="Mace_2013 membership">
+##INFO=<ID=Sorghum_EMS_mutants,Number=0,Type=Flag,Description="Sorghum_EMS_mutants membership">
+##INFO=<ID=Morris 2013_1,Number=0,Type=Flag,Description="Morris 2013_1 membership">
+#CHROM  POS     ID      REF     ALT     QUAL    FILTER  INFO
+1       248     tmp_1_248_G_A   G       A       .       .       TSA=SNV;Mace_2013
+1       320     tmp_1_320_C_T   C       T       .       .       TSA=SNV;Mace_2013
+1       336     tmp_1_336_T_A   T       A       .       .       TSA=SNV;Mace_2013
+1       741     tmp_1_741_T_G   T       G       .       .       TSA=SNV;Mace_2013
+
+Alors que dans fasta:
+cbellot@cc2-admin:/gs7k1/projects/BFF/sorghum_bicolor/Sorghum_Mutants/vcf$ grep ">" /gs7k1/projects/BFF/sorghum_bicolor/Sorghum_genome_versions/annotation/formated_files/Sbicolor_79.assembly.fna | more 
+>chromosome_1
+>chromosome_2
+>chromosome_3
+>chromosome_4
+>chromosome_5
+>chromosome_6
+>chromosome_7
+>chromosome_8
+>chromosome_9
+>chromosome_10
+
+Donc dans le script, permettre ajout d'un prefixe (--prefix chromosome_)
+
+- gff3 (parametre colonne 3 : gene)
+/gs7k1/projects/BFF/sorghum_bicolor/Sorghum_genome_versions/annotation/formated_files/Sbicolor_79.gff3
+
+chromosome_1    phytozome       gene    2164    2829    .       +       .       ID=Sb01g000200;Name=Sb01g000200;Note=similar to Putative uncharacterized protein
+chromosome_1    phytozome       mRNA    2164    2829    .       +       .       ID=Sb01g000200.1;Parent=Sb01g000200;Dbxref=Phytozome:1949293,TAIR:AT4G05220.1,MSU:LOC_Os07g34720.1;Name=Sb01g000200.1;Note=similar to Putative uncharacterized protein
+chromosome_1    phytozome       polypeptide     2164    2829    .       +       1       ID=Sb01g000200.1.p;Derives_from=Sb01g000200.1;Name=Sb01g000200.1.p;Note=similar to Putative uncharacterized protein
+chromosome_1    phytozome       exon    2164    2829    .       +       .       Parent=Sb01g000200.1
+chromosome_1    phytozome       CDS     2164    2829    .       +       0       Parent=Sb01g000200.1
+chromosome_1    phytozome       gene    11418   14814   .       -       .       ID=Sb01g000210;Name=Sb01g000210;Note=similar to RabGAP/TBC domain-containing protein%2C putative%2C expressed
+chromosome_1    phytozome       mRNA    11418   14814   .       -       .       ID=Sb01g000210.1;Parent=Sb01g000210;Dbxref=Phytozome:1949294,KOG:KOG2197,TAIR:AT4G27100.1,MSU:LOC_Os11g37690.1;Name=Sb01g000210.1;Note=similar to RabGAP/TBC domain-containing protein%2C putative%2C expressed;Ontology_term=GO:0005097,GO:0032313,GO:0005622
