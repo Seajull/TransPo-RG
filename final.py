@@ -37,7 +37,7 @@ res1 = re.search("/?(\w+)\.",args.fasta1)
 if args.fasta2 :
     res2 = re.search("/?(\w+)\.",args.fasta2)
     if args.out == None:
-        args.out = "Data/aln_"+res1.group(1)+"_"+res2.group(1)+".sam"
+        args.out = "data/aln_"+res1.group(1)+"_"+res2.group(1)+".sam"
 
         
 tabIn = open(args.tabinput,"r")
