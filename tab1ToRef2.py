@@ -22,7 +22,7 @@ parser.add_argument("-t", "--type",dest="typeF", default=None, help="Sélectionn
 parser.add_argument("-i", "--index",dest="index", action="store_true", help="Force l'indexation du fichier fasta 2.")
 parser.add_argument("-v", "--verbose",dest="verbose", action="store_true", help="Active l'affichage")
 parser.add_argument("-w", "--warning",dest="warn", action="store_true", help="Désactive l'affichage des warnings.")
-parser.add_argument("-te", "--tempfile",dest="tempf", default=0, type=int,  choices=range(1,3), help="Force la création du fichier .sam (1) et du fichiers tabulé intermédiaire (2).")
+parser.add_argument("-te", "--tempfile",dest="tempf", action="store_true", help="Force la création du fichier fasta des séquences sélectionnées et du ficher tabulé intermédiaire.")
 
 args = parser.parse_args()
 
@@ -39,14 +39,21 @@ if args.fasta2 :
     res2 = re.search("/?(\w+)\.",args.fasta2)
     if args.out == None:
         args.out = "data/aln_"+res1.group(1)+"_"+res2.group(1)+".sam"
+    else :
+        args.out = "data/"+args.out
 
 
-lenChr=tempfile.NamedTemporaryFile()
+lenChr = tempfile.NamedTemporaryFile()
 
-if args.tempf != 2 : 
+
+if not args.tempf : 
     tabOut=tempfile.NamedTemporaryFile()
     tabO=tabOut.name
+    selectS = tempfile.NamedTemporaryFile()
+    selectedSeq = selectS.name
 else :
+    fasta1Out=(args.fasta1).split(".")
+    selectedSeq=fasta1Out[0]+"_selected."+fasta1Out[1]
     tab=(args.tabinput).split(".")
     tabO = (tab[0]+"_out."+tab[1])
 
@@ -59,7 +66,7 @@ if args.typeF != None and fileTab.file_type != "gff" :
 # Méthode permettant de récupérer l'ID des chromosomes et leurs tailles
 
 def parseFa() :
-    with open(lenChr.name,"w") as lenC : # A modifier au plus vite avec tempfile ou stringIO but meh
+    with open(lenChr.name,"w") as lenC : 
         for seqF in SeqIO.parse(args.fasta1,"fasta") :
             lenC.write(seqF.id+"\t"+str(len(seqF)))
     return 
@@ -69,8 +76,8 @@ parseFa()
 # Test si index des chromosomes existant sinon on le réalise
 
 def getFlank() :
-    if args.verbose :
-        print("\n ----- Création du fichier " +tabO +". ----- \n")
+    if args.verbose and args.tempf:
+        print("\n ----- Création du fichier " +tabO +". ----- ")
         
     if (fileTab.file_type != "vcf"):
         fileTab.slop(b=args.flank, g=lenChr.name ,output=tabO)
@@ -106,7 +113,7 @@ def cutGff() :
         if t not in typeFclean :
             typeFclean.append(t)
     if args.verbose :
-        print(" ----- Récupération des features de type : \""+",".join(typeFclean)+"\" dans le GFF. ----- \n")
+        print("\n ----- Récupération des features de type : \""+",".join(typeFclean)+"\" dans le GFF. -----")
     typeFclean="|".join(typeFclean)
     with open(tabO,"w") as out :
         call(["awk","tolower($3) ~ /"+typeFclean+"/",args.tabinput],stdout=out)
@@ -114,13 +121,11 @@ def cutGff() :
     
 
 def getFasta() :
-    fasta1Out=(args.fasta1).split(".")
-    ref1=fasta1Out[0]+"_selected."+fasta1Out[1]
     if args.verbose :
-        print(" ----- Récupération des séquences flanquantes dans le fichier "+args.fasta1+". ----- \n")
-    call(["bedtools","getfasta","-fi", args.fasta1, "-bed",tabO, "-fo", ref1])
-    # ref1 (fasta) en sortieq
-    return ref1
+        print("\n ----- Récupération des séquences flanquantes dans le fichier "+args.fasta1+". ----- \n")
+    call(["bedtools","getfasta","-fi", args.fasta1, "-bed",tabO, "-fo", selectedSeq])
+    # ref1 (fasta) en sortie
+    return 
 
 def index() :
     if args.index:
@@ -131,14 +136,14 @@ def index() :
     return
 
 def align():
-    ref1=getFasta()
+    getFasta()
     if args.verbose :
         print(" ----- Réalisation et stockage de l'alignement dans le fichier "+args.out+". ----- \n")
     with open(args.out,"w") as out:
         if args.verbose :
-            call(["bwa","mem", args.fasta2, ref1],stdout=out)
+            call(["bwa","mem", args.fasta2, selectedSeq],stdout=out)
         else :
-            call(["bwa","mem","-v","0", args.fasta2, ref1],stdout=out)
+            call(["bwa","mem","-v","0", args.fasta2, selectedSeq],stdout=out)
     #Fichier .sam ici, next ?
     return
 
