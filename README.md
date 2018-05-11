@@ -1,3 +1,7 @@
+``` python3
+text
+```
+
 usage: tab1ToRef2.py [-h] [-f1 FASTA1] [-f2 FASTA2] [-ti TABINPUT] [-o OUT]
                      [-b FLANK] [-t TYPEF] [-i] [-v] [-w] [-te {1,2}]
 
