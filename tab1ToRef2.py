@@ -45,7 +45,6 @@ if args.fasta2 :
 
 lenChr = tempfile.NamedTemporaryFile()
 
-
 if not args.tempf : 
     tabOut=tempfile.NamedTemporaryFile()
     tabO=tabOut.name
@@ -122,15 +121,15 @@ def cutGff() :
 
 def getFasta() :
     if args.verbose :
-        print("\n ----- Récupération des séquences flanquantes dans le fichier "+args.fasta1+". ----- \n")
-    call(["bedtools","getfasta","-fi", args.fasta1, "-bed",tabO, "-fo", selectedSeq])
-    # ref1 (fasta) en sortie
+        print("\n ----- Récupération des séquences flanquantes dans le fichier "+args.fasta1+". -----")
+    BedTool(tabO).sequence(fi=args.fasta1).save_seqs(selectedSeq)
+    # Sauvegarde dans le fichier désigné par la variable selectedSeq les séquences fasta correspondantes au informations contenue dans le fichier tabulé
     return 
 
 def index() :
     if args.index:
         if args.verbose :
-            print(" ----- Indexation du fichier "+args.fasta2+" par BWA. ----- \n")
+            print("\n ----- Indexation du fichier "+args.fasta2+" par BWA. ----- \n")
         call(["bwa","index",args.fasta2])
         print("")
     return
@@ -138,7 +137,7 @@ def index() :
 def align():
     getFasta()
     if args.verbose :
-        print(" ----- Réalisation et stockage de l'alignement dans le fichier "+args.out+". ----- \n")
+        print("\n ----- Réalisation et stockage de l'alignement dans le fichier "+args.out+". ----- \n")
     with open(args.out,"w") as out:
         if args.verbose :
             call(["bwa","mem", args.fasta2, selectedSeq],stdout=out)
@@ -146,6 +145,28 @@ def align():
             call(["bwa","mem","-v","0", args.fasta2, selectedSeq],stdout=out)
     #Fichier .sam ici, next ?
     return
+
+ 
+def samToTab() :
+    pos=0
+    tabou=""
+    for i in tab :
+        line=i.split("\t")
+        if line[0][0] == "#" :
+            tabou+= i 
+        else :
+            for f in samB :
+                res=re.search(":(\d+)-\d+",f[0])
+                if res :
+                    if int(res.group(1)) == int(line[1])-50 :
+                        pos=int(f[3])+49
+                        break
+            tabou+=line[0]+" "+ str(pos) +" "+ " ".join(line[2:11])
+    BedTool(tabou,from_string=True).saveas(taout)
+    return
+
+samToTab()
+
 
 def getPosCds(tab,flank=0) :
     #if tab.file_type()
@@ -183,9 +204,6 @@ getFlank()
 
 if args.typeF != None and fileTab.file_type == "gff" :
     cutGff()
+    
 index()
 align()
-
-
-
-
