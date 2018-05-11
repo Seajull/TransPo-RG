@@ -146,27 +146,32 @@ def align():
     #Fichier .sam ici, next ?
     return
 
- 
 def samToTab() :
     pos=0
     tabou=""
-    for i in tab :
-        line=i.split("\t")
-        if line[0][0] == "#" :
-            tabou+= i 
-        else :
-            for f in samB :
-                res=re.search(":(\d+)-\d+",f[0])
-                if res :
-                    if int(res.group(1)) == int(line[1])-50 :
-                        pos=int(f[3])+49
-                        break
-            tabou+=line[0]+" "+ str(pos) +" "+ " ".join(line[2:11])
-    BedTool(tabou,from_string=True).saveas(taout)
+    samf=BedTool(args.out)
+    with open(args.tabinput,"r") as tabi :
+            for i in tabi :
+                line=i.split("\t")
+                #print(line)
+                if line[0][0] == "#" :
+                    tabou+= i 
+                else :
+                    for f in samf :
+                        res=re.search(":(\d+)-\d+",f[0])
+                        if res :
+                            if int(res.group(1)) == int(line[1])-50 :
+                                pos=int(f[3])+49
+                                #print(pos)
+                                break
+                    if fileTab.file_type == "vcf" and f[5]=="100M":
+                        tabou+=f[2]+" "+ str(pos) +" "+ " ".join(line[2:11])
+                    elif fileTab.file_type == "bed" :
+                        tabou+=f[2]+" "+ str(pos) +" "+ str(pos) +" "+ " ".join(line[2:3])
+                    elif fileTab.file_type == "gff" :
+                        pass            
+            BedTool(tabou,from_string=True).saveas("out.vcf")
     return
-
-samToTab()
-
 
 def getPosCds(tab,flank=0) :
     #if tab.file_type()
@@ -204,6 +209,7 @@ getFlank()
 
 if args.typeF != None and fileTab.file_type == "gff" :
     cutGff()
-    
 index()
 align()
+if fileTab.file_type == "vcf":
+    samToTab()
