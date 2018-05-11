@@ -1,9 +1,9 @@
 ``` python3
 text
-```
+
 
 usage: tab1ToRef2.py [-h] [-f1 FASTA1] [-f2 FASTA2] [-ti TABINPUT] [-o OUT]
-                     [-b FLANK] [-t TYPEF] [-i] [-v] [-w] [-te {1,2}]
+                     [-b FLANK] [-t TYPEF] [-i] [-v] [-w] [-te 1,2]
 
 optional arguments:
   -h, --help            Affiche ces messages help
@@ -22,6 +22,8 @@ optional arguments:
   -i, --index           Force l'indexation du fichier fasta 2.
   -v, --verbose         Active l'affichage
   -w, --warning         Désactive l'affichage des warnings.
-  -te {1,2}, --tempfile {1,2}
+  -te 1,2, --tempfile 1,2
                         Force la création du fichier .sam (1) et du fichiers
                         tabulé intermédiaire (2).
+
+```
