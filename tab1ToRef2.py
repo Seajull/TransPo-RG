@@ -164,7 +164,7 @@ def align():
     return
 
 def samToTab() :
-    pos=0
+    start=0
     tabou=""
     samf=BedTool(args.out)
     with open(args.tabinput,"r") as tabi :
@@ -178,16 +178,21 @@ def samToTab() :
                         res=re.search(":(\d+)-\d+",f[0])
                         if res :
                             if int(res.group(1)) == int(line[1])-args.flank-1 :
-                                pos=int(f[3])+args.flank
+                                start=int(f[3])+args.flank
                                 #print(pos)
                                 break
                     if fileTab.file_type == "vcf" and f[5]==str(args.flank*2+1)+"M": # Match parfait uniquement pour un SNP
-                        tabou+=f[2]+" "+ str(pos) +" "+ " ".join(line[2:11])
+                        tabou+=f[2]+" "+ str(start) +" "+ " ".join(line[2:11])
                     elif fileTab.file_type == "bed" :
-                        tabou+=f[2]+" "+ str(pos) +" "+ str(pos) +" "+ " ".join(line[2:3])
+                        tabou+=f[2]+" "+ str(start) +" "+ str(start) +" "+str(line[3])+"\n"
                     elif fileTab.file_type == "gff" :
                         pass
-            BedTool(tabou,from_string=True).saveas("./résultat/"+res2.group(1)+"_out.vcf")
+            if fileTab.file_type == "vcf" :
+                BedTool(tabou,from_string=True).saveas("./résultat/"+res2.group(1)+"_out.vcf")
+            if fileTab.file_type == "bed" :
+                BedTool(tabou,from_string=True).saveas("./résultat/"+res2.group(1)+"_out.bed")
+            if fileTab.file_type == "gff" :
+                BedTool(tabou,from_string=True).saveas("./résultat/"+res2.group(1)+"_out.gff3")
     return
 
 def getPosCds(tab,flank=0) :
@@ -229,5 +234,5 @@ if args.typeF != None and fileTab.file_type == "gff" :
 getFlank()
 index()
 align()
-if fileTab.file_type == "vcf":
+if fileTab.file_type == "bed" :
     samToTab()
