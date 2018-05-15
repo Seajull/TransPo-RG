@@ -64,9 +64,9 @@ else :
     tabOut=tempfile.NamedTemporaryFile()
     tabO=tabOut.name
     fasta1Out=(args.fasta1).split(".")
-    selectedSeq=fasta1Out[0]+"_selected."+fasta1Out[1]
+    selectedSeq="résultat/"+fasta1Out[0].split("/")[-1]+"_selected."+fasta1Out[1]
     tab=(args.tabinput).split(".")
-    tabOP="résultat/"+(tab[0].split("/")[-1]+"_out."+tab[1])
+    tabOP="résultat/"+tab[0].split("/")[-1]+"_out."+tab[1]
 
 
 fileTab=BedTool(args.tabinput)
@@ -169,9 +169,9 @@ def parseCigar(sam) :
     lengy=[]
     for i in sam :
         leng=0
-        res =re.findall("\d+\w{1}",i[5])
+        res =re.findall("\d+\w",i[5])
         for i in res :
-            if i[-1] in ["M","=","X","D","N"] :
+            if i[-1] in ["M","=","X","I","S"] :
                 leng+=int(i[:-1])
         lengy.append(leng)
     return lengy
@@ -183,32 +183,48 @@ def samToTab() :
     tabou=""
     samf=BedTool(args.out)
     lengh=parseCigar(samf)
+    countLine=0
+    if (fileTab.file_type=="gff") :
+        args.tabinput=tabO
     with open(args.tabinput,"r") as tabi :
         for i in tabi :
             line=i.split("\t")
-            #print(line)
             if line[0][0] == "#" :
                 tabou+= i 
             else :
                 for f in samf :
                     res=re.search(":(\d+)-(\d+)",f[0])
                     if res :
-                        if int(res.group(1)) == int(line[1])-args.flank-1 :
-                            start=int(f[3])+args.flank
-                            stop=start
-                            #print(pos)
-                            break
+                        if fileTab.file_type == "gff" :
+                            if int(res.group(1)) == int(line[3])-args.flank -1 :
+                                start=int(f[3])+args.flank
+                                stop=start+lengh[countLine]-(args.flank*2)
+                                #print(pos)
+                                countLine=0
+                                break
+                        elif fileTab.file_type == "bed" :  
+                            if int(res.group(1)) == int(line[1])-args.flank :
+                                start=int(f[3])+args.flank
+                                stop=start+lengh[countLine]-(args.flank*2)
+                                #print(pos)
+                                countLine=0
+                                break
+                        elif fileTab.file_type == "vcf" :
+                            if int(res.group(1)) == int(line[1])-args.flank-1:
+                                start=int(f[3])+args.flank
+                                break
+                        countLine+=1
                 if fileTab.file_type == "vcf" and f[5]==str(args.flank*2+1)+"M": # Match parfait uniquement pour un SNP
                     tabou+=f[2]+" "+ str(start) +" "+ " ".join(line[2:11])
                 elif fileTab.file_type == "bed" :
-                    tabou+=f[2]+" "+ str(start) +" "+ str(start) +" "+line[3].replace(" ","_")+"\n"
+                    tabou+=f[2]+" "+ str(start) +" "+ str(stop) +" "+line[3].replace(" ","_")+"\n"
                 elif fileTab.file_type == "gff" :
-                    pass
+                    tabou+=f[2]+" "+line[1]+" "+line[2]+" "+ str(start) +" "+ str(stop) +" "+" ".join(line[5:8])+" "+line[8].replace(" ","_")+"\n"
         if fileTab.file_type == "vcf" :
             BedTool(tabou,from_string=True).saveas("résultat/"+res2.group(1)+"_out.vcf")
-        if fileTab.file_type == "bed" :
+        elif fileTab.file_type == "bed" :
             BedTool(tabou,from_string=True).saveas("résultat/"+res2.group(1)+"_out.bed")
-        if fileTab.file_type == "gff" :
+        elif fileTab.file_type == "gff" :
             BedTool(tabou,from_string=True).saveas("résultat/"+res2.group(1)+"_out.gff3")
     return
 
@@ -251,5 +267,5 @@ if args.typeF != None and fileTab.file_type == "gff" :
 getFlank()
 index()
 align()
-if fileTab.file_type != "gff" :
-    samToTab()
+#if fileTab.file_type != "gff" :
+samToTab()
