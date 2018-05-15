@@ -41,7 +41,6 @@ if args.out == None:
 else :
     args.out = "résultat/"+args.out
 
-
 lenChr = tempfile.NamedTemporaryFile()
 
 try :
@@ -52,15 +51,13 @@ except :
     pass
 
 if not args.tempf : 
-   
     tabOut=tempfile.NamedTemporaryFile()
     tabO=tabOut.name
     tabOPut=tempfile.NamedTemporaryFile()
     tabOP=tabOPut.name
     selectS = tempfile.NamedTemporaryFile()
     selectedSeq = selectS.name
-else :
-    
+else :    
     tabOut=tempfile.NamedTemporaryFile()
     tabO=tabOut.name
     fasta1Out=(args.fasta1).split(".")
@@ -144,9 +141,8 @@ def getFasta() :
     return 
 
 def index() :
-    if args.index:
-        if args.verbose :
-            print("\n ----- Indexation du fichier "+args.fasta2+" par BWA. ----- \n")
+    if args.verbose :
+        print("\n ----- Indexation du fichier "+args.fasta2+" par BWA. ----- \n")
         call(["bwa","index",args.fasta2])
         print("")
     return
@@ -229,7 +225,6 @@ def samToTab() :
     return
 
 def getPosCds(tab,flank=0) :
-    #if tab.file_type()
     #warnings.resetwarnings()
     #warnings.filterwarnings("error")
     dicoPos={}
@@ -266,6 +261,7 @@ print(dicoPos2)
 if args.typeF != None and fileTab.file_type == "gff" :
     cutGff()
 getFlank()
-index()
+if args.index:
+    index()
 align()
 samToTab()
