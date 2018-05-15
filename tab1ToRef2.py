@@ -37,9 +37,9 @@ if args.fasta2 == None:
 res1 = re.search("/?(\w+)\.",args.fasta1)
 res2 = re.search("/?(\w+)\.",args.fasta2)
 if args.out == None:
-    args.out = "./résultat/aln_"+res1.group(1)+"_"+res2.group(1)+".sam"
+    args.out = "résultat/aln_"+res1.group(1)+"_"+res2.group(1)+".sam"
 else :
-    args.out = "./résultat/"+args.out
+    args.out = "résultat/"+args.out
 
 
 lenChr = tempfile.NamedTemporaryFile()
@@ -66,7 +66,7 @@ else :
     fasta1Out=(args.fasta1).split(".")
     selectedSeq=fasta1Out[0]+"_selected."+fasta1Out[1]
     tab=(args.tabinput).split(".")
-    tabOP="./résultat/"+(tab[0].split("/")[-1]+"_out."+tab[1])
+    tabOP="résultat/"+(tab[0].split("/")[-1]+"_out."+tab[1])
 
 
 fileTab=BedTool(args.tabinput)
@@ -128,7 +128,7 @@ def getFlank() :
                 else :
                     stop=feature.stop+args.flank-1
                 if feature.start-args.flank < 0 :
-                    start=0
+                    start=0 # - combien du coup ?
                 else :
                     start=feature.start-args.flank-1
                 res += feature.chrom +" "+str(start)+" "+ str(stop)+"\n"
@@ -163,36 +163,53 @@ def align():
     #Fichier .sam ici, next ?
     return
 
+
+
+def parseCigar(sam) :
+    lengy=[]
+    for i in sam :
+        leng=0
+        res =re.findall("\d+\w{1}",i[5])
+        for i in res :
+            if i[-1] in ["M","=","X","D","N"] :
+                leng+=int(i[:-1])
+        lengy.append(leng)
+    return lengy
+
+
 def samToTab() :
     start=0
+    stop=0
     tabou=""
     samf=BedTool(args.out)
+    lengh=parseCigar(samf)
     with open(args.tabinput,"r") as tabi :
-            for i in tabi :
-                line=i.split("\t")
-                #print(line)
-                if line[0][0] == "#" :
-                    tabou+= i 
-                else :
-                    for f in samf :
-                        res=re.search(":(\d+)-\d+",f[0])
-                        if res :
-                            if int(res.group(1)) == int(line[1])-args.flank-1 :
-                                start=int(f[3])+args.flank
-                                #print(pos)
-                                break
-                    if fileTab.file_type == "vcf" and f[5]==str(args.flank*2+1)+"M": # Match parfait uniquement pour un SNP
-                        tabou+=f[2]+" "+ str(start) +" "+ " ".join(line[2:11])
-                    elif fileTab.file_type == "bed" :
-                        tabou+=f[2]+" "+ str(start) +" "+ str(start) +" "+str(line[3])+"\n"
-                    elif fileTab.file_type == "gff" :
-                        pass
-            if fileTab.file_type == "vcf" :
-                BedTool(tabou,from_string=True).saveas("./résultat/"+res2.group(1)+"_out.vcf")
-            if fileTab.file_type == "bed" :
-                BedTool(tabou,from_string=True).saveas("./résultat/"+res2.group(1)+"_out.bed")
-            if fileTab.file_type == "gff" :
-                BedTool(tabou,from_string=True).saveas("./résultat/"+res2.group(1)+"_out.gff3")
+        for i in tabi :
+            line=i.split("\t")
+            #print(line)
+            if line[0][0] == "#" :
+                tabou+= i 
+            else :
+                for f in samf :
+                    res=re.search(":(\d+)-(\d+)",f[0])
+                    if res :
+                        if int(res.group(1)) == int(line[1])-args.flank-1 :
+                            start=int(f[3])+args.flank
+                            stop=start
+                            #print(pos)
+                            break
+                if fileTab.file_type == "vcf" and f[5]==str(args.flank*2+1)+"M": # Match parfait uniquement pour un SNP
+                    tabou+=f[2]+" "+ str(start) +" "+ " ".join(line[2:11])
+                elif fileTab.file_type == "bed" :
+                    tabou+=f[2]+" "+ str(start) +" "+ str(start) +" "+line[3].replace(" ","_")+"\n"
+                elif fileTab.file_type == "gff" :
+                    pass
+        if fileTab.file_type == "vcf" :
+            BedTool(tabou,from_string=True).saveas("résultat/"+res2.group(1)+"_out.vcf")
+        if fileTab.file_type == "bed" :
+            BedTool(tabou,from_string=True).saveas("résultat/"+res2.group(1)+"_out.bed")
+        if fileTab.file_type == "gff" :
+            BedTool(tabou,from_string=True).saveas("résultat/"+res2.group(1)+"_out.gff3")
     return
 
 def getPosCds(tab,flank=0) :
@@ -234,5 +251,5 @@ if args.typeF != None and fileTab.file_type == "gff" :
 getFlank()
 index()
 align()
-if fileTab.file_type == "bed" :
+if fileTab.file_type != "gff" :
     samToTab()

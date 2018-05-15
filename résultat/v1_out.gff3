@@ -1,0 +1,14 @@
+chromosome_1	phytozome	gene	2114	2879	.	+	.	ID=Sb01g000200;Name=Sb01g000200;Note=similar to Putative uncharacterized protein
+chromosome_1	phytozome	gene	11368	14864	.	-	.	ID=Sb01g000210;Name=Sb01g000210;Note=similar to RabGAP/TBC domain-containing protein%2C putative%2C expressed
+chromosome_1	phytozome	gene	24790	42492	.	-	.	ID=Sb01g000220;Name=Sb01g000220;Note=similar to PDR-like ABC transporter
+chromosome_1	phytozome	gene	60072	63545	.	+	.	ID=Sb01g000230;Name=Sb01g000230;Note=similar to Putative uncharacterized protein
+chromosome_1	phytozome	gene	63599	69564	.	-	.	ID=Sb01g000240;Name=Sb01g000240;Note=similar to Expressed protein
+chromosome_1	phytozome	gene	79760	81710	.	+	.	ID=Sb01g000250;Name=Sb01g000250;Note=Predicted protein
+chromosome_1	phytozome	gene	82048	107384	.	+	.	ID=Sb01g000255;Name=Sb01g000255;Note=similar to Putative uncharacterized protein
+chromosome_1	phytozome	gene	110129	112564	.	-	.	ID=Sb01g000260;Name=Sb01g000260;Note=similar to Os03g0861900 protein
+chromosome_1	phytozome	gene	112924	116101	.	+	.	ID=Sb01g000270;Name=Sb01g000270;Note=similar to Rhodanese-like domain containing protein%2C expressed
+chromosome_1	phytozome	gene	116253	136515	.	-	.	ID=Sb01g000280;Name=Sb01g000280;Note=similar to Expressed protein
+chromosome_1	phytozome	gene	155115	155631	.	+	.	ID=Sb01g000290;Name=Sb01g000290;Note=weakly similar to Putative uncharacterized protein
+chromosome_1	phytozome	gene	156041	162201	.	-	.	ID=Sb01g000300;Name=Sb01g000300;Note=similar to Transcriptional corepressor LEUNIG%2C putative%2C expressed
+chromosome_1	phytozome	gene	162745	168004	.	-	.	ID=Sb01g000310;Name=Sb01g000310;Note=weakly similar to Putative uncharacterized protein
+chromosome_1	phytozome	gene	186024	205257	.	+	.	ID=Sb01g000330;Name=Sb01g000330;Note=similar to Putative myosin heavy chain

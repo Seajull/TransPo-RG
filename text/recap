@@ -23,6 +23,7 @@
 
 
 --- Description du script tab1ToRef2.py :
+
     Lib :
         biopython (SeqIO)
         pybedtools
@@ -49,3 +50,12 @@
     d'un type souhaité à partir d'un fichier .gff (-t cds,gene permet de récupérer
     tout les gènes et tout les CDS mais pas les exons,mRNA,etc).
     Trois options sont obligatoires : les deux références fasta et un fichier tabulé.
+
+--- Problèmes rencontrés :
+
+    Gestion des missmatchs lors de du passage du fichier d'alignement à un fichier tabulé.
+
+    Annotations en début ou en fin de séquence ne sont pas prise en compte car
+    elles sont plus courtes (exemple : SNP à la position 20, avec 50 bp de flank
+    on extrait une séquence de 71 bp, faut-il considérer les 29 manquantes comme des
+    missmatch ? Ou simuler les matchs pour arriver à 101M ?).
