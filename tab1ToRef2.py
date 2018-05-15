@@ -47,7 +47,7 @@ lenChr = tempfile.NamedTemporaryFile()
 try :
     os.mkdir("./résultat")
     if args.verbose :
-        print("\n ----- Création du dossier résultat -----")
+        print("\n ----- Création du dossier résultat. -----")
 except :
     pass
 
@@ -166,17 +166,17 @@ def align():
 
 
 def parseCigar(sam) :
-    lengy=[]
+    lenCig=[]
     for i in sam :
         leng=0
         res =re.findall("\d+\w",i[5])
         for i in res :
             if i[-1] in ["M","=","X","I","S"] :
                 leng+=int(i[:-1])
-        lengy.append(leng)
-    return lengy
+        lenCig.append(leng)
+    return lenCig
 
-
+# C'est le bazar, à simplifier ou au moins à ordonner pour pouvoir facilement rajouter des filtres.
 def samToTab() :
     start=0
     stop=0
@@ -230,8 +230,8 @@ def samToTab() :
 
 def getPosCds(tab,flank=0) :
     #if tab.file_type()
-    warnings.resetwarnings()
-    warnings.filterwarnings("error")
+    #warnings.resetwarnings()
+    #warnings.filterwarnings("error")
     dicoPos={}
     posGene=()
     with open(tab,"r") as out :
@@ -249,16 +249,17 @@ def getPosCds(tab,flank=0) :
                 cdsStop=int(stop)-int(posGene[0])-flank
                 if cdsStart > cdsStop :
                     warnings.warn("Start > stop",Warning)
-                    break
                 else :
                     dicoPos[posGene].append([cdsStart,cdsStop])
-    warnings.resetwarnings()
+    #warnings.resetwarnings()
     return dicoPos
 
 #Problème pos gene et CDS -> indel ? 
-#dicoPos1=getPosCds(args.tabinput)
-#dicoPos2=getPosCds(tabout,args.flank)
-
+dicoPos1=getPosCds(args.tabinput)
+dicoPos2=getPosCds(args.tabinput,args.flank)
+print(dicoPos1)
+print("\n")
+print(dicoPos2)
 
 
 
@@ -267,5 +268,4 @@ if args.typeF != None and fileTab.file_type == "gff" :
 getFlank()
 index()
 align()
-#if fileTab.file_type != "gff" :
 samToTab()
