@@ -250,12 +250,8 @@ def getPosCds(tab,flank=0) :
     return dicoPos
 
 #Problème pos gene et CDS -> indel ? 
-dicoPos1=getPosCds(args.tabinput)
-dicoPos2=getPosCds(args.tabinput,args.flank)
-print(dicoPos1)
-print("\n")
-print(dicoPos2)
-
+#dicoPos1=getPosCds(args.tabinput)
+#dicoPos2=getPosCds(args.tabinput,args.flank)
 
 
 if args.typeF != None and fileTab.file_type == "gff" :
