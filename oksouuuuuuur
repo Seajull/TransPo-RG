@@ -1,0 +1,133 @@
+chromosome_1	phytozome	gene	2164	2829	.	+	.	ID=Sb01g000200;Name=Sb01g000200;Note=similar to Putative uncharacterized protein
+chromosome_1	phytozome	CDS	2164	2829	.	+	0	Parent=Sb01g000200.1
+chromosome_1	phytozome	gene	11418	14814	.	-	.	ID=Sb01g000210;Name=Sb01g000210;Note=similar to RabGAP/TBC domain-containing protein%2C putative%2C expressed
+chromosome_1	phytozome	CDS	11724	11744	.	-	0	Parent=Sb01g000210.1
+chromosome_1	phytozome	CDS	11862	11945	.	-	0	Parent=Sb01g000210.1
+chromosome_1	phytozome	CDS	12105	12365	.	-	0	Parent=Sb01g000210.1
+chromosome_1	phytozome	CDS	12902	12999	.	-	2	Parent=Sb01g000210.1
+chromosome_1	phytozome	CDS	13108	13213	.	-	0	Parent=Sb01g000210.1
+chromosome_1	phytozome	CDS	13307	13395	.	-	2	Parent=Sb01g000210.1
+chromosome_1	phytozome	CDS	13491	13613	.	-	2	Parent=Sb01g000210.1
+chromosome_1	phytozome	CDS	13850	14121	.	-	1	Parent=Sb01g000210.1
+chromosome_1	phytozome	CDS	14230	14333	.	-	0	Parent=Sb01g000210.1
+chromosome_1	phytozome	CDS	14534	14629	.	-	0	Parent=Sb01g000210.1
+chromosome_1	phytozome	CDS	14716	14814	.	-	0	Parent=Sb01g000210.1
+chromosome_1	phytozome	gene	24840	42442	.	-	.	ID=Sb01g000220;Name=Sb01g000220;Note=similar to PDR-like ABC transporter
+chromosome_1	phytozome	CDS	24840	25115	.	-	0	Parent=Sb01g000220.1
+chromosome_1	phytozome	CDS	25209	25463	.	-	0	Parent=Sb01g000220.1
+chromosome_1	phytozome	CDS	25903	26074	.	-	1	Parent=Sb01g000220.1
+chromosome_1	phytozome	CDS	26187	26414	.	-	1	Parent=Sb01g000220.1
+chromosome_1	phytozome	CDS	26756	26889	.	-	0	Parent=Sb01g000220.1
+chromosome_1	phytozome	CDS	33107	33190	.	-	0	Parent=Sb01g000220.1
+chromosome_1	phytozome	CDS	33298	33588	.	-	0	Parent=Sb01g000220.1
+chromosome_1	phytozome	CDS	33705	34037	.	-	0	Parent=Sb01g000220.1
+chromosome_1	phytozome	CDS	34134	34240	.	-	2	Parent=Sb01g000220.1
+chromosome_1	phytozome	CDS	34673	34838	.	-	0	Parent=Sb01g000220.1
+chromosome_1	phytozome	CDS	34962	35065	.	-	2	Parent=Sb01g000220.1
+chromosome_1	phytozome	CDS	35177	35337	.	-	1	Parent=Sb01g000220.1
+chromosome_1	phytozome	CDS	35448	36348	.	-	2	Parent=Sb01g000220.1
+chromosome_1	phytozome	CDS	36479	36569	.	-	0	Parent=Sb01g000220.1
+chromosome_1	phytozome	CDS	36644	36934	.	-	0	Parent=Sb01g000220.1
+chromosome_1	phytozome	CDS	37023	37107	.	-	1	Parent=Sb01g000220.1
+chromosome_1	phytozome	CDS	37566	37648	.	-	0	Parent=Sb01g000220.1
+chromosome_1	phytozome	CDS	41913	42033	.	-	1	Parent=Sb01g000220.1
+chromosome_1	phytozome	CDS	42237	42442	.	-	0	Parent=Sb01g000220.1
+chromosome_1	phytozome	gene	60122	63495	.	+	.	ID=Sb01g000230;Name=Sb01g000230;Note=similar to Putative uncharacterized protein
+chromosome_1	phytozome	CDS	60945	60994	.	+	0	Parent=Sb01g000230.1
+chromosome_1	phytozome	CDS	61463	61516	.	+	1	Parent=Sb01g000230.1
+chromosome_1	phytozome	CDS	62276	62355	.	+	1	Parent=Sb01g000230.1
+chromosome_1	phytozome	CDS	62779	62984	.	+	2	Parent=Sb01g000230.1
+chromosome_1	phytozome	CDS	63057	63269	.	+	0	Parent=Sb01g000230.1
+chromosome_1	phytozome	gene	63649	69514	.	-	.	ID=Sb01g000240;Name=Sb01g000240;Note=similar to Expressed protein
+chromosome_1	phytozome	CDS	63906	64404	.	-	1	Parent=Sb01g000240.1
+chromosome_1	phytozome	CDS	65203	65734	.	-	2	Parent=Sb01g000240.1
+chromosome_1	phytozome	CDS	65805	65919	.	-	0	Parent=Sb01g000240.1
+chromosome_1	phytozome	CDS	66045	66120	.	-	1	Parent=Sb01g000240.1
+chromosome_1	phytozome	CDS	66194	66293	.	-	2	Parent=Sb01g000240.1
+chromosome_1	phytozome	CDS	66388	66491	.	-	1	Parent=Sb01g000240.1
+chromosome_1	phytozome	CDS	66703	66791	.	-	0	Parent=Sb01g000240.1
+chromosome_1	phytozome	CDS	67615	68591	.	-	2	Parent=Sb01g000240.1
+chromosome_1	phytozome	CDS	68726	68818	.	-	2	Parent=Sb01g000240.1
+chromosome_1	phytozome	CDS	69038	69290	.	-	0	Parent=Sb01g000240.1
+chromosome_1	phytozome	gene	79810	81660	.	+	.	ID=Sb01g000250;Name=Sb01g000250;Note=Predicted protein
+chromosome_1	phytozome	CDS	79810	81013	.	+	0	Parent=Sb01g000250.1
+chromosome_1	phytozome	CDS	81089	81660	.	+	2	Parent=Sb01g000250.1
+chromosome_1	phytozome	gene	82098	107334	.	+	.	ID=Sb01g000255;Name=Sb01g000255;Note=similar to Putative uncharacterized protein
+chromosome_1	phytozome	CDS	82098	82472	.	+	0	Parent=Sb01g000255.1
+chromosome_1	phytozome	CDS	82595	82709	.	+	0	Parent=Sb01g000255.1
+chromosome_1	phytozome	CDS	82791	82872	.	+	2	Parent=Sb01g000255.1
+chromosome_1	phytozome	CDS	107115	107166	.	+	1	Parent=Sb01g000255.1
+chromosome_1	phytozome	CDS	107281	107334	.	+	0	Parent=Sb01g000255.1
+chromosome_1	phytozome	gene	110179	112514	.	-	.	ID=Sb01g000260;Name=Sb01g000260;Note=similar to Os03g0861900 protein
+chromosome_1	phytozome	CDS	110442	112487	.	-	0	Parent=Sb01g000260.1
+chromosome_1	phytozome	gene	112974	116051	.	+	.	ID=Sb01g000270;Name=Sb01g000270;Note=similar to Rhodanese-like domain containing protein%2C expressed
+chromosome_1	phytozome	CDS	113005	113298	.	+	0	Parent=Sb01g000270.1
+chromosome_1	phytozome	CDS	113435	113488	.	+	0	Parent=Sb01g000270.1
+chromosome_1	phytozome	CDS	113713	113862	.	+	0	Parent=Sb01g000270.1
+chromosome_1	phytozome	CDS	114467	114629	.	+	0	Parent=Sb01g000270.1
+chromosome_1	phytozome	CDS	114875	114963	.	+	2	Parent=Sb01g000270.1
+chromosome_1	phytozome	CDS	115059	115165	.	+	0	Parent=Sb01g000270.1
+chromosome_1	phytozome	CDS	115350	115604	.	+	1	Parent=Sb01g000270.1
+chromosome_1	phytozome	CDS	115686	115818	.	+	1	Parent=Sb01g000270.1
+chromosome_1	phytozome	gene	116303	136465	.	-	.	ID=Sb01g000280;Name=Sb01g000280;Note=similar to Expressed protein
+chromosome_1	phytozome	CDS	116616	116677	.	-	2	Parent=Sb01g000280.1
+chromosome_1	phytozome	CDS	116891	116944	.	-	2	Parent=Sb01g000280.1
+chromosome_1	phytozome	CDS	117155	117512	.	-	0	Parent=Sb01g000280.1
+chromosome_1	phytozome	CDS	117752	118666	.	-	0	Parent=Sb01g000280.1
+chromosome_1	phytozome	CDS	120754	122258	.	-	2	Parent=Sb01g000280.1
+chromosome_1	phytozome	CDS	132666	132877	.	-	1	Parent=Sb01g000280.1
+chromosome_1	phytozome	CDS	133919	134071	.	-	1	Parent=Sb01g000280.1
+chromosome_1	phytozome	CDS	134427	134488	.	-	0	Parent=Sb01g000280.1
+chromosome_1	phytozome	CDS	134581	134633	.	-	2	Parent=Sb01g000280.1
+chromosome_1	phytozome	CDS	135470	135509	.	-	0	Parent=Sb01g000280.1
+chromosome_1	phytozome	CDS	135595	135715	.	-	1	Parent=Sb01g000280.1
+chromosome_1	phytozome	CDS	135812	135991	.	-	1	Parent=Sb01g000280.1
+chromosome_1	phytozome	CDS	136407	136465	.	-	0	Parent=Sb01g000280.1
+chromosome_1	phytozome	gene	155165	155581	.	+	.	ID=Sb01g000290;Name=Sb01g000290;Note=weakly similar to Putative uncharacterized protein
+chromosome_1	phytozome	CDS	155165	155333	.	+	0	Parent=Sb01g000290.1
+chromosome_1	phytozome	CDS	155439	155581	.	+	2	Parent=Sb01g000290.1
+chromosome_1	phytozome	gene	156091	162151	.	-	.	ID=Sb01g000300;Name=Sb01g000300;Note=similar to Transcriptional corepressor LEUNIG%2C putative%2C expressed
+chromosome_1	phytozome	CDS	156091	156234	.	-	0	Parent=Sb01g000300.1
+chromosome_1	phytozome	CDS	156335	156532	.	-	0	Parent=Sb01g000300.1
+chromosome_1	phytozome	CDS	156605	156733	.	-	0	Parent=Sb01g000300.1
+chromosome_1	phytozome	CDS	156827	156982	.	-	0	Parent=Sb01g000300.1
+chromosome_1	phytozome	CDS	158037	158186	.	-	0	Parent=Sb01g000300.1
+chromosome_1	phytozome	CDS	158562	158671	.	-	2	Parent=Sb01g000300.1
+chromosome_1	phytozome	CDS	158874	159006	.	-	0	Parent=Sb01g000300.1
+chromosome_1	phytozome	CDS	159096	159305	.	-	0	Parent=Sb01g000300.1
+chromosome_1	phytozome	CDS	159384	159452	.	-	0	Parent=Sb01g000300.1
+chromosome_1	phytozome	CDS	159639	159839	.	-	0	Parent=Sb01g000300.1
+chromosome_1	phytozome	CDS	159914	159966	.	-	2	Parent=Sb01g000300.1
+chromosome_1	phytozome	CDS	160968	161073	.	-	0	Parent=Sb01g000300.1
+chromosome_1	phytozome	CDS	161177	161231	.	-	1	Parent=Sb01g000300.1
+chromosome_1	phytozome	CDS	161313	161557	.	-	0	Parent=Sb01g000300.1
+chromosome_1	phytozome	CDS	161682	161982	.	-	1	Parent=Sb01g000300.1
+chromosome_1	phytozome	CDS	162120	162151	.	-	0	Parent=Sb01g000300.1
+chromosome_1	phytozome	gene	162795	167954	.	-	.	ID=Sb01g000310;Name=Sb01g000310;Note=weakly similar to Putative uncharacterized protein
+chromosome_1	phytozome	CDS	163137	163336	.	-	2	Parent=Sb01g000310.1
+chromosome_1	phytozome	CDS	163419	163506	.	-	0	Parent=Sb01g000310.1
+chromosome_1	phytozome	CDS	163679	163801	.	-	0	Parent=Sb01g000310.1
+chromosome_1	phytozome	CDS	163883	164030	.	-	1	Parent=Sb01g000310.1
+chromosome_1	phytozome	CDS	164120	164283	.	-	0	Parent=Sb01g000310.1
+chromosome_1	phytozome	CDS	164488	164640	.	-	0	Parent=Sb01g000310.1
+chromosome_1	phytozome	CDS	165103	165183	.	-	0	Parent=Sb01g000310.1
+chromosome_1	phytozome	CDS	165267	167954	.	-	0	Parent=Sb01g000310.1
+chromosome_1	phytozome	gene	186074	205207	.	+	.	ID=Sb01g000330;Name=Sb01g000330;Note=similar to Putative myosin heavy chain
+chromosome_1	phytozome	CDS	186074	186292	.	+	0	Parent=Sb01g000330.1
+chromosome_1	phytozome	CDS	186498	186641	.	+	0	Parent=Sb01g000330.1
+chromosome_1	phytozome	CDS	187093	187482	.	+	0	Parent=Sb01g000330.1
+chromosome_1	phytozome	CDS	187802	187860	.	+	0	Parent=Sb01g000330.1
+chromosome_1	phytozome	CDS	187965	188124	.	+	1	Parent=Sb01g000330.1
+chromosome_1	phytozome	CDS	188573	188722	.	+	0	Parent=Sb01g000330.1
+chromosome_1	phytozome	CDS	188807	188943	.	+	0	Parent=Sb01g000330.1
+chromosome_1	phytozome	CDS	189030	189176	.	+	1	Parent=Sb01g000330.1
+chromosome_1	phytozome	CDS	189288	189389	.	+	1	Parent=Sb01g000330.1
+chromosome_1	phytozome	CDS	190949	191006	.	+	1	Parent=Sb01g000330.1
+chromosome_1	phytozome	CDS	191116	191217	.	+	0	Parent=Sb01g000330.1
+chromosome_1	phytozome	CDS	192134	192171	.	+	0	Parent=Sb01g000330.1
+chromosome_1	phytozome	CDS	192260	192386	.	+	1	Parent=Sb01g000330.1
+chromosome_1	phytozome	CDS	193301	193468	.	+	0	Parent=Sb01g000330.1
+chromosome_1	phytozome	CDS	193538	193669	.	+	0	Parent=Sb01g000330.1
+chromosome_1	phytozome	CDS	194358	194467	.	+	0	Parent=Sb01g000330.1
+chromosome_1	phytozome	CDS	194543	194603	.	+	1	Parent=Sb01g000330.1
+chromosome_1	phytozome	CDS	194656	194715	.	+	0	Parent=Sb01g000330.1
