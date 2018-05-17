@@ -50,7 +50,7 @@
     d'un type souhaité à partir d'un fichier .gff (-t cds,gene permet de récupérer
     tout les gènes et tout les CDS mais pas les exons,mRNA,etc).
     Trois options sont obligatoires : les deux références fasta et un fichier tabulé.
-
+q
 
 --- Problèmes rencontrés :
 

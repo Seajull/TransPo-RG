@@ -1,5 +1,5 @@
 import sys, re, os
-
+koi
 bed = open(sys.argv[1],"r")
 
 tabFile = bed.readlines()

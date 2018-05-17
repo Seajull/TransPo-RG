@@ -31,7 +31,7 @@ if args.warn :
 if args.fasta1 == None:
     sys.exit("ERREUR : L'option --fasta1 (-f1) est manquant")
 if args.tabinput == None:
-    sys.exit("ERREUR : L'option --tabinput (-ti) est manquant")            
+    sys.exit("ERREUR : L'option --tabinput (-ti) est manquant")
 if args.fasta2 == None:
     sys.exit("ERREUR : L'option --fasta2 (-f2) est manquant")
 res1 = re.search("/?(\w+)\.",args.fasta1)
@@ -50,14 +50,14 @@ try :
 except :
     pass
 
-if not args.tempf : 
+if not args.tempf :
     tabOut=tempfile.NamedTemporaryFile()
     tabO=tabOut.name
     tabOPut=tempfile.NamedTemporaryFile()
     tabOP=tabOPut.name
     selectS = tempfile.NamedTemporaryFile()
     selectedSeq = selectS.name
-else :    
+else :
     tabOut=tempfile.NamedTemporaryFile()
     tabO=tabOut.name
     fasta1Out=(args.fasta1).split(".")
@@ -76,10 +76,10 @@ if args.typeF != None and fileTab.file_type != "gff" :
 # Méthode permettant de récupérer l'ID des chromosomes et leurs tailles à l'aide de biopython
 
 def parseFa() :
-    with open(lenChr.name,"w") as lenC : 
+    with open(lenChr.name,"w") as lenC :
         for seqF in SeqIO.parse(args.fasta1,"fasta") :
             lenC.write(seqF.id+"\t"+str(len(seqF)))
-    return 
+    return
 
 parseFa()
 
