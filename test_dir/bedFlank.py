@@ -38,7 +38,7 @@ for line in bed :
 for line in fasta :
     if line[0] ==">" :
         if numchromo in lenChr.keys():
-            lenChr[numchromo]=countNucl      
+            lenChr[numchromo]=countNucl
             countNucl=0
         numchr=re.search("chromosome_(\d+)",line)
         if numchr :
@@ -53,7 +53,7 @@ for line in fasta :
                 if i != "\n":
                     countNucl+=1
 if numchromo in lenChr.keys():
-    lenChr[numchromo]=countNucl      
+    lenChr[numchromo]=countNucl
 
 for line in bed :
     if line[0:11]=="chromosome_" :
@@ -61,7 +61,7 @@ for line in bed :
         if int(lineS[1]) < x :
             lineS[1] = 0
         else :
-            lineS[1] = int(lineS[1])-x 
+            lineS[1] = int(lineS[1])-x
         if int(lineS[2])+x > lenChr[line[11]]:
             lineS[2] = lenChr[line[11]]
         else :

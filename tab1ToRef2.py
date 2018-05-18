@@ -227,7 +227,7 @@ def samToTab() :
                 elif ext == "gff3" :
                     tabou+=f[2]+" "+line[1]+" "+line[2]+" "+ str(start) +" "+ str(stop) +" "+" ".join(line[5:8])+" "+line[8].replace(" ","_")+"\n"
         if ext == "vcf" :
-                BedTool(tabou,from_string=True).saveas(args.out)
+            BedTool(tabou,from_string=True).saveas(args.out)
         elif ext == "bed" :
             BedTool(tabou,from_string=True).saveas(args.out)
         elif ext == "gff3" :
