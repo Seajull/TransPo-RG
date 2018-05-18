@@ -67,9 +67,9 @@ if not args.tempf :
     selectS = tempfile.NamedTemporaryFile()
     selectedSeq = selectS.name
 else :
-    alnN="résultat/aln_out.sam"
+    alnN="résultat/aln_out_"+ext+".sam"
     fasta1Out=(args.fasta1).split(".")
-    selectedSeq="résultat/"+fasta1Out[0].split("/")[-1]+"_selected."+fasta1Out[1]
+    selectedSeq="résultat/"+fasta1Out[0].split("/")[-1]+"_selected_"+ext+"."+fasta1Out[1]
     tab=(args.tabinput).split(".")
     tabOP="résultat/"+tab[0].split("/")[-1]+"_out."+tab[1]
 
@@ -105,8 +105,6 @@ def cutGff() :
     typeFclean="|".join(typeFclean)
     with open(tabO,"w") as out :
         call(["awk","tolower($3) ~ /"+typeFclean+"/",args.tabinput],stdout=out)
-    with open("oksouuuuuuur","w") as out :
-        call(["awk","tolower($3) ~ /"+typeFclean+"/",args.tabinput],stdout=out)
     return
 
 
@@ -119,7 +117,6 @@ def getFlank() :
 
     if (fileTab2.file_type != "vcf"):
         fileTab2.slop(b=args.flank, g=lenChr.name ,output=tabOP)
-        fileTab2.slop(b=args.flank, g=lenChr.name ,output="tabOP")
         # Pour les fichiers VCF, on doit rajouter une colonne. On recrée donc un objet BedTools à partir
         # du fichier VCF original.
     else :
@@ -193,12 +190,12 @@ def samToTab() :
     if ext=="gff3" and args.typeF != None:
         args.tabinput=tabO
     with open(args.tabinput,"r") as tabi :
-        for i in tabi :
+        for i in tabi : # i parcours tabinput (ou tabO après cutGff)
             line=i.split("\t")
             if line[0][0] == "#" :
                 tabou+= i
             else :
-                for f in samf :
+                for f in samf : # f parcours le fichier .sam
                     res=re.search(":(\d+)-(\d+)",f[0])
                     if res :
                         if ext == "gff3" :
@@ -206,20 +203,21 @@ def samToTab() :
                                 start=int(f[3])+args.flank
                                 stop=start+lengh[countLine]-(args.flank*2)
                                 #print(pos)
-                                countLine=0
+                                countLine+=1
                                 break
                         elif ext == "bed" :
                             if int(res.group(1)) == int(line[1])-args.flank :
                                 start=int(f[3])+args.flank
-                                stop=start+lengh[countLine]-(args.flank*2) # Problème par la
+                                stop=start+lengh[countLine]-(args.flank*2)
                                 #print(pos)
-                                countLine=0
+                                countLine+=1
                                 break
                         elif ext == "vcf" :
                             if int(res.group(1)) == int(line[1])-args.flank-1:
                                 start=int(f[3])+args.flank
                                 break
-                        countLine+=1
+                        else :
+                            countLine+=1
                 if ext == "vcf" and f[5]==str(args.flank*2+1)+"M": # Match parfait uniquement pour un SNP
                     tabou+=f[2]+" "+ str(start) +" "+ " ".join(line[2:11])
                 elif ext == "bed" :
