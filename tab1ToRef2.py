@@ -43,16 +43,16 @@ if ext =="gff" :
     ext="gff3"
 
 if args.out == None:
-    args.out = "résultat/"+res2.group(1)+"_out."+ext
+    args.out = "resultat/"+res2.group(1)+"_out."+ext
 else :
-    args.out = "résultat/"+args.out.split(".")[0]+"."+ext
+    args.out = "resultat/"+args.out.split(".")[0]+"."+ext
 
 lenChr = tempfile.NamedTemporaryFile()
 
 try :
-    os.mkdir("./résultat")
+    os.mkdir("./resultat")
     if args.verbose :
-        print("\n ----- Création du dossier résultat. -----")
+        print("\n ----- Création du dossier resultat. -----")
 except :
     pass
 
@@ -67,11 +67,11 @@ if not args.tempf :
     selectS = tempfile.NamedTemporaryFile()
     selectedSeq = selectS.name
 else :
-    alnN="résultat/aln_out_"+ext+".sam"
+    alnN="resultat/aln_out_"+ext+".sam"
     fasta1Out=(args.fasta1).split(".")
-    selectedSeq="résultat/"+fasta1Out[0].split("/")[-1]+"_selected_"+ext+"."+fasta1Out[1]
+    selectedSeq="resultat/"+fasta1Out[0].split("/")[-1]+"_selected_"+ext+"."+fasta1Out[1]
     tab=(args.tabinput).split(".")
-    tabOP="résultat/"+tab[0].split("/")[-1]+"_out."+tab[1]
+    tabOP="resultat/"+tab[0].split("/")[-1]+"_out."+tab[1]
 
 
 
@@ -196,19 +196,23 @@ def samToTab() :
                 tabou+= i
             else :
                 for f in samf : # f parcours le fichier .sam
+                    if int(f[1])!=0 :
+                        flag=True
+                    else :
+                        flag=False
                     res=re.search(":(\d+)-(\d+)",f[0])
                     if res :
                         if ext == "gff3" :
                             if int(res.group(1)) == int(line[3])-args.flank -1 :
                                 start=int(f[3])+args.flank
-                                stop=start+lengh[countLine]-(args.flank*2)
+                                stop=start+lengh[countLine]-(args.flank*2)-1
                                 #print(pos)
                                 countLine+=1
                                 break
                         elif ext == "bed" :
                             if int(res.group(1)) == int(line[1])-args.flank :
                                 start=int(f[3])+args.flank
-                                stop=start+lengh[countLine]-(args.flank*2)
+                                stop=start+lengh[countLine]-(args.flank*2)-1
                                 #print(pos)
                                 countLine+=1
                                 break
@@ -218,11 +222,11 @@ def samToTab() :
                                 break
                         else :
                             countLine+=1
-                if ext == "vcf" and f[5]==str(args.flank*2+1)+"M": # Match parfait uniquement pour un SNP
+                if not flag and ext == "vcf" and f[5]==str(args.flank*2+1)+"M": # Match parfait uniquement pour un SNP
                     tabou+=f[2]+" "+ str(start) +" "+ " ".join(line[2:11])
-                elif ext == "bed" :
+                elif not flag and ext == "bed" :
                     tabou+=f[2]+" "+ str(start) +" "+ str(stop) +" "+line[3].replace(" ","_")+"\n"
-                elif ext == "gff3" :
+                elif not flag and ext == "gff3" :
                     tabou+=f[2]+" "+line[1]+" "+line[2]+" "+ str(start) +" "+ str(stop) +" "+" ".join(line[5:8])+" "+line[8].replace(" ","_")+"\n"
         if ext == "vcf" :
             BedTool(tabou,from_string=True).saveas(args.out)
@@ -238,18 +242,20 @@ def getPosCds(tab) :
     dicoPos={}
     posGene=()
     with open(tab,"r") as out :
+        numGene=0
         for line in out :
             lineSplit=line.split("\t")
             typeA = lineSplit[2].lower()
             start =lineSplit[3]
             stop =lineSplit[4]
             if typeA == "gene" :
-                posGene=(int(start),int(stop))
+                numGene+=1
+                posGene=(numGene,int(start),int(stop))
                 if posGene not in dicoPos.keys():
                     dicoPos[posGene]=[]
-            if typeA == "cds" :
-                cdsStart=int(start)-int(posGene[0])
-                cdsStop=int(stop)-int(posGene[0])
+            if typeA == "cds":
+                cdsStart=int(start)-int(posGene[1])
+                cdsStop=int(stop)-int(posGene[1])
                 if cdsStart > cdsStop :
                     warnings.warn("Start > stop",Warning)
                 else :
@@ -273,15 +279,21 @@ samToTab()
 if ext == "gff3" :
     dicoPos1=getPosCds(args.tabinput)
     dicoPos2=getPosCds(args.out)
-    for keys in dicoPos1 :
-        for key in dicoPos2 :
-            if keys==key :
-                print("lol")
-
-
-
-
-
-
-
-
+    geneInt=[]
+    lastG=0
+    for key in dicoPos1.keys() :
+        for keys in dicoPos2.keys() :
+            if keys[0]>lastG :
+                lastG=keys[0]
+            if keys[0]==key[0]:
+                if dicoPos1[key]==dicoPos2[keys]:
+                    geneInt.append(keys[0])
+                else :
+                    print(key[0])
+                    print(dicoPos1[key])
+                    print(dicoPos2[keys])
+    for l in range(1,lastG+1) :
+        if l in sorted(geneInt) :
+            print("Gène "+str(l)+" intègre.")
+        else :
+            print("Gène "+str(l)+" non intègre.")

@@ -1,8 +1,6 @@
 ``` python3
-
-
 usage: tab1ToRef2.py [-h] [-f1 FASTA1] [-f2 FASTA2] [-ti TABINPUT] [-o OUT]
-                     [-b FLANK] [-t TYPEF] [-i] [-v] [-w] [-te 1,2]
+                     [-b FLANK] [-t TYPEF] [-i] [-v] [-w] [-te]
 
 optional arguments:
   -h, --help            Affiche ces messages help
@@ -12,7 +10,7 @@ optional arguments:
                         Input de la référence fasta 2 (nouvelle).
   -ti TABINPUT, --tabinput TABINPUT
                         Input du fichier tabulé associé à fasta 1.
-  -o OUT, --output OUT  Fichier de sortie (.sam).
+  -o OUT, --output OUT  Fichier de sortie (format tabulé).
   -b FLANK              Taille de la fenêtre à sélectionner (par défaut : 50)
   -t TYPEF, --type TYPEF
                         Sélectionne uniquement les types souhaiter dans un
@@ -21,8 +19,7 @@ optional arguments:
   -i, --index           Force l'indexation du fichier fasta 2.
   -v, --verbose         Active l'affichage
   -w, --warning         Désactive l'affichage des warnings.
-  -te 1,2, --tempfile 1,2
-                        Force la création du fichier .sam (1) et du fichiers
-                        tabulé intermédiaire (2).
-
+  -te, --tempfile       Force la création du fichier fasta des séquences
+                        sélectionnées, du ficher tabulé intermédiaire et du
+                        fichier d'alignement .sam.
 ```

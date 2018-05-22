@@ -1,0 +1,14 @@
+Chr01	phytozome	gene	1951	2616	.	+	.	ID=Sb01g000200;Name=Sb01g000200;Note=similar_to_Putative_uncharacterized_protein
+Chr01	phytozome	gene	11205	14601	.	-	.	ID=Sb01g000210;Name=Sb01g000210;Note=similar_to_RabGAP/TBC_domain-containing_protein%2C_putative%2C_expressed
+Chr01	phytozome	gene	24632	42234	.	-	.	ID=Sb01g000220;Name=Sb01g000220;Note=similar_to_PDR-like_ABC_transporter
+Chr01	phytozome	gene	59914	63287	.	+	.	ID=Sb01g000230;Name=Sb01g000230;Note=similar_to_Putative_uncharacterized_protein
+Chr01	phytozome	gene	63441	69306	.	-	.	ID=Sb01g000240;Name=Sb01g000240;Note=similar_to_Expressed_protein
+Chr01	phytozome	gene	79602	81452	.	+	.	ID=Sb01g000250;Name=Sb01g000250;Note=Predicted_protein
+Chr01	phytozome	gene	81890	107126	.	+	.	ID=Sb01g000255;Name=Sb01g000255;Note=similar_to_Putative_uncharacterized_protein
+Chr01	phytozome	gene	109971	112306	.	-	.	ID=Sb01g000260;Name=Sb01g000260;Note=similar_to_Os03g0861900_protein
+Chr01	phytozome	gene	112766	115843	.	+	.	ID=Sb01g000270;Name=Sb01g000270;Note=similar_to_Rhodanese-like_domain_containing_protein%2C_expressed
+Chr01	phytozome	gene	116217	136379	.	-	.	ID=Sb01g000280;Name=Sb01g000280;Note=similar_to_Expressed_protein
+Chr01	phytozome	gene	154770	155186	.	+	.	ID=Sb01g000290;Name=Sb01g000290;Note=weakly_similar_to_Putative_uncharacterized_protein
+Chr01	phytozome	gene	155696	161756	.	-	.	ID=Sb01g000300;Name=Sb01g000300;Note=similar_to_Transcriptional_corepressor_LEUNIG%2C_putative%2C_expressed
+Chr01	phytozome	gene	162163	163537	.	-	.	ID=Sb01g000310;Name=Sb01g000310;Note=weakly_similar_to_Putative_uncharacterized_protein
+Chr01	phytozome	gene	185499	190658	.	+	.	ID=Sb01g000330;Name=Sb01g000330;Note=similar_to_Putative_myosin_heavy_chain
