@@ -22,6 +22,7 @@ parser.add_argument("-t", "--type",dest="typeF", default=None, help="Sélectionn
 parser.add_argument("-i", "--index",dest="index", action="store_true", help="Force l'indexation du fichier fasta 2.")
 parser.add_argument("-v", "--verbose",dest="verbose", action="store_true", help="Active l'affichage")
 parser.add_argument("-w", "--warning",dest="warn", action="store_true", help="Désactive l'affichage des warnings.")
+parser.add_argument("-c", "--cds",dest="cds", action="store_true", help="Active la vérification des positions des CDS par rapport aux gènes ou au mRNA")
 parser.add_argument("-te", "--tempfile",dest="tempf", action="store_true", help="Force la création du fichier fasta des séquences sélectionnées, du ficher tabulé intermédiaire et du fichier d'alignement .sam.")
 
 args = parser.parse_args()
@@ -80,6 +81,14 @@ if args.typeF != None and ext != "gff3" :
     print("")
     warnings.warn("L'option --type (-t) est ignorée car le fichier tabulé n'est pas au format GFF.",Warning)
 
+if args.typeF != None and ext == "gff3" :
+    splitType = args.typeF.split(",")
+    typeFclean=[]
+    for t in splitType :
+        t=t.lower()
+        if t not in typeFclean :
+            typeFclean.append(t)
+
 # Méthode permettant de récupérer l'ID des chromosomes et leurs tailles à l'aide de biopython
 
 def parseFa() :
@@ -93,13 +102,7 @@ parseFa()
 # Test si index des chromosomes existant sinon on le réalise
 
 def cutGff() :
-    splitType = args.typeF.split(",")
-    typeFclean=[]
-
-    for t in splitType :
-        t=t.lower()
-        if t not in typeFclean :
-            typeFclean.append(t)
+    global typeFclean
     if args.verbose :
         print("\n ----- Récupération des features de type : \""+",".join(typeFclean)+"\" dans le GFF. -----")
     typeFclean="|".join(typeFclean)
@@ -171,8 +174,7 @@ def align():
 def parseCigar(sam) :
     lenCig=[]
     for i in sam :
-        if int(i[1]) != 0:
-            print(i[1])
+        if int(i[1]) != 0: # On ignore les match complémentaire (flag 2048)
             continue
         leng=0
         res =re.findall("\d+\w",i[5])
@@ -199,7 +201,7 @@ def samToTab() :
                 tabou+= i
             else :
                 for f in samf : # f parcours le fichier .sam
-                    if int(f[1])!=0 :
+                    if int(f[1])!=0 : # On ignore les match complémentaire (flag 2048)
                         continue
                     res=re.search(":(\d+)-(\d+)",f[0])
                     if res :
@@ -242,14 +244,24 @@ def getPosCds(tab) :
     #warnings.filterwarnings("error")
     dicoPos={}
     posGene=()
+    global typeFclean
+    if args.typeF == None :
+        typeD = True
+    else :
+        if ("gene" in typeFclean and "mrna" in typeFclean) :
+            typeD = True
+        else :
+            typeD=False
     with open(tab,"r") as out :
         numGene=0
         for line in out :
             lineSplit=line.split("\t")
             typeA = lineSplit[2].lower()
-            start =lineSplit[3]
-            stop =lineSplit[4]
-            if typeA == "gene" :
+            if typeD and typeA == "gene" :
+                continue
+            start = lineSplit[3]
+            stop = lineSplit[4]
+            if typeA == "gene" or typeA == "mrna" :
                 numGene+=1
                 posGene=(numGene,int(start),int(stop))
                 if posGene not in dicoPos.keys():
@@ -264,8 +276,29 @@ def getPosCds(tab) :
     #warnings.resetwarnings()
     return dicoPos
 
-#Problème pos gene et CDS -> indel ? 
-
+def isComplete() :
+    if ext == "gff3" :
+        dicoPos1=getPosCds(args.tabinput)
+        dicoPos2=getPosCds(args.out)
+        geneInt=[]
+        lastG=0
+        for key in dicoPos1.keys() :
+            for keys in dicoPos2.keys() :
+                if keys[0]>lastG :
+                    lastG=keys[0]
+                if keys[0]==key[0]:
+                    if dicoPos1[key]==dicoPos2[keys]:
+                        geneInt.append(keys[0])
+                   # else :
+                   #     print(key[0])
+                   #     print(dicoPos1[key])
+                   #     print(dicoPos2[keys])
+        for l in range(1,lastG+1) :
+            if l in sorted(geneInt) :
+                print("Gène "+str(l)+" intègre.")
+            else :
+                print("Gène "+str(l)+" non intègre.")
+    return
 
 if args.typeF != None and ext == "gff3" :
     cutGff()
@@ -274,27 +307,5 @@ if args.index:
     index()
 align()
 samToTab()
-
-
-
-if ext == "gff3" :
-    dicoPos1=getPosCds(args.tabinput)
-    dicoPos2=getPosCds(args.out)
-    geneInt=[]
-    lastG=0
-    for key in dicoPos1.keys() :
-        for keys in dicoPos2.keys() :
-            if keys[0]>lastG :
-                lastG=keys[0]
-            if keys[0]==key[0]:
-                if dicoPos1[key]==dicoPos2[keys]:
-                    geneInt.append(keys[0])
-                else :
-                    print(key[0])
-                    print(dicoPos1[key])
-                    print(dicoPos2[keys])
-    for l in range(1,lastG+1) :
-        if l in sorted(geneInt) :
-            print("Gène "+str(l)+" intègre.")
-        else :
-            print("Gène "+str(l)+" non intègre.")
+if args.cds and ext=="gff3" and (args.typeF==None or (("gene" in typeFclean or "mrna" in typeFclean) and "cds" in typeFclean)) :
+    isComplete()
