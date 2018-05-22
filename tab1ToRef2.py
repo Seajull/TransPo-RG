@@ -171,6 +171,9 @@ def align():
 def parseCigar(sam) :
     lenCig=[]
     for i in sam :
+        if int(i[1]) != 0:
+            print(i[1])
+            continue
         leng=0
         res =re.findall("\d+\w",i[5])
         for i in res :
@@ -197,15 +200,13 @@ def samToTab() :
             else :
                 for f in samf : # f parcours le fichier .sam
                     if int(f[1])!=0 :
-                        flag=True
-                    else :
-                        flag=False
+                        continue
                     res=re.search(":(\d+)-(\d+)",f[0])
                     if res :
                         if ext == "gff3" :
                             if int(res.group(1)) == int(line[3])-args.flank -1 :
                                 start=int(f[3])+args.flank
-                                stop=start+lengh[countLine]-(args.flank*2)-1
+                                stop=start+lengh[countLine]-(args.flank*2)-1 #BUGICI SUR COUNTLINE
                                 #print(pos)
                                 countLine+=1
                                 break
@@ -222,11 +223,11 @@ def samToTab() :
                                 break
                         else :
                             countLine+=1
-                if not flag and ext == "vcf" and f[5]==str(args.flank*2+1)+"M": # Match parfait uniquement pour un SNP
+                if ext == "vcf" and f[5]==str(args.flank*2+1)+"M": # Match parfait uniquement pour un SNP
                     tabou+=f[2]+" "+ str(start) +" "+ " ".join(line[2:11])
-                elif not flag and ext == "bed" :
+                elif ext == "bed" :
                     tabou+=f[2]+" "+ str(start) +" "+ str(stop) +" "+line[3].replace(" ","_")+"\n"
-                elif not flag and ext == "gff3" :
+                elif ext == "gff3" :
                     tabou+=f[2]+" "+line[1]+" "+line[2]+" "+ str(start) +" "+ str(stop) +" "+" ".join(line[5:8])+" "+line[8].replace(" ","_")+"\n"
         if ext == "vcf" :
             BedTool(tabou,from_string=True).saveas(args.out)
