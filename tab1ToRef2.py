@@ -23,6 +23,7 @@ parser.add_argument("-i", "--index",dest="index", action="store_true", help="For
 parser.add_argument("-v", "--verbose",dest="verbose", action="store_true", help="Active l'affichage")
 parser.add_argument("-w", "--warning",dest="warn", action="store_true", help="Désactive l'affichage des warnings.")
 parser.add_argument("-c", "--cds",dest="cds", action="store_true", help="Active la vérification des positions des CDS par rapport aux gènes ou au mRNA")
+parser.add_argument("-p", "--prefix",dest="prefix", action="store_true", help="Permet de modifier le préfixe du fichier tabulé pour qu'il corresponde à celui du fichier fasta")
 parser.add_argument("-te", "--tempfile",dest="tempf", action="store_true", help="Force la création du fichier fasta des séquences sélectionnées, du ficher tabulé intermédiaire et du fichier d'alignement .sam.")
 
 args = parser.parse_args()
@@ -60,6 +61,26 @@ except :
 tabOut=tempfile.NamedTemporaryFile()
 tabO=tabOut.name
 
+tabPre=tempfile.NamedTemporaryFile()
+prefixTab=tabPre.name
+
+mod=tempfile.NamedTemporaryFile()
+listMod=mod.name
+with open(listMod,"r+") as out :
+    call(["module list"],shell=True,stderr=out)
+    out.seek(0)
+    for line in out :
+        res=re.findall("\)\s([^\s]+)\s+",line)
+        if "listM" in locals() :
+            for i in res :
+                listM.append(i)
+        else :
+            listM=res
+mandatoryMod=["bioinfo/bwa/0.7.15","system/python/3.4.3","bioinfo/bedtools/2.24.0"]
+for i in mandatoryMod:
+    if i not in listM :
+        print(i)
+
 if not args.tempf :
     aln=tempfile.NamedTemporaryFile()
     alnN=aln.name
@@ -73,9 +94,6 @@ else :
     selectedSeq="resultat/"+fasta1Out[0].split("/")[-1]+"_selected_"+ext+"."+fasta1Out[1]
     tab=(args.tabinput).split(".")
     tabOP="resultat/"+tab[0].split("/")[-1]+"_out."+tab[1]
-
-
-
 
 if args.typeF != None and ext != "gff3" :
     print("")
@@ -99,7 +117,16 @@ def parseFa() :
 
 parseFa()
 
-# Test si index des chromosomes existant sinon on le réalise
+def prefix() :
+    nul=""
+    fasta=SeqIO.parse(args.fasta1,"fasta")
+    first_seq=next(fasta)
+    if (fileTab[0][0][0:-1])!= (first_seq.id[0:-1]) :
+        with open(prefixTab,"w") as pre :
+            for feat in fileTab :
+                nul+= first_seq.id[0:-1]+feat[0][-1]+" "+(" ".join(feat[1:])+"\n")
+    BedTool(nul, from_string=True).saveas(tabO)
+    return
 
 def cutGff() :
     global typeFclean
@@ -113,7 +140,7 @@ def cutGff() :
 
 def getFlank() :
     fileTab2=BedTool(args.tabinput)
-    if args.typeF != None and ext== "gff3" :
+    if (args.typeF != None and ext== "gff3") or args.prefix :
         fileTab2=BedTool(tabO)
     if args.verbose and args.tempf:
         print("\n ----- Création du fichier " +tabOP +". ----- ")
@@ -135,7 +162,7 @@ def getFlank() :
                 else :
                     stop=feature.stop+args.flank-1
                 if feature.start-args.flank < 0 :
-                    start=0 # - combien du coup ?
+                    start=0
                 else :
                     start=feature.start-args.flank-1
                 res += feature.chrom +" "+str(start)+" "+ str(stop)+"\n"
@@ -192,7 +219,7 @@ def samToTab() :
     samf=BedTool(alnN)
     lengh=parseCigar(samf)
     countLine=0
-    if ext=="gff3" and args.typeF != None:
+    if (ext=="gff3" and args.typeF != None) or args.prefix:
         args.tabinput=tabO
     with open(args.tabinput,"r") as tabi :
         for i in tabi : # i parcours tabinput (ou tabO après cutGff)
@@ -208,7 +235,7 @@ def samToTab() :
                         if ext == "gff3" :
                             if int(res.group(1)) == int(line[3])-args.flank -1 :
                                 start=int(f[3])+args.flank
-                                stop=start+lengh[countLine]-(args.flank*2)-1 #BUGICI SUR COUNTLINE
+                                stop=start+lengh[countLine]-(args.flank*2)-1
                                 #print(pos)
                                 countLine+=1
                                 break
@@ -302,6 +329,7 @@ def isComplete() :
 
 if args.typeF != None and ext == "gff3" :
     cutGff()
+prefix()
 getFlank()
 if args.index:
     index()
