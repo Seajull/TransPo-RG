@@ -1,5 +1,0 @@
-Currently Loaded Modulefiles:
-  1) bioinfo/bwa/0.7.15        5) system/python/3.4.3
-  2) system/emacs/24.4         6) system/libevent/2.0.22
-  3) bioinfo/bedtools/2.24.0   7) system/tmux/2.0
-  4) compiler/gcc/4.9.2
