@@ -42,10 +42,11 @@ Ca devrait passer vu qu'on travaille que sur une ref à la fois (1 fasta + 1 fic
 fichier fasta (encore une fois possibilité d'en rentrer plusieurs pour optimiser et
 pas devoir recalculer fasta_selected.fasta pour la ref 1) qui sera juste aligné.
 
-!!!! Vérifier position des CDS dans les gènes (relative au gène) dans v2 pour voir si même disposition dans v2
+@@@@ Vérifier position des CDS dans les gènes (relative au gène) dans v2 pour voir si même disposition dans v2
 getPosCDS -> nouvelle méthode de vérification ? parse les deux fichiers tab (le v1 et
 celui généré (normalement des GFF)) et compare les positions relatives des CDS dans les
 gènes ? Juste à exécuter getPosCDS sur chaque fichiers puis de comparer pour chaque gène
+
 -> en sortie récupéré un autre fichier tab (gff) avec seulement les gènes complet ? Possibilité
 de mettre des seuils -> exemple : 90 % des CDS présent à 90% de match minimum. S'il
 manque un CDS on élimine ?
@@ -54,3 +55,6 @@ Optimisation ? Nombre de parcours d'un génome ? Lecture par biopython puis par
 samtools faidx puis par bedtools getfasta
 Pour getfasta -> parcours très partiel dans le cas d'un vcf mais certaines séquences
 en x2 ou x3 dans le cas d'un gff3 avec gene,cds,mrna -> stockage fasta1_selected.fasta conséquent.
+
+vcf indel ? stop = start + len(alt) - len(ref) (+ ou - 1), comment faire pour mixed records ? (ATC -> AT,ATCG)
+

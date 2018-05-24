@@ -13,17 +13,16 @@ import sys, re, os, timeit, tempfile, argparse, warnings, io, shutil
 parser = argparse.ArgumentParser(add_help=False)
 
 parser.add_argument("-h", "--help", action="help", default=argparse.SUPPRESS,help="Affiche ces messages help")
-parser.add_argument("-f1", "--fasta1", dest="fasta1", default=None, help="Input de la référence fasta 1 (originelle).")
+parser.add_argument("-f1", "--fasta1", dest="fasta1",default=None, help="Input de la référence fasta 1 (originelle).")
 parser.add_argument("-f2", "--fasta2", dest="fasta2", default=None, help="Input de la référence fasta 2 (nouvelle).")
 parser.add_argument("-ti", "--tabinput", dest="tabinput", default=None, help="Input du fichier tabulé associé à fasta 1.")
 parser.add_argument("-o", "--output", dest="out", default=None, help="Fichier de sortie (format tabulé).")
 parser.add_argument("-b", dest="flank", type=int, default=50, help="Taille de la fenêtre à sélectionner (par défaut : 50)")
-parser.add_argument("-t", "--type",dest="typeF", default=None, help="Sélectionne uniquement les types souhaiter dans un gff3 (exemple de format de l'option : 'mRNA,exon,CDS').")
+parser.add_argument("-t", "--type",dest="typeF", default=None, help="Sélectionne uniquement les types souhaiter dans un gff3 (exemple de format de l'option : 'mRNA,exon,cds' (insensible a la casse)).")
 parser.add_argument("-i", "--index",dest="index", action="store_true", help="Force l'indexation du fichier fasta 2.")
 parser.add_argument("-v", "--verbose",dest="verbose", action="store_true", help="Active l'affichage")
 parser.add_argument("-w", "--warning",dest="warn", action="store_true", help="Désactive l'affichage des warnings.")
-parser.add_argument("-c", "--cds",dest="cds", action="store_true", help="Active la vérification des positions des CDS par rapport aux gènes ou au mRNA")
-parser.add_argument("-p", "--prefix",dest="prefix", action="store_true", help="Permet de modifier le préfixe du fichier tabulé pour qu'il corresponde à celui du fichier fasta")
+parser.add_argument("-c", "--cds",dest="cds", action="store_true", help="Active la vérification des positions des CDS par rapport aux gènes ou au mRNA.")
 parser.add_argument("-te", "--tempfile",dest="tempf", action="store_true", help="Force la création du fichier fasta des séquences sélectionnées, du ficher tabulé intermédiaire et du fichier d'alignement .sam.")
 
 args = parser.parse_args()
@@ -100,13 +99,8 @@ if args.typeF != None and ext != "gff3" :
     warnings.warn("L'option --type (-t) est ignorée car le fichier tabulé n'est pas au format GFF.",Warning)
 
 if args.typeF != None and ext == "gff3" :
-    splitType = args.typeF.split(",")
-    typeFclean=[]
-    for t in splitType :
-        t=t.lower()
-        if t not in typeFclean :
-            typeFclean.append(t)
-
+    typ=(re.findall("[a-zA-Z0-9]+",args.typeF))
+    typeFclean=[l.lower() for l in typ]
 # Méthode permettant de récupérer l'ID des chromosomes et leurs tailles à l'aide de biopython
 
 def parseFa() :
@@ -116,8 +110,9 @@ def parseFa() :
     return
 
 parseFa()
-
+change=False
 def prefix() :
+    global change
     nul=""
     fasta=SeqIO.parse(args.fasta1,"fasta")
     first_seq=next(fasta)
@@ -125,7 +120,8 @@ def prefix() :
         with open(prefixTab,"w") as pre :
             for feat in fileTab :
                 nul+= first_seq.id[0:-1]+feat[0][-1]+" "+(" ".join(feat[1:])+"\n")
-    BedTool(nul, from_string=True).saveas(tabO)
+        BedTool(nul, from_string=True).saveas(tabO)
+        change=True
     return
 
 def cutGff() :
@@ -140,7 +136,7 @@ def cutGff() :
 
 def getFlank() :
     fileTab2=BedTool(args.tabinput)
-    if (args.typeF != None and ext== "gff3") or args.prefix :
+    if (args.typeF != None and ext== "gff3") or change :
         fileTab2=BedTool(tabO)
     if args.verbose and args.tempf:
         print("\n ----- Création du fichier " +tabOP +". ----- ")
@@ -219,7 +215,7 @@ def samToTab() :
     samf=BedTool(alnN)
     lengh=parseCigar(samf)
     countLine=0
-    if (ext=="gff3" and args.typeF != None) or args.prefix:
+    if (ext=="gff3" and args.typeF != None) or change:
         args.tabinput=tabO
     with open(args.tabinput,"r") as tabi :
         for i in tabi : # i parcours tabinput (ou tabO après cutGff)
