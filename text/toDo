@@ -56,5 +56,5 @@ samtools faidx puis par bedtools getfasta
 Pour getfasta -> parcours très partiel dans le cas d'un vcf mais certaines séquences
 en x2 ou x3 dans le cas d'un gff3 avec gene,cds,mrna -> stockage fasta1_selected.fasta conséquent.
 
-vcf indel ? stop = start + len(alt) - len(ref) (+ ou - 1), comment faire pour mixed records ? (ATC -> AT,ATCG)
-
+VCF indel, comment faire pour mixed records ? (ATC -> AT,ATCG)
+stop = start + len(alt) (+ ou - 1)
