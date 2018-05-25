@@ -1,53 +1,95 @@
 --- Objectif :
 
-    On dispose d'un fichier fasta (une version d'un génome qui fait office de référence) et d'un ou
-    plusieurs fichiers tabulés associé (.bed, .vcf ou .gff3).  On souhaite projeter les données des
-    fichiers tabulés sur une autre version de ce génome (une autre référence). C'est à dire obtenir
-    un fichier tabulé pour la seconde référence avec un maximum d'informations tirés des fichiers
-    tabulés de la première référence. (exon, cds, snp, indel, gene, etc).
+    On dispose d'un fichier fasta (une version d'un génome qui fait office de référence)
+    et d'un ou plusieurs fichiers tabulés associé (.bed, .vcf ou .gff3).  On souhaite
+    projeter les données des fichiers tabulés sur une autre version de ce génome (une
+    autre référence). C'est à dire obtenir un fichier tabulé pour la seconde référence
+    avec un maximum d'informations tirés des fichiers tabulés de la première référence.
+    (exon, cds, snp, indel, gene, etc).
 
 
 --- Méthodes :
 
-    Pour réaliser ceci, on va récupérer les séquences flanquantes des annotations fournis dans les
-    fichiers tabulés et les mapper sur toute la seconde référence.  Par exemple, si l'on a un SNP à
-    la position 90 dans la première référence, on va récupérer la séquence de 40 à 140 (50 bp de
-    part en part par défaut) que l'on va ensuite aligner sur la deuxième référence.  Dans le cas
-    d'un CDS, on soutrait 50 à la position de départ et on ajoute 50 à la position de fin.
+    Pour réaliser ceci, on va récupérer les séquences flanquantes des annotations fournis
+    dans les fichiers tabulés et les mapper sur toute la seconde référence.  Par exemple,
+    si l'on a un SNP à la position 90 dans la première référence, on va récupérer la
+    séquence de 40 à 140 (50 bp de part en part par défaut) que l'on va ensuite aligner
+    sur la deuxième référence.  Dans le cas d'un CDS, on soutrait 50 à la position de
+    départ et on ajoute 50 à la position de fin.
 
-    On obtient ainsi un fichier d'alignement dont il faut extraire les informations nécessaires pour
-    recréer un fichier tabulé (du même format que celui passé en entrée).
+    On obtient ainsi un fichier d'alignement dont il faut extraire les informations
+    nécessaires, c'est-à-dire les nouvelles position, pour recréer un fichier tabulé (du
+    même format que celui passé en entrée).
 
 
 --- Description du script tab1ToRef2.py :
 
-    Lib : biopython (SeqIO) pybedtools tempfile argparse warnings subprocess
+    Lib : biopython pybedtools tempfile argparse warnings subprocess
 
-    Biopython permet de récupérer la taille de chaque séquence dans la première référence fasta,
-    utile pour la méthode getflank dans le cas d'un fichier vcf (qui modifie les positions dans les
-    fichiers tabulés).
+        Biopython permet de récupérer la taille de chaque séquence dans la première référence
+    fasta, utile pour la méthode getflank dans le cas d'un fichier vcf (qui modifie les
+    positions dans les fichiers tabulés).
 
-    pybedtools permet d'encapsuler tout les fichiers tabulés et d'utiliser plusieurs outils de
-    Bedtools comme getfasta (.sequence() ici) et slop (qui permet de récupérer les séquences et les
-    séquences flanquantes).
+        pybedtools permet d'encapsuler tout les fichiers tabulés et d'utiliser plusieurs
+    outils de Bedtools comme getfasta (.sequence() ici) et slop (qui permet de récupérer
+    les séquences et les séquences flanquantes).
 
-    tempfile permet la création de fichier temporaire afin de limiter le nombre fichier crée en
-    sortie (actuellement on ne crée qu'un fichier .sam et un .vcf (si le fichier tabulé en entrée
-    est un .vcf)).
+        tempfile permet la création de fichier temporaire afin de limiter le nombre fichier
+    crée en sortie (actuellement on ne crée qu'un fichier .sam et un .vcf (si le fichier
+    tabulé en entrée est un .vcf)).
 
-    argparse permet de gérer les arguements à l'aide d'option. On peut ainsi exécuter le script avec
-    l'option -h (ou --help) pour afficher les options disponibles.  Par exemple, l'option -t (ou
-    --type) permet de récupérer seulement les annotations d'un type souhaité à partir d'un fichier
-    .gff (-t cds,gene permet de récupérer tout les gènes et tout les CDS mais pas les
-    exons,mRNA,etc).  Trois options sont obligatoires : les deux références fasta et un fichier
-    tabulé.
+        argparse permet de gérer les arguements à l'aide d'option. On peut ainsi exécuter le
+    script avec l'option -h (ou --help) pour afficher les options disponibles.  Par
+    exemple, l'option -t (ou --type) permet de récupérer seulement les annotations d'un
+    type souhaité à partir d'un fichier .gff (-t cds,gene permet de récupérer tout les
+    gènes et tout les CDS mais pas les exons,mRNA,etc).  Trois options sont obligatoires :
+    les deux références fasta et un fichier tabulé.
+  
 
+    Fonctionnement :
 
+        On vérifie d'abord que les trois fichiers obligatoires sont bien spécifié (deux
+    fichiers FASTA ainsi qu'un fichier tabulé (GFF, VCF ou BED)) ainsi que les différentes
+    versions des outils utilisés sont bien installés (bwa et bedtools).
+    On vérifie aussi le format du fichier tabulé pour pouvoir lui appliquer les méthodes
+    adéquates en fonction. 
+        
+        Dans un premier temps, on récupère les ID et tailles des chromosomes présent dans
+    le fasta1; cela nous servira lorsque l'on modifiera les positions dans le fichier
+    tabulé pour inclure les régions flanquantes. 
+    Si le fichier tabulé est au format GFF et que l'on souhaite filtrer les types
+    d'annotations avec l'option --type, on utilise la méthode cutGff() qui générera un
+    fichier temporaire de type GFF qui sera alors utilisé à la place du fichier passé en
+    entrée. 
+   
+        La méthode getFlank() génère un fichier temporaire tabulé contenant les nouvelles
+    positions avec les régions flanquantes incluses. Pour les fichiers GFF et BED, on
+    utilise l'outils slop de bedtools. Pour les fichiers VCF on doit rajouter une colonne
+    pour la position stop, on crée alors le fichier temporaire manuellement.
+        
+        L'outils getfasta de bedtools permet de sélectionner les séquences spécifiés dans le
+    fichier temporaire tabulé généré au préalable. Cet outil nécessite que l'identifiant
+    du chromosome soit similaire dans le fichier FASTA et dans le fichier tabulé. On
+    vérifie donc que c'est bien le cas sinon on regénére un fichier temporaire tabulé en
+    modifiant le préfixe du fichier tabulé pour que les deux concordent.
+
+        On réalise l'alignement de ces séquences sélectionnés sur le fichier fasta2 et on
+    obtient un fichier d'alignement .SAM dont on extrait les positions moins la longueur
+    des régions flanquantes et on génére un fichier tabulé contenant ces nouvelles
+    positions avec toute les annotations présentes dès le début et que l'on ne modifie
+    pas.
+
+        Dans le cas d'un fichier GFF contenant les annotations de type CDS et mRNA (ou
+    gene), la méthode getPosCds([file]) permet de récupérer les postions relatives des
+    CDS dans les ARNm (ou dans les gènes). Cela nous permet par la suite de comparer ces
+    positions relative entre les deux versions du fasta pour vérifier l'intégrité des ARNm
+    (ou gène) dans le fichier fasta2.
+        
 --- Problèmes rencontrés :
 
-    Gestion des missmatchs lors de du passage du fichier d'alignement à un fichier tabulé.
+    Gestion des missmatchs lors du passage du fichier d'alignement à un fichier tabulé.
 
-    Annotations en début ou en fin de séquence ne sont pas prise en compte car elles sont plus
-    courtes (exemple : SNP à la position 20, avec 50 bp de flank on extrait une séquence de 71 bp,
-    faut-il considérer les 29 manquantes comme des missmatch ? Ou simuler les matchs pour arriver à
-    101M ?).
+    Annotations en début ou en fin de séquence ne sont pas prise en compte car elles sont
+    plus courtes (exemple : SNP à la position 20, avec 50 bp de flank on extrait une
+    séquence de 71 bp, faut-il considérer les 29 manquantes comme des missmatch ? Ou
+    simuler les matchs pour arriver à 101M ?).

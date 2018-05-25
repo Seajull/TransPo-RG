@@ -6,4 +6,8 @@ lol=10
 for i in range (1,lol) :
     if i==2 or i==5:
        continue
-    print(i)
+
+
+p="mm"
+if p :
+    print("p")
