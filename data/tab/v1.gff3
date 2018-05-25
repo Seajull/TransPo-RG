@@ -1,0 +1,300 @@
+chromosome_1	phytozome	gene	2164	2829	.	+	.	ID=Sb01g000200;Name=Sb01g000200;Note=similar to Putative uncharacterized protein
+chromosome_1	phytozome	mRNA	2164	2829	.	+	.	ID=Sb01g000200.1;Parent=Sb01g000200;Dbxref=Phytozome:1949293,TAIR:AT4G05220.1,MSU:LOC_Os07g34720.1;Name=Sb01g000200.1;Note=similar to Putative uncharacterized protein
+chromosome_1	phytozome	polypeptide	2164	2829	.	+	1	ID=Sb01g000200.1.p;Derives_from=Sb01g000200.1;Name=Sb01g000200.1.p;Note=similar to Putative uncharacterized protein
+chromosome_1	phytozome	exon	2164	2829	.	+	.	Parent=Sb01g000200.1
+chromosome_1	phytozome	CDS	2164	2829	.	+	0	Parent=Sb01g000200.1
+chromosome_1	phytozome	gene	11418	14814	.	-	.	ID=Sb01g000210;Name=Sb01g000210;Note=similar to RabGAP/TBC domain-containing protein%2C putative%2C expressed
+chromosome_1	phytozome	mRNA	11418	14814	.	-	.	ID=Sb01g000210.1;Parent=Sb01g000210;Dbxref=Phytozome:1949294,KOG:KOG2197,TAIR:AT4G27100.1,MSU:LOC_Os11g37690.1;Name=Sb01g000210.1;Note=similar to RabGAP/TBC domain-containing protein%2C putative%2C expressed;Ontology_term=GO:0005097,GO:0032313,GO:0005622
+chromosome_1	phytozome	polypeptide	11724	14814	.	-	1	ID=Sb01g000210.1.p;Derives_from=Sb01g000210.1;Name=Sb01g000210.1.p;Note=similar to RabGAP/TBC domain-containing protein%2C putative%2C expressed
+chromosome_1	phytozome	exon	11418	11744	.	-	.	Parent=Sb01g000210.1
+chromosome_1	phytozome	exon	11862	11945	.	-	.	Parent=Sb01g000210.1
+chromosome_1	phytozome	exon	12105	12365	.	-	.	Parent=Sb01g000210.1
+chromosome_1	phytozome	exon	12902	12999	.	-	.	Parent=Sb01g000210.1
+chromosome_1	phytozome	exon	13108	13213	.	-	.	Parent=Sb01g000210.1
+chromosome_1	phytozome	exon	13307	13395	.	-	.	Parent=Sb01g000210.1
+chromosome_1	phytozome	exon	13491	13613	.	-	.	Parent=Sb01g000210.1
+chromosome_1	phytozome	exon	13850	14121	.	-	.	Parent=Sb01g000210.1
+chromosome_1	phytozome	exon	14230	14333	.	-	.	Parent=Sb01g000210.1
+chromosome_1	phytozome	exon	14534	14629	.	-	.	Parent=Sb01g000210.1
+chromosome_1	phytozome	exon	14716	14814	.	-	.	Parent=Sb01g000210.1
+chromosome_1	phytozome	CDS	11724	11744	.	-	0	Parent=Sb01g000210.1
+chromosome_1	phytozome	CDS	11862	11945	.	-	0	Parent=Sb01g000210.1
+chromosome_1	phytozome	CDS	12105	12365	.	-	0	Parent=Sb01g000210.1
+chromosome_1	phytozome	CDS	12902	12999	.	-	2	Parent=Sb01g000210.1
+chromosome_1	phytozome	CDS	13108	13213	.	-	0	Parent=Sb01g000210.1
+chromosome_1	phytozome	CDS	13307	13395	.	-	2	Parent=Sb01g000210.1
+chromosome_1	phytozome	CDS	13491	13613	.	-	2	Parent=Sb01g000210.1
+chromosome_1	phytozome	CDS	13850	14121	.	-	1	Parent=Sb01g000210.1
+chromosome_1	phytozome	CDS	14230	14333	.	-	0	Parent=Sb01g000210.1
+chromosome_1	phytozome	CDS	14534	14629	.	-	0	Parent=Sb01g000210.1
+chromosome_1	phytozome	CDS	14716	14814	.	-	0	Parent=Sb01g000210.1
+chromosome_1	phytozome	gene	24840	42442	.	-	.	ID=Sb01g000220;Name=Sb01g000220;Note=similar to PDR-like ABC transporter
+chromosome_1	phytozome	mRNA	24840	42442	.	-	.	ID=Sb01g000220.1;Parent=Sb01g000220;Dbxref=Phytozome:1949295,KOG:KOG0065,TAIR:AT2G36380.1,MSU:LOC_Os11g37700.1;Name=Sb01g000220.1;Note=similar to PDR-like ABC transporter;Ontology_term=GO:0005524,GO:0016887,GO:0016020
+chromosome_1	phytozome	polypeptide	24840	42442	.	-	1	ID=Sb01g000220.1.p;Derives_from=Sb01g000220.1;Name=Sb01g000220.1.p;Note=similar to PDR-like ABC transporter
+chromosome_1	phytozome	exon	24840	25115	.	-	.	Parent=Sb01g000220.1
+chromosome_1	phytozome	exon	25209	25463	.	-	.	Parent=Sb01g000220.1
+chromosome_1	phytozome	exon	25903	26074	.	-	.	Parent=Sb01g000220.1
+chromosome_1	phytozome	exon	26187	26414	.	-	.	Parent=Sb01g000220.1
+chromosome_1	phytozome	exon	26756	26889	.	-	.	Parent=Sb01g000220.1
+chromosome_1	phytozome	exon	33107	33190	.	-	.	Parent=Sb01g000220.1
+chromosome_1	phytozome	exon	33298	33588	.	-	.	Parent=Sb01g000220.1
+chromosome_1	phytozome	exon	33705	34037	.	-	.	Parent=Sb01g000220.1
+chromosome_1	phytozome	exon	34134	34240	.	-	.	Parent=Sb01g000220.1
+chromosome_1	phytozome	exon	34673	34838	.	-	.	Parent=Sb01g000220.1
+chromosome_1	phytozome	exon	34962	35065	.	-	.	Parent=Sb01g000220.1
+chromosome_1	phytozome	exon	35177	35337	.	-	.	Parent=Sb01g000220.1
+chromosome_1	phytozome	exon	35448	36348	.	-	.	Parent=Sb01g000220.1
+chromosome_1	phytozome	exon	36479	36569	.	-	.	Parent=Sb01g000220.1
+chromosome_1	phytozome	exon	36644	36934	.	-	.	Parent=Sb01g000220.1
+chromosome_1	phytozome	exon	37023	37107	.	-	.	Parent=Sb01g000220.1
+chromosome_1	phytozome	exon	37566	37648	.	-	.	Parent=Sb01g000220.1
+chromosome_1	phytozome	exon	41913	42033	.	-	.	Parent=Sb01g000220.1
+chromosome_1	phytozome	exon	42237	42442	.	-	.	Parent=Sb01g000220.1
+chromosome_1	phytozome	CDS	24840	25115	.	-	0	Parent=Sb01g000220.1
+chromosome_1	phytozome	CDS	25209	25463	.	-	0	Parent=Sb01g000220.1
+chromosome_1	phytozome	CDS	25903	26074	.	-	1	Parent=Sb01g000220.1
+chromosome_1	phytozome	CDS	26187	26414	.	-	1	Parent=Sb01g000220.1
+chromosome_1	phytozome	CDS	26756	26889	.	-	0	Parent=Sb01g000220.1
+chromosome_1	phytozome	CDS	33107	33190	.	-	0	Parent=Sb01g000220.1
+chromosome_1	phytozome	CDS	33298	33588	.	-	0	Parent=Sb01g000220.1
+chromosome_1	phytozome	CDS	33705	34037	.	-	0	Parent=Sb01g000220.1
+chromosome_1	phytozome	CDS	34134	34240	.	-	2	Parent=Sb01g000220.1
+chromosome_1	phytozome	CDS	34673	34838	.	-	0	Parent=Sb01g000220.1
+chromosome_1	phytozome	CDS	34962	35065	.	-	2	Parent=Sb01g000220.1
+chromosome_1	phytozome	CDS	35177	35337	.	-	1	Parent=Sb01g000220.1
+chromosome_1	phytozome	CDS	35448	36348	.	-	2	Parent=Sb01g000220.1
+chromosome_1	phytozome	CDS	36479	36569	.	-	0	Parent=Sb01g000220.1
+chromosome_1	phytozome	CDS	36644	36934	.	-	0	Parent=Sb01g000220.1
+chromosome_1	phytozome	CDS	37023	37107	.	-	1	Parent=Sb01g000220.1
+chromosome_1	phytozome	CDS	37566	37648	.	-	0	Parent=Sb01g000220.1
+chromosome_1	phytozome	CDS	41913	42033	.	-	1	Parent=Sb01g000220.1
+chromosome_1	phytozome	CDS	42237	42442	.	-	0	Parent=Sb01g000220.1
+chromosome_1	phytozome	gene	60122	63495	.	+	.	ID=Sb01g000230;Name=Sb01g000230;Note=similar to Putative uncharacterized protein
+chromosome_1	phytozome	mRNA	60122	63495	.	+	.	ID=Sb01g000230.1;Parent=Sb01g000230;Dbxref=Phytozome:1949296,KOG:KOG0867,TAIR:AT5G41210.1,MSU:LOC_Os11g37730.1;Name=Sb01g000230.1;Note=similar to Putative uncharacterized protein
+chromosome_1	phytozome	polypeptide	60945	63269	.	+	1	ID=Sb01g000230.1.p;Derives_from=Sb01g000230.1;Name=Sb01g000230.1.p;Note=similar to Putative uncharacterized protein
+chromosome_1	phytozome	exon	60122	60346	.	+	.	Parent=Sb01g000230.1
+chromosome_1	phytozome	exon	60586	60659	.	+	.	Parent=Sb01g000230.1
+chromosome_1	phytozome	exon	60934	60994	.	+	.	Parent=Sb01g000230.1
+chromosome_1	phytozome	exon	61463	61516	.	+	.	Parent=Sb01g000230.1
+chromosome_1	phytozome	exon	62276	62355	.	+	.	Parent=Sb01g000230.1
+chromosome_1	phytozome	exon	62779	62984	.	+	.	Parent=Sb01g000230.1
+chromosome_1	phytozome	exon	63057	63495	.	+	.	Parent=Sb01g000230.1
+chromosome_1	phytozome	CDS	60945	60994	.	+	0	Parent=Sb01g000230.1
+chromosome_1	phytozome	CDS	61463	61516	.	+	1	Parent=Sb01g000230.1
+chromosome_1	phytozome	CDS	62276	62355	.	+	1	Parent=Sb01g000230.1
+chromosome_1	phytozome	CDS	62779	62984	.	+	2	Parent=Sb01g000230.1
+chromosome_1	phytozome	CDS	63057	63269	.	+	0	Parent=Sb01g000230.1
+chromosome_1	phytozome	gene	63649	69514	.	-	.	ID=Sb01g000240;Name=Sb01g000240;Note=similar to Expressed protein
+chromosome_1	phytozome	mRNA	63649	69514	.	-	.	ID=Sb01g000240.1;Parent=Sb01g000240;Dbxref=Phytozome:1949297,TAIR:AT5G23890.1,MSU:LOC_Os03g64400.1;Name=Sb01g000240.1;Note=similar to Expressed protein
+chromosome_1	phytozome	polypeptide	63906	69290	.	-	1	ID=Sb01g000240.1.p;Derives_from=Sb01g000240.1;Name=Sb01g000240.1.p;Note=similar to Expressed protein
+chromosome_1	phytozome	exon	63649	64404	.	-	.	Parent=Sb01g000240.1
+chromosome_1	phytozome	exon	65203	65734	.	-	.	Parent=Sb01g000240.1
+chromosome_1	phytozome	exon	65805	65919	.	-	.	Parent=Sb01g000240.1
+chromosome_1	phytozome	exon	66045	66120	.	-	.	Parent=Sb01g000240.1
+chromosome_1	phytozome	exon	66194	66293	.	-	.	Parent=Sb01g000240.1
+chromosome_1	phytozome	exon	66388	66491	.	-	.	Parent=Sb01g000240.1
+chromosome_1	phytozome	exon	66703	66791	.	-	.	Parent=Sb01g000240.1
+chromosome_1	phytozome	exon	67615	68591	.	-	.	Parent=Sb01g000240.1
+chromosome_1	phytozome	exon	68726	68818	.	-	.	Parent=Sb01g000240.1
+chromosome_1	phytozome	exon	69038	69514	.	-	.	Parent=Sb01g000240.1
+chromosome_1	phytozome	CDS	63906	64404	.	-	1	Parent=Sb01g000240.1
+chromosome_1	phytozome	CDS	65203	65734	.	-	2	Parent=Sb01g000240.1
+chromosome_1	phytozome	CDS	65805	65919	.	-	0	Parent=Sb01g000240.1
+chromosome_1	phytozome	CDS	66045	66120	.	-	1	Parent=Sb01g000240.1
+chromosome_1	phytozome	CDS	66194	66293	.	-	2	Parent=Sb01g000240.1
+chromosome_1	phytozome	CDS	66388	66491	.	-	1	Parent=Sb01g000240.1
+chromosome_1	phytozome	CDS	66703	66791	.	-	0	Parent=Sb01g000240.1
+chromosome_1	phytozome	CDS	67615	68591	.	-	2	Parent=Sb01g000240.1
+chromosome_1	phytozome	CDS	68726	68818	.	-	2	Parent=Sb01g000240.1
+chromosome_1	phytozome	CDS	69038	69290	.	-	0	Parent=Sb01g000240.1
+chromosome_1	phytozome	gene	79810	81660	.	+	.	ID=Sb01g000250;Name=Sb01g000250;Note=Predicted protein
+chromosome_1	phytozome	mRNA	79810	81660	.	+	.	ID=Sb01g000250.1;Parent=Sb01g000250;Dbxref=Phytozome:1949299,TAIR:AT5G17910.1,MSU:LOC_Os07g28920.1;Name=Sb01g000250.1;Note=Predicted protein
+chromosome_1	phytozome	polypeptide	79810	81660	.	+	1	ID=Sb01g000250.1.p;Derives_from=Sb01g000250.1;Name=Sb01g000250.1.p;Note=Predicted protein
+chromosome_1	phytozome	exon	79810	81013	.	+	.	Parent=Sb01g000250.1
+chromosome_1	phytozome	exon	81089	81660	.	+	.	Parent=Sb01g000250.1
+chromosome_1	phytozome	CDS	79810	81013	.	+	0	Parent=Sb01g000250.1
+chromosome_1	phytozome	CDS	81089	81660	.	+	2	Parent=Sb01g000250.1
+chromosome_1	phytozome	gene	82098	107334	.	+	.	ID=Sb01g000255;Name=Sb01g000255;Note=similar to Putative uncharacterized protein
+chromosome_1	phytozome	mRNA	82098	107334	.	+	.	ID=Sb01g000255.1;Parent=Sb01g000255;Dbxref=Phytozome:1949300,TAIR:AT5G41470.1,MSU:LOC_Os03g64380.1;Name=Sb01g000255.1;Note=similar to Putative uncharacterized protein
+chromosome_1	phytozome	polypeptide	82098	107334	.	+	1	ID=Sb01g000255.1.p;Derives_from=Sb01g000255.1;Name=Sb01g000255.1.p;Note=similar to Putative uncharacterized protein
+chromosome_1	phytozome	exon	82098	82472	.	+	.	Parent=Sb01g000255.1
+chromosome_1	phytozome	exon	82595	82709	.	+	.	Parent=Sb01g000255.1
+chromosome_1	phytozome	exon	82791	82872	.	+	.	Parent=Sb01g000255.1
+chromosome_1	phytozome	exon	107115	107166	.	+	.	Parent=Sb01g000255.1
+chromosome_1	phytozome	exon	107281	107334	.	+	.	Parent=Sb01g000255.1
+chromosome_1	phytozome	CDS	82098	82472	.	+	0	Parent=Sb01g000255.1
+chromosome_1	phytozome	CDS	82595	82709	.	+	0	Parent=Sb01g000255.1
+chromosome_1	phytozome	CDS	82791	82872	.	+	2	Parent=Sb01g000255.1
+chromosome_1	phytozome	CDS	107115	107166	.	+	1	Parent=Sb01g000255.1
+chromosome_1	phytozome	CDS	107281	107334	.	+	0	Parent=Sb01g000255.1
+chromosome_1	phytozome	gene	110179	112514	.	-	.	ID=Sb01g000260;Name=Sb01g000260;Note=similar to Os03g0861900 protein
+chromosome_1	phytozome	mRNA	110179	112514	.	-	.	ID=Sb01g000260.1;Parent=Sb01g000260;Dbxref=Phytozome:1949301,TAIR:AT5G52850.1,MSU:LOC_Os03g64370.1;Name=Sb01g000260.1;Note=similar to Os03g0861900 protein
+chromosome_1	phytozome	polypeptide	110442	112487	.	-	1	ID=Sb01g000260.1.p;Derives_from=Sb01g000260.1;Name=Sb01g000260.1.p;Note=similar to Os03g0861900 protein
+chromosome_1	phytozome	exon	110179	112514	.	-	.	Parent=Sb01g000260.1
+chromosome_1	phytozome	CDS	110442	112487	.	-	0	Parent=Sb01g000260.1
+chromosome_1	phytozome	gene	112974	116051	.	+	.	ID=Sb01g000270;Name=Sb01g000270;Note=similar to Rhodanese-like domain containing protein%2C expressed
+chromosome_1	phytozome	mRNA	112974	116051	.	+	.	ID=Sb01g000270.1;Parent=Sb01g000270;Dbxref=Phytozome:1949302,TAIR:AT1G17850.2,MSU:LOC_Os03g64350.1;Name=Sb01g000270.1;Note=similar to Rhodanese-like domain containing protein%2C expressed
+chromosome_1	phytozome	polypeptide	113005	115818	.	+	1	ID=Sb01g000270.1.p;Derives_from=Sb01g000270.1;Name=Sb01g000270.1.p;Note=similar to Rhodanese-like domain containing protein%2C expressed
+chromosome_1	phytozome	exon	112974	113298	.	+	.	Parent=Sb01g000270.1
+chromosome_1	phytozome	exon	113435	113488	.	+	.	Parent=Sb01g000270.1
+chromosome_1	phytozome	exon	113713	113862	.	+	.	Parent=Sb01g000270.1
+chromosome_1	phytozome	exon	114467	114629	.	+	.	Parent=Sb01g000270.1
+chromosome_1	phytozome	exon	114875	114963	.	+	.	Parent=Sb01g000270.1
+chromosome_1	phytozome	exon	115059	115165	.	+	.	Parent=Sb01g000270.1
+chromosome_1	phytozome	exon	115350	115604	.	+	.	Parent=Sb01g000270.1
+chromosome_1	phytozome	exon	115686	116051	.	+	.	Parent=Sb01g000270.1
+chromosome_1	phytozome	CDS	113005	113298	.	+	0	Parent=Sb01g000270.1
+chromosome_1	phytozome	CDS	113435	113488	.	+	0	Parent=Sb01g000270.1
+chromosome_1	phytozome	CDS	113713	113862	.	+	0	Parent=Sb01g000270.1
+chromosome_1	phytozome	CDS	114467	114629	.	+	0	Parent=Sb01g000270.1
+chromosome_1	phytozome	CDS	114875	114963	.	+	2	Parent=Sb01g000270.1
+chromosome_1	phytozome	CDS	115059	115165	.	+	0	Parent=Sb01g000270.1
+chromosome_1	phytozome	CDS	115350	115604	.	+	1	Parent=Sb01g000270.1
+chromosome_1	phytozome	CDS	115686	115818	.	+	1	Parent=Sb01g000270.1
+chromosome_1	phytozome	gene	116303	136465	.	-	.	ID=Sb01g000280;Name=Sb01g000280;Note=similar to Expressed protein
+chromosome_1	phytozome	mRNA	116303	136465	.	-	.	ID=Sb01g000280.1;Parent=Sb01g000280;Dbxref=Phytozome:1949303,TAIR:AT5G43310.2,MSU:LOC_Os03g64320.1;Name=Sb01g000280.1;Note=similar to Expressed protein
+chromosome_1	phytozome	polypeptide	116616	136465	.	-	1	ID=Sb01g000280.1.p;Derives_from=Sb01g000280.1;Name=Sb01g000280.1.p;Note=similar to Expressed protein
+chromosome_1	phytozome	exon	116303	116677	.	-	.	Parent=Sb01g000280.1
+chromosome_1	phytozome	exon	116891	116944	.	-	.	Parent=Sb01g000280.1
+chromosome_1	phytozome	exon	117155	117512	.	-	.	Parent=Sb01g000280.1
+chromosome_1	phytozome	exon	117752	118666	.	-	.	Parent=Sb01g000280.1
+chromosome_1	phytozome	exon	120754	122258	.	-	.	Parent=Sb01g000280.1
+chromosome_1	phytozome	exon	132666	132877	.	-	.	Parent=Sb01g000280.1
+chromosome_1	phytozome	exon	133919	134071	.	-	.	Parent=Sb01g000280.1
+chromosome_1	phytozome	exon	134427	134488	.	-	.	Parent=Sb01g000280.1
+chromosome_1	phytozome	exon	134581	134633	.	-	.	Parent=Sb01g000280.1
+chromosome_1	phytozome	exon	135470	135509	.	-	.	Parent=Sb01g000280.1
+chromosome_1	phytozome	exon	135595	135715	.	-	.	Parent=Sb01g000280.1
+chromosome_1	phytozome	exon	135812	135991	.	-	.	Parent=Sb01g000280.1
+chromosome_1	phytozome	exon	136407	136465	.	-	.	Parent=Sb01g000280.1
+chromosome_1	phytozome	CDS	116616	116677	.	-	2	Parent=Sb01g000280.1
+chromosome_1	phytozome	CDS	116891	116944	.	-	2	Parent=Sb01g000280.1
+chromosome_1	phytozome	CDS	117155	117512	.	-	0	Parent=Sb01g000280.1
+chromosome_1	phytozome	CDS	117752	118666	.	-	0	Parent=Sb01g000280.1
+chromosome_1	phytozome	CDS	120754	122258	.	-	2	Parent=Sb01g000280.1
+chromosome_1	phytozome	CDS	132666	132877	.	-	1	Parent=Sb01g000280.1
+chromosome_1	phytozome	CDS	133919	134071	.	-	1	Parent=Sb01g000280.1
+chromosome_1	phytozome	CDS	134427	134488	.	-	0	Parent=Sb01g000280.1
+chromosome_1	phytozome	CDS	134581	134633	.	-	2	Parent=Sb01g000280.1
+chromosome_1	phytozome	CDS	135470	135509	.	-	0	Parent=Sb01g000280.1
+chromosome_1	phytozome	CDS	135595	135715	.	-	1	Parent=Sb01g000280.1
+chromosome_1	phytozome	CDS	135812	135991	.	-	1	Parent=Sb01g000280.1
+chromosome_1	phytozome	CDS	136407	136465	.	-	0	Parent=Sb01g000280.1
+chromosome_1	phytozome	gene	155165	155581	.	+	.	ID=Sb01g000290;Name=Sb01g000290;Note=weakly similar to Putative uncharacterized protein
+chromosome_1	phytozome	mRNA	155165	155581	.	+	.	ID=Sb01g000290.1;Parent=Sb01g000290;Dbxref=Phytozome:1949304,MSU:LOC_Os03g64310.1;Name=Sb01g000290.1;Note=weakly similar to Putative uncharacterized protein
+chromosome_1	phytozome	polypeptide	155165	155581	.	+	1	ID=Sb01g000290.1.p;Derives_from=Sb01g000290.1;Name=Sb01g000290.1.p;Note=weakly similar to Putative uncharacterized protein
+chromosome_1	phytozome	exon	155165	155333	.	+	.	Parent=Sb01g000290.1
+chromosome_1	phytozome	exon	155439	155581	.	+	.	Parent=Sb01g000290.1
+chromosome_1	phytozome	CDS	155165	155333	.	+	0	Parent=Sb01g000290.1
+chromosome_1	phytozome	CDS	155439	155581	.	+	2	Parent=Sb01g000290.1
+chromosome_1	phytozome	gene	156091	162151	.	-	.	ID=Sb01g000300;Name=Sb01g000300;Note=similar to Transcriptional corepressor LEUNIG%2C putative%2C expressed
+chromosome_1	phytozome	mRNA	156091	162151	.	-	.	ID=Sb01g000300.1;Parent=Sb01g000300;Dbxref=Phytozome:1949305,KOG:KOG0266,TAIR:AT2G32700.6,MSU:LOC_Os03g64300.1;Name=Sb01g000300.1;Note=similar to Transcriptional corepressor LEUNIG%2C putative%2C expressed;Ontology_term=GO:0005515
+chromosome_1	phytozome	polypeptide	156091	162151	.	-	1	ID=Sb01g000300.1.p;Derives_from=Sb01g000300.1;Name=Sb01g000300.1.p;Note=similar to Transcriptional corepressor LEUNIG%2C putative%2C expressed
+chromosome_1	phytozome	exon	156091	156234	.	-	.	Parent=Sb01g000300.1
+chromosome_1	phytozome	exon	156335	156532	.	-	.	Parent=Sb01g000300.1
+chromosome_1	phytozome	exon	156605	156733	.	-	.	Parent=Sb01g000300.1
+chromosome_1	phytozome	exon	156827	156982	.	-	.	Parent=Sb01g000300.1
+chromosome_1	phytozome	exon	158037	158186	.	-	.	Parent=Sb01g000300.1
+chromosome_1	phytozome	exon	158562	158671	.	-	.	Parent=Sb01g000300.1
+chromosome_1	phytozome	exon	158874	159006	.	-	.	Parent=Sb01g000300.1
+chromosome_1	phytozome	exon	159096	159305	.	-	.	Parent=Sb01g000300.1
+chromosome_1	phytozome	exon	159384	159452	.	-	.	Parent=Sb01g000300.1
+chromosome_1	phytozome	exon	159639	159839	.	-	.	Parent=Sb01g000300.1
+chromosome_1	phytozome	exon	159914	159966	.	-	.	Parent=Sb01g000300.1
+chromosome_1	phytozome	exon	160968	161073	.	-	.	Parent=Sb01g000300.1
+chromosome_1	phytozome	exon	161177	161231	.	-	.	Parent=Sb01g000300.1
+chromosome_1	phytozome	exon	161313	161557	.	-	.	Parent=Sb01g000300.1
+chromosome_1	phytozome	exon	161682	161982	.	-	.	Parent=Sb01g000300.1
+chromosome_1	phytozome	exon	162120	162151	.	-	.	Parent=Sb01g000300.1
+chromosome_1	phytozome	CDS	156091	156234	.	-	0	Parent=Sb01g000300.1
+chromosome_1	phytozome	CDS	156335	156532	.	-	0	Parent=Sb01g000300.1
+chromosome_1	phytozome	CDS	156605	156733	.	-	0	Parent=Sb01g000300.1
+chromosome_1	phytozome	CDS	156827	156982	.	-	0	Parent=Sb01g000300.1
+chromosome_1	phytozome	CDS	158037	158186	.	-	0	Parent=Sb01g000300.1
+chromosome_1	phytozome	CDS	158562	158671	.	-	2	Parent=Sb01g000300.1
+chromosome_1	phytozome	CDS	158874	159006	.	-	0	Parent=Sb01g000300.1
+chromosome_1	phytozome	CDS	159096	159305	.	-	0	Parent=Sb01g000300.1
+chromosome_1	phytozome	CDS	159384	159452	.	-	0	Parent=Sb01g000300.1
+chromosome_1	phytozome	CDS	159639	159839	.	-	0	Parent=Sb01g000300.1
+chromosome_1	phytozome	CDS	159914	159966	.	-	2	Parent=Sb01g000300.1
+chromosome_1	phytozome	CDS	160968	161073	.	-	0	Parent=Sb01g000300.1
+chromosome_1	phytozome	CDS	161177	161231	.	-	1	Parent=Sb01g000300.1
+chromosome_1	phytozome	CDS	161313	161557	.	-	0	Parent=Sb01g000300.1
+chromosome_1	phytozome	CDS	161682	161982	.	-	1	Parent=Sb01g000300.1
+chromosome_1	phytozome	CDS	162120	162151	.	-	0	Parent=Sb01g000300.1
+chromosome_1	phytozome	gene	162795	167954	.	-	.	ID=Sb01g000310;Name=Sb01g000310;Note=weakly similar to Putative uncharacterized protein
+chromosome_1	phytozome	mRNA	162795	167954	.	-	.	ID=Sb01g000310.1;Parent=Sb01g000310;Dbxref=Phytozome:1949306,KOG:KOG0192,TAIR:AT2G35050.1,MSU:LOC_Os07g25680.1;Name=Sb01g000310.1;Note=weakly similar to Putative uncharacterized protein;Ontology_term=GO:0004672,GO:0005524,GO:0006468,GO:0005515
+chromosome_1	phytozome	polypeptide	163137	167954	.	-	1	ID=Sb01g000310.1.p;Derives_from=Sb01g000310.1;Name=Sb01g000310.1.p;Note=weakly similar to Putative uncharacterized protein
+chromosome_1	phytozome	exon	162795	163336	.	-	.	Parent=Sb01g000310.1
+chromosome_1	phytozome	exon	163419	163506	.	-	.	Parent=Sb01g000310.1
+chromosome_1	phytozome	exon	163679	163801	.	-	.	Parent=Sb01g000310.1
+chromosome_1	phytozome	exon	163883	164030	.	-	.	Parent=Sb01g000310.1
+chromosome_1	phytozome	exon	164120	164283	.	-	.	Parent=Sb01g000310.1
+chromosome_1	phytozome	exon	164488	164640	.	-	.	Parent=Sb01g000310.1
+chromosome_1	phytozome	exon	165103	165183	.	-	.	Parent=Sb01g000310.1
+chromosome_1	phytozome	exon	165267	167954	.	-	.	Parent=Sb01g000310.1
+chromosome_1	phytozome	CDS	163137	163336	.	-	2	Parent=Sb01g000310.1
+chromosome_1	phytozome	CDS	163419	163506	.	-	0	Parent=Sb01g000310.1
+chromosome_1	phytozome	CDS	163679	163801	.	-	0	Parent=Sb01g000310.1
+chromosome_1	phytozome	CDS	163883	164030	.	-	1	Parent=Sb01g000310.1
+chromosome_1	phytozome	CDS	164120	164283	.	-	0	Parent=Sb01g000310.1
+chromosome_1	phytozome	CDS	164488	164640	.	-	0	Parent=Sb01g000310.1
+chromosome_1	phytozome	CDS	165103	165183	.	-	0	Parent=Sb01g000310.1
+chromosome_1	phytozome	CDS	165267	167954	.	-	0	Parent=Sb01g000310.1
+chromosome_1	phytozome	gene	186074	205207	.	+	.	ID=Sb01g000330;Name=Sb01g000330;Note=similar to Putative myosin heavy chain
+chromosome_1	phytozome	mRNA	186074	205207	.	+	.	ID=Sb01g000330.1;Parent=Sb01g000330;Dbxref=Phytozome:1949308,KOG:KOG0160,TAIR:AT1G04160.1,MSU:LOC_Os03g64290.1;Name=Sb01g000330.1;Note=similar to Putative myosin heavy chain;Ontology_term=GO:0003774,GO:0005524,GO:0016459,GO:0005515
+chromosome_1	phytozome	polypeptide	186074	205207	.	+	1	ID=Sb01g000330.1.p;Derives_from=Sb01g000330.1;Name=Sb01g000330.1.p;Note=similar to Putative myosin heavy chain
+chromosome_1	phytozome	exon	186074	186292	.	+	.	Parent=Sb01g000330.1
+chromosome_1	phytozome	exon	186498	186641	.	+	.	Parent=Sb01g000330.1
+chromosome_1	phytozome	exon	187093	187482	.	+	.	Parent=Sb01g000330.1
+chromosome_1	phytozome	exon	187802	187860	.	+	.	Parent=Sb01g000330.1
+chromosome_1	phytozome	exon	187965	188124	.	+	.	Parent=Sb01g000330.1
+chromosome_1	phytozome	exon	188573	188722	.	+	.	Parent=Sb01g000330.1
+chromosome_1	phytozome	exon	188807	188943	.	+	.	Parent=Sb01g000330.1
+chromosome_1	phytozome	exon	189030	189176	.	+	.	Parent=Sb01g000330.1
+chromosome_1	phytozome	exon	189288	189389	.	+	.	Parent=Sb01g000330.1
+chromosome_1	phytozome	exon	190949	191006	.	+	.	Parent=Sb01g000330.1
+chromosome_1	phytozome	exon	191116	191217	.	+	.	Parent=Sb01g000330.1
+chromosome_1	phytozome	exon	192134	192171	.	+	.	Parent=Sb01g000330.1
+chromosome_1	phytozome	exon	192260	192386	.	+	.	Parent=Sb01g000330.1
+chromosome_1	phytozome	exon	193301	193468	.	+	.	Parent=Sb01g000330.1
+chromosome_1	phytozome	exon	193538	193669	.	+	.	Parent=Sb01g000330.1
+chromosome_1	phytozome	exon	194358	194467	.	+	.	Parent=Sb01g000330.1
+chromosome_1	phytozome	exon	194543	194603	.	+	.	Parent=Sb01g000330.1
+chromosome_1	phytozome	exon	194656	194715	.	+	.	Parent=Sb01g000330.1
+chromosome_1	phytozome	exon	194890	195067	.	+	.	Parent=Sb01g000330.1
+chromosome_1	phytozome	exon	195170	195375	.	+	.	Parent=Sb01g000330.1
+chromosome_1	phytozome	exon	195755	195874	.	+	.	Parent=Sb01g000330.1
+chromosome_1	phytozome	exon	196148	196246	.	+	.	Parent=Sb01g000330.1
+chromosome_1	phytozome	exon	196304	196396	.	+	.	Parent=Sb01g000330.1
+chromosome_1	phytozome	exon	199582	199791	.	+	.	Parent=Sb01g000330.1
+chromosome_1	phytozome	exon	199891	200030	.	+	.	Parent=Sb01g000330.1
+chromosome_1	phytozome	exon	200449	200484	.	+	.	Parent=Sb01g000330.1
+chromosome_1	phytozome	exon	200763	200883	.	+	.	Parent=Sb01g000330.1
+chromosome_1	phytozome	exon	201002	201151	.	+	.	Parent=Sb01g000330.1
+chromosome_1	phytozome	exon	201722	201925	.	+	.	Parent=Sb01g000330.1
+chromosome_1	phytozome	exon	203378	203482	.	+	.	Parent=Sb01g000330.1
+chromosome_1	phytozome	exon	203568	203638	.	+	.	Parent=Sb01g000330.1
+chromosome_1	phytozome	exon	203709	203808	.	+	.	Parent=Sb01g000330.1
+chromosome_1	phytozome	exon	204300	204356	.	+	.	Parent=Sb01g000330.1
+chromosome_1	phytozome	exon	204613	204828	.	+	.	Parent=Sb01g000330.1
+chromosome_1	phytozome	exon	204906	204994	.	+	.	Parent=Sb01g000330.1
+chromosome_1	phytozome	exon	205093	205207	.	+	.	Parent=Sb01g000330.1
+chromosome_1	phytozome	CDS	186074	186292	.	+	0	Parent=Sb01g000330.1
+chromosome_1	phytozome	CDS	186498	186641	.	+	0	Parent=Sb01g000330.1
+chromosome_1	phytozome	CDS	187093	187482	.	+	0	Parent=Sb01g000330.1
+chromosome_1	phytozome	CDS	187802	187860	.	+	0	Parent=Sb01g000330.1
+chromosome_1	phytozome	CDS	187965	188124	.	+	1	Parent=Sb01g000330.1
+chromosome_1	phytozome	CDS	188573	188722	.	+	0	Parent=Sb01g000330.1
+chromosome_1	phytozome	CDS	188807	188943	.	+	0	Parent=Sb01g000330.1
+chromosome_1	phytozome	CDS	189030	189176	.	+	1	Parent=Sb01g000330.1
+chromosome_1	phytozome	CDS	189288	189389	.	+	1	Parent=Sb01g000330.1
+chromosome_1	phytozome	CDS	190949	191006	.	+	1	Parent=Sb01g000330.1
+chromosome_1	phytozome	CDS	191116	191217	.	+	0	Parent=Sb01g000330.1
+chromosome_1	phytozome	CDS	192134	192171	.	+	0	Parent=Sb01g000330.1
+chromosome_1	phytozome	CDS	192260	192386	.	+	1	Parent=Sb01g000330.1
+chromosome_1	phytozome	CDS	193301	193468	.	+	0	Parent=Sb01g000330.1
+chromosome_1	phytozome	CDS	193538	193669	.	+	0	Parent=Sb01g000330.1
+chromosome_1	phytozome	CDS	194358	194467	.	+	0	Parent=Sb01g000330.1
+chromosome_1	phytozome	CDS	194543	194603	.	+	1	Parent=Sb01g000330.1
+chromosome_1	phytozome	CDS	194656	194715	.	+	0	Parent=Sb01g000330.1
