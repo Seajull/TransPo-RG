@@ -1,5 +1,5 @@
-@@@@@ flank.py -> Sélectionner régions flanquantes des régions spécifiés dans le
-      fichier tabulé associé (BED/VCF/GFF)
+@@@@@ flank.py -> Sélectionner régions flanquantes des régions spécifiés dans le fichier
+tabulé associé (BED/VCF/GFF)
 
 @@@@@ !!! Formater SNP (VCF ??)
 
@@ -9,52 +9,63 @@
 
 @@@@@ Fichier d'alignement en sortie (sam) -> samtobam de samtools -> bamtobed de bedtools
 
-@@@@@ Comparer fichier bed en sortie avec le fichier bed obtenus (reverse flank.py
-      pour comparer vraiment les régions ? perte de l'information d'un snp ? snp = stop - start - (2 x windows) = 0 -> snp)
+@@@@@ Comparer fichier bed en sortie avec le fichier bed obtenus (reverse flank.py pour
+comparer vraiment les régions ? perte de l'information d'un snp ? snp = stop - start - (2
+x windows) = 0 -> snp)
 
 @@@@@ tempfile ?
 
-@@@@ SAM en sortie de final.py (trouver un nom) -> transformer en vcf/bed/gff (selon fileTab.file_type) (reverse flank ?)
-PROBLEME ! Ecriture fichier tab ? vcf pour commencer -> faire + 50 sur la pos du
-SAM pour retomber sur le SNP (ou en tout cas la pos défini dans le vcf originelle).
-Problème pour gene/CDS : taille variable si indel, comment récupérer la taille ? (CIGAR ?)
-Que récupérer ? Strict minimum ? (REFID QUERYID POS ? (+ type pour GFF ofc))
--> création de fichier tabulé non formater ? Ou format important pour utilisation ultérieur ?
+@@@@ SAM en sortie de final.py (trouver un nom) -> transformer en vcf/bed/gff (selon
+fileTab.file_type) (reverse flank ?) PROBLEME ! Ecriture fichier tab ? vcf pour commencer
+-> faire + 50 sur la pos du SAM pour retomber sur le SNP (ou en tout cas la pos défini
+dans le vcf originelle).  Problème pour gene/CDS : taille variable si indel, comment
+récupérer la taille ? (CIGAR ?) Que récupérer ? Strict minimum ? (REFID QUERYID POS ? (+
+type pour GFF ofc)) -> création de fichier tabulé non formater ? Ou format important pour
+utilisation ultérieur ?
 
-@@@@@ -> stocker pos des gene ? oui pour pouvoir les retrouver
-@@@@@ -> stocker pos gene dans keys avec list[start,stop] et stocker pos cds dans values list[list[start,pos]]
+@@@@@ -> stocker pos des gene ? oui pour pouvoir les retrouver @@@@@ -> stocker pos gene
+dans keys avec list[start,stop] et stocker pos cds dans values list[list[start,pos]]
 
 @@@@ Tempfile mini requis pour gain d'espace même si on a que 1 ref de base à traiter
-(envisager la possibilité de mettre plusieurs version d'un coup pour comparer sur
-cette ref 1).
+(envisager la possibilité de mettre plusieurs version d'un coup pour comparer sur cette
+ref 1).
 
 @@@@ Méthode cutGff crée un fichier GFF, possibilité de renvoyer directement le stdout
-d'une méthode ? Du coup juste print les lignes dans la méthode et renvoyé tout ça
-dans getfasta directement (qui est appelé dans align) -> redirigé dans un objet
-file-like (stringIO -> mais stockage mémoire vive ? mieux que stockage dans un tempfile ?)
+d'une méthode ? Du coup juste print les lignes dans la méthode et renvoyé tout ça dans
+getfasta directement (qui est appelé dans align) -> redirigé dans un objet file-like
+(stringIO -> mais stockage mémoire vive ? mieux que stockage dans un tempfile ?)
 
-@@@@ Passer direct la sortie stdout dans bwa mem ? Doit être possible mais
-comment cela est géré ? Mémoire vive ? -> trop conséquent et risque de gros problème !
-Solution de perte de temps de calcul pour reparcourir une fois la ref 1 et ?????.
+@@@@ Passer direct la sortie stdout dans bwa mem ? Doit être possible mais comment cela
+est géré ? Mémoire vive ? -> trop conséquent et risque de gros problème !  Solution de
+perte de temps de calcul pour reparcourir une fois la ref 1 et ?????.
 
 Ca devrait passer vu qu'on travaille que sur une ref à la fois (1 fasta + 1 fichier tabulé
 (-> possibilité d'en rentrer plusieurs d'un coup ? Intérêt ?)) et compare à un seul
-fichier fasta (encore une fois possibilité d'en rentrer plusieurs pour optimiser et
-pas devoir recalculer fasta_selected.fasta pour la ref 1) qui sera juste aligné.
+fichier fasta (encore une fois possibilité d'en rentrer plusieurs pour optimiser et pas
+devoir recalculer fasta_selected.fasta pour la ref 1) qui sera juste aligné.
 
-@@@@ Vérifier position des CDS dans les gènes (relative au gène) dans v2 pour voir si même disposition dans v2
-getPosCDS -> nouvelle méthode de vérification ? parse les deux fichiers tab (le v1 et
-celui généré (normalement des GFF)) et compare les positions relatives des CDS dans les
-gènes ? Juste à exécuter getPosCDS sur chaque fichiers puis de comparer pour chaque gène
+@@@@ Vérifier position des CDS dans les gènes (relative au gène) dans v2 pour voir si même
+disposition dans v2 getPosCDS -> nouvelle méthode de vérification ? parse les deux
+fichiers tab (le v1 et celui généré (normalement des GFF)) et compare les positions
+relatives des CDS dans les gènes ? Juste à exécuter getPosCDS sur chaque fichiers puis de
+comparer pour chaque gène
 
--> en sortie récupéré un autre fichier tab (gff) avec seulement les gènes complet ? Possibilité
-de mettre des seuils -> exemple : 90 % des CDS présent à 90% de match minimum. S'il
-manque un CDS on élimine ?
+-> en sortie récupéré un autre fichier tab (gff) avec seulement les gènes complet ?
+Possibilité de mettre des seuils -> exemple : 90 % des CDS présent à 90% de match minimum.
+S'il manque un CDS on élimine ?
 
-Optimisation ? Nombre de parcours d'un génome ? Lecture par biopython puis par
-samtools faidx puis par bedtools getfasta
-Pour getfasta -> parcours très partiel dans le cas d'un vcf mais certaines séquences
-en x2 ou x3 dans le cas d'un gff3 avec gene,cds,mrna -> stockage fasta1_selected.fasta conséquent.
+Optimisation ? Nombre de parcours d'un génome ? Lecture par biopython puis par samtools
+faidx puis par bedtools getfasta Pour getfasta -> parcours très partiel dans le cas d'un
+vcf mais certaines séquences en x2 ou x3 dans le cas d'un gff3 avec gene,cds,mrna ->
+stockage fasta1_selected.fasta conséquent.
 
-VCF indel, comment faire pour mixed records ? (ATC -> AT,ATCG)
-stop = start + len(alt) (+ ou - 1)
+VCF indel, comment faire pour mixed records ? (ATC -> AT,ATCG) stop = start + len(alt) (+
+ou - 1)
+
+gestion tag NM (edit distance), si > 0 = missmatch, région flanquantes chevauchante
+(plusieurs SNP annoté dans la région) ? 
+
+
+
+
+

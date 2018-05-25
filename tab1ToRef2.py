@@ -153,10 +153,10 @@ def getFlank() :
                     lenghtC=re.search(feature.chrom+"\t(\d+)",line)
                     if lenghtC :
                         break
-                if feature.stop+args.flank-1 > int(lenghtC.group(1)):
+                if feature.stop+args.flank-1+(len(feature[3])-1) > int(lenghtC.group(1)):
                     stop=int(lenghtC.group(1))
                 else :
-                    stop=feature.stop+args.flank-1
+                    stop=feature.stop+args.flank-1+(len(feature[3])-1)
                 if feature.start-args.flank < 0 :
                     start=0
                 else :
@@ -176,8 +176,8 @@ def getFasta():
 def index() :
     if args.verbose :
         print("\n ----- Indexation du fichier "+args.fasta2+" par BWA. ----- \n")
-        call(["bwa","index",args.fasta2])
-        print("")
+    call(["bwa","index",args.fasta2])
+    print("")
     return
 
 def align():
@@ -248,6 +248,8 @@ def samToTab() :
                                 break
                         else :
                             countLine+=1
+                if f[11][-1]!="0" and f[5]=="101M":     # Affiche l'ID des séquences contenant un missmatch
+                    print(f[0].split(":")[1]+"\t"+f[11])
                 if ext == "vcf" and f[5]==str(args.flank*2+1)+"M": # Match parfait uniquement pour un SNP
                     tabou+=f[2]+" "+ str(start) +" "+ " ".join(line[2:11])
                 elif ext == "bed" :
