@@ -15,7 +15,7 @@ Arguments optionnels :
                         d'autre de l'annotation (par défaut : 50).
   -c, --cds             Active la vérification des positions des CDS par
                         rapport aux gènes ou au mRNA.
-  -h, --help            Affiche ces messages help
+  -h, --help            Affiche ces messages d'aide.
   -i, --index           Force l'indexation du fichier fasta 2.
   -o OUT, --output OUT  Fichier de sortie (format tabulé).
   -t TYPEF, --type TYPEF
@@ -25,6 +25,6 @@ Arguments optionnels :
   -te, --tempfile       Force la création du fichier fasta des séquences
                         sélectionnées, du ficher tabulé intermédiaire et du
                         fichier d'alignement .sam.
-  -v, --verbose         Active l'affichage
+  -v, --verbose         Active l'affichage des messages.
   -w, --warning         Désactive l'affichage des warnings.
 ```
