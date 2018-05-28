@@ -1,8 +1,8 @@
 Prérequis :  
 -
-** python 3.4.3
-** bwa mem 0.7.15
-** bedtools 2.24.0
+* * python 3.4.3
+* * bwa mem 0.7.15
+* * bedtools 2.24.0
 
 
 
