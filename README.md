@@ -1,4 +1,9 @@
 ``` python3
+
+**ok**
+
+
+
 usage: tab1ToRef2.py [-f1 FASTA1] [-f2 FASTA2] [-ti TABINPUT] [-b FLANK] [-c]
                      [-h] [-i] [-o OUT] [-t TYPEF] [-te] [-v] [-w]
 
