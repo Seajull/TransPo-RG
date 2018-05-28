@@ -1,10 +1,9 @@
-''' Markdown
-### __Prérequis__ :  
+### Prérequis :  
 
 * python 3.4.3
 * bwa mem 0.7.15
 * bedtools 2.24.0
-'''
+
 ----------
 ``` python3
 usage: tab1ToRef2.py [-f1 FASTA1] [-f2 FASTA2] [-ti TABINPUT] [-b FLANK] [-c]
