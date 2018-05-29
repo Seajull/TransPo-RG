@@ -3,9 +3,9 @@
 * bwa mem (0.7.15)
 * bedtools (2.24.0)
 * python 3 (3.4.3)
-* biopython (1.65+) 
-* bedtools (2.24.0)
-* pybedtools (0.7.10)
+    * biopython (1.65+) 
+    * bedtools (2.24.0)
+    * pybedtools (0.7.10)
 
 
 ----------
