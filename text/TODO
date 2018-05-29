@@ -1,18 +1,22 @@
 @ Journal
 
+--- SEMAINE 22 ---
+
 # 29/05/2018 
 -- Objectif
 
-* Traduction programme en anglais (but -> internationalisé, portabilité, compatibilité
-(accent))
+* Traduction programme en anglais (but -> internationalisé, portabilité,
+compatibilité (accent))
 
-* Virtualenv pour avoir son install de python indépendante (possibilité de rajouter /
-enlever des librairies rapidement -> enlever un maximum les appels systèmes).
+* Virtualenv pour avoir son install de python indépendante (possibilité de
+rajouter / enlever des librairies rapidement -> enlever un maximum les appels
+systèmes).
 
-* Dans l'optique de limiter voir suppprimer complétement les appels systèmes, remplacer
-test module par test rapide (appel --version par exemple et regarder si stderr est bien
-vide (check de subprocess ?). Remplacer appel système par librairie bwa mem et awk par ???
-mais ça doit exister (ou juste recoder manuellement avec pybedtools).
+* Dans l'optique de limiter voir suppprimer complétement les appels systèmes,
+remplacer test module par test rapide (appel --version par exemple et regarder
+si stderr est bien vide (check de subprocess ?). Remplacer appel système par
+librairie bwa mem et awk par ???  mais ça doit exister (ou juste recoder
+manuellement avec pybedtools).
 
 -- Done
 
@@ -20,20 +24,33 @@ mais ça doit exister (ou juste recoder manuellement avec pybedtools).
 
 * Virtualenv bien setup (/venv) -> activer venv avec source venv/bin/activate
 
-* Appel système AWK remplacer par une boucle for + split("\t")  BWA wrapper trop vieux,
-aucun ne fonctionne
+* Appel système AWK remplacer par une boucle for + split("\t")
+BWA wrapper trop vieux, aucun ne fonctionne
 
 # 30/05/2018
 -- Objectif
 
-* Bibliographie -> résumer de la situation
+* Bibliographie -> résumer de la situation 
 
-* Continuer documentation
+* Versioning (dans le but de changer de version post-restructuration)
+
+* Restructuration (voir section TODO pour précision)
 
 @ TODO
 
-Bibliographie -> lister outils existant (QOD), différence ?, utiliser concept d'un autre
-outil ?  
-Galaxy ?  
-Documentation -> commentaire (doxygen, pydoc)
-main ? 
+* Bibliographie -> lister outils existant (QOD), différence ?, utiliser concept
+d'un autre outil ?  
+
+* Galaxy   
+
+* Documentation -> commentaire (doxygen, pydoc) 
+
+* Restructurer le programme -> par exemple : tempfile crée au bon endroit (en
+local dans une fonction), fonction qui retourne un objet au lieu de définir des
+variables en global 
+
+* Versioning 
+
+
+
+

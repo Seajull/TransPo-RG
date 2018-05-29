@@ -23,87 +23,87 @@ optional.add_argument("-w", "--warning",dest="warn", action="store_true", help="
 if __name__ == '__main__':
     args = parser.parse_args()
 
-def init() :
-    if args.warn :
-        warnings.filterwarnings("ignore")
+if args.warn :
+    warnings.filterwarnings("ignore")
 
-    if args.fasta1 == None:
-        sys.exit("ERROR : Argument --fasta1 (-f1) is missing.")
-    if args.fasta2 == None:
-        sys.exit("ERROR : Argument --fasta2 (-f2) is missing.")
-    if args.tabinput == None:
-        sys.exit("ERROR : Argument --tabinput (-ti) is missing.")
+if args.fasta1 == None:
+    sys.exit("ERROR : Argument --fasta1 (-f1) is missing.")
+if args.fasta2 == None:
+    sys.exit("ERROR : Argument --fasta2 (-f2) is missing.")
+if args.tabinput == None:
+    sys.exit("ERROR : Argument --tabinput (-ti) is missing.")
 
-    res2 = re.search("/?(\w+)\.",args.fasta2)
+res2 = re.search("/?(\w+)\.",args.fasta2)
+global fileTab
+fileTab=BedTool(args.tabinput)
+global ext
+ext=fileTab.file_type
+if ext =="gff" :
+    ext="gff3"
 
-    fileTab=BedTool(args.tabinput)
-    ext=fileTab.file_type
-    if ext =="gff" :
-        ext="gff3"
 
+lenChr = tempfile.NamedTemporaryFile()
 
-    lenChr = tempfile.NamedTemporaryFile()
+try:
+    os.mkdir("result")
+    if args.verbose :
+        print("\n ----- Creating directory 'result/'. -----")
+except :
+    pass
 
-    try:
-        os.mkdir("result")
-        if args.verbose :
-            print("\n ----- Creating directory 'result/'. -----")
-    except :
-        pass
+if args.out == None:
+    args.out = "result/"+res2.group(1)+"_out."+ext
+else :
+    args.out = "result/"+args.out.split(".")[0]+"."+ext
 
-    if args.out == None:
-        args.out = "result/"+res2.group(1)+"_out."+ext
-    else :
-        args.out = "result/"+args.out.split(".")[0]+"."+ext
+# Check dependance
+mod=tempfile.NamedTemporaryFile()
+listMod=mod.name
+with open(listMod,"r+") as out :
+    call(["module list"],shell=True,stderr=out)
+    out.seek(0)
+    for line in out :
+        res=re.findall("\)\s([^\s]+)\s+",line)
+        if "listM" in locals() :
+            for i in res :
+                listM.append(i)
+        else :
+            listM=res
+mandatoryMod=["bioinfo/bwa/0.7.15","bioinfo/bedtools/2.24.0"]
+goInstall=""
+for i in mandatoryMod:
+    if i not in listM :
+        goInstall += ("/".join(i.split("/")[1:]))+"  "
+if goInstall :
+    sys.exit("ERROR : please, install following tools : " + goInstall)
 
-    # Check dependance
-    mod=tempfile.NamedTemporaryFile()
-    listMod=mod.name
-    with open(listMod,"r+") as out :
-        call(["module list"],shell=True,stderr=out)
-        out.seek(0)
-        for line in out :
-            res=re.findall("\)\s([^\s]+)\s+",line)
-            if "listM" in locals() :
-                for i in res :
-                    listM.append(i)
-            else :
-                listM=res
-    mandatoryMod=["bioinfo/bwa/0.7.15","bioinfo/bedtools/2.24.0"]
-    goInstall=""
-    for i in mandatoryMod:
-        if i not in listM :
-            goInstall += ("/".join(i.split("/")[1:]))+"  "
-    if goInstall :
-        sys.exit("ERROR : please, install following tools : " + goInstall)
+# Creating tempfile (or file if args --tempfile is enable)
+tabOut=tempfile.NamedTemporaryFile()
+tabO=tabOut.name
+tabPre=tempfile.NamedTemporaryFile()
+prefixTab=tabPre.name
+if not args.tempf :
+    aln=tempfile.NamedTemporaryFile()
+    alnN=aln.name
+    tabOPut=tempfile.NamedTemporaryFile()
+    tabOP=tabOPut.name
+    selectS = tempfile.NamedTemporaryFile()
+    selectedSeq = selectS.name
+else :
+    alnN="result/aln_out_"+ext+".sam"
+    fasta1Out=(args.fasta1).split(".")
+    selectedSeq="result/"+fasta1Out[0].split("/")[-1]+"_selected_"+ext+"."+fasta1Out[1]
+    tab=(args.tabinput).split(".")
+    tabOP="result/"+tab[0].split("/")[-1]+"_out."+tab[1]
 
-    # Creating tempfile (or file if args --tempfile is enable)
-    tabOut=tempfile.NamedTemporaryFile()
-    tabO=tabOut.name
-    tabPre=tempfile.NamedTemporaryFile()
-    prefixTab=tabPre.name
-    if not args.tempf :
-        aln=tempfile.NamedTemporaryFile()
-        alnN=aln.name
-        tabOPut=tempfile.NamedTemporaryFile()
-        tabOP=tabOPut.name
-        selectS = tempfile.NamedTemporaryFile()
-        selectedSeq = selectS.name
-    else :
-        alnN="result/aln_out_"+ext+".sam"
-        fasta1Out=(args.fasta1).split(".")
-        selectedSeq="result/"+fasta1Out[0].split("/")[-1]+"_selected_"+ext+"."+fasta1Out[1]
-        tab=(args.tabinput).split(".")
-        tabOP="result/"+tab[0].split("/")[-1]+"_out."+tab[1]
+if args.typeA != None and ext != "gff3" :
+    print("")
+    warnings.warn("Argument --typeA is ignored because --tabinput format isn't GFF.",Warning)
 
-    if args.typeA != None and ext != "gff3" :
-        print("")
-        warnings.warn("Argument --typeA is ignored because --tabinput format isn't GFF.",Warning)
-
-    if args.typeA != None and ext == "gff3" :
-        typ=(re.findall("[a-zA-Z0-9]+",args.typeA))
-        typeAclean=[l.lower() for l in typ]
-    return
+if args.typeA != None and ext == "gff3" :
+    typ=(re.findall("[a-zA-Z0-9]+",args.typeA))
+    typeAclean=[l.lower() for l in typ]
+    
 # TODO : add ENG comment and remove FR comment 
 # Méthode permettant de récupérer l'ID des chromosomes et leurs tailles à l'aide de biopython
 def parseFa() :
@@ -361,7 +361,6 @@ def isComplete() :
 # TODO : add ENG comment and remove FR comment 
 # Exécution des méthodes, implémenté un main ? 
 if __name__ == "__main__":
-    init()
     if args.typeA != None and ext == "gff3" :
         cutGff()
     prefix()
