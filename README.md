@@ -1,10 +1,16 @@
 ### Requires :  
 
-* python 3 (3.4.3)
 * bwa mem (0.7.15)
 * bedtools (2.24.0)
+* python 3 (3.4.3)
+* biopython (1.65+) 
+* bedtools (2.24.0)
+* pybedtools (0.7.10)
+
 
 ----------
+
+
 ``` python3
 usage: tab1ToRef2.py [-f1 FASTA1] [-f2 FASTA2] [-ti TABINPUT] [-b FLANK] [-c]
                      [-h] [-i] [-o OUT] [-t TYPEF] [-te] [-v] [-w]
