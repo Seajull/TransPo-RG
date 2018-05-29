@@ -1,31 +1,24 @@
-###############################################################
-## Script permettant de récupérer les séquences flanquantes  ##
-## à partir d'un fichier tabulé (VCF/BED/GFF3) d'une         ##
-## référence fasta et de les aligner sur une autre           ##
-## référence fasta                                           ##
-###############################################################
-
 from Bio import SeqIO
 from subprocess import call
 from pybedtools import BedTool
-import sys, re, tempfile, argparse, warnings
+import sys, os, re, tempfile, argparse, warnings
 
 parser = argparse.ArgumentParser(add_help=False)
 
-required = parser.add_argument_group("Arguments requis ")
-optional = parser.add_argument_group("Arguments optionnels ")
-required.add_argument("-f1", "--fasta1", dest="fasta1",default=None, help="Input de la référence fasta 1 (originelle).")
-required.add_argument("-f2", "--fasta2", dest="fasta2", default=None, help="Input de la référence fasta 2 (nouvelle).")
-required.add_argument("-ti", "--tabinput", dest="tabinput", default=None, help="Input du fichier tabulé associé à fasta1.")
-optional.add_argument("-b", dest="flank", type=int, default=50, help="Taille des régions flanquantes à extraire de par et d'autre de l'annotation (par défaut : 50).")
-optional.add_argument("-c", "--cds",dest="cds", action="store_true", help="Active la vérification des positions des CDS par rapport aux gènes ou au mRNA.")
-optional.add_argument("-h", "--help", action="help", default=argparse.SUPPRESS,help="Affiche ces messages d'aide.")
-optional.add_argument("-i", "--index",dest="index", action="store_true", help="Force l'indexation du fichier fasta 2.")
-optional.add_argument("-o", "--output", dest="out", default=None, help="Fichier de sortie (format tabulé).")
-optional.add_argument("-t", "--type",dest="typeF", default=None, help="Sélectionne uniquement les types souhaiter dans un gff3 (exemple de format de l'option : \"mRNA exon cds\" (insensible a la casse)).")
-optional.add_argument("-te", "--tempfile",dest="tempf", action="store_true", help="Force la création du fichier fasta des séquences sélectionnées, du ficher tabulé intermédiaire et du fichier d'alignement .sam.")
-optional.add_argument("-v", "--verbose",dest="verbose", action="store_true", help="Active l'affichage des messages.")
-optional.add_argument("-w", "--warning",dest="warn", action="store_true", help="Désactive l'affichage des warnings.")
+required = parser.add_argument_group("Required arguments")
+optional = parser.add_argument_group("Optional arguments")
+required.add_argument("-f1", "--fasta1", dest="fasta1",default=None, help="Input of reference fasta1 (old) <fasta>.")
+required.add_argument("-f2", "--fasta2", dest="fasta2", default=None, help="Input of reference fasta2 (new) <fasta>.")
+required.add_argument("-ti", "--tabinput", dest="tabinput", default=None, help="Input of tabbed file related to fasta1 <bed/gff/vcf>")
+optional.add_argument("-b", dest="flank", type=int, default=50, help="Size of flank region to extract from each side of the annotation (default : 50).")
+optional.add_argument("-c", "--cds",dest="cds", action="store_true", help="Enable control of postions of CDS inside mRNA (or gene).")
+optional.add_argument("-h", "--help", action="help", default=argparse.SUPPRESS,help="Show this help message and exit.")
+optional.add_argument("-i", "--index",dest="index", action="store_true", help="Create the index of fasta2.")
+optional.add_argument("-o", "--output", dest="out", default=None, help="Output file (same format of tabbed file input).")
+optional.add_argument("-t", "--type",dest="typeA", default=None, help="Only extract annotation of specified type (gff file only) (example : \"mRNA exon cds\" (case insensitive)).")
+optional.add_argument("-te", "--tempfile",dest="tempf", action="store_true", help="Create all file instead of using temporary file.")
+optional.add_argument("-v", "--verbose",dest="verbose", action="store_true", help="Enable message.")
+optional.add_argument("-w", "--warning",dest="warn", action="store_true", help="Disable warnings.")
 
 args = parser.parse_args()
 
@@ -33,11 +26,11 @@ if args.warn :
     warnings.filterwarnings("ignore")
 
 if args.fasta1 == None:
-    sys.exit("ERREUR : L'option --fasta1 (-f1) est manquant")
-if args.tabinput == None:
-    sys.exit("ERREUR : L'option --tabinput (-ti) est manquant")
+    sys.exit("ERROR : Argument --fasta1 (-f1) is missing.")
 if args.fasta2 == None:
-    sys.exit("ERREUR : L'option --fasta2 (-f2) est manquant")
+    sys.exit("ERROR : Argument --fasta2 (-f2) is missing.")
+if args.tabinput == None:
+    sys.exit("ERROR : Argument --tabinput (-ti) is missing.")
 
 res2 = re.search("/?(\w+)\.",args.fasta2)
 
@@ -46,21 +39,22 @@ ext=fileTab.file_type
 if ext =="gff" :
     ext="gff3"
 
-if args.out == None:
-    args.out = "resultat/"+res2.group(1)+"_out."+ext
-else :
-    args.out = "resultat/"+args.out.split(".")[0]+"."+ext
 
 lenChr = tempfile.NamedTemporaryFile()
 
-try :
-    os.mkdir("./resultat")
+try:
+    os.mkdir("result")
     if args.verbose :
-        print("\n ----- Création du dossier resultat. -----")
+        print("\n ----- Creating directory 'result/'. -----")
 except :
     pass
 
-# Vérifie que les modules nécessaires sont bien installés.
+if args.out == None:
+    args.out = "result/"+res2.group(1)+"_out."+ext
+else :
+    args.out = "result/"+args.out.split(".")[0]+"."+ext
+
+# Check dependance
 mod=tempfile.NamedTemporaryFile()
 listMod=mod.name
 with open(listMod,"r+") as out :
@@ -79,9 +73,9 @@ for i in mandatoryMod:
     if i not in listM :
         goInstall += ("/".join(i.split("/")[1:]))+"  "
 if goInstall :
-    sys.exit("ERREUR : Veuillez installer les outils suivants : " + goInstall)
+    sys.exit("ERROR : please, install following tools : " + goInstall)
 
-# Création des fichiers temporaires (ou non temporaire si l'option --tempfile est activé)
+# Creating tempfile (or file if args --tempfile is enable)
 tabOut=tempfile.NamedTemporaryFile()
 tabO=tabOut.name
 tabPre=tempfile.NamedTemporaryFile()
@@ -94,20 +88,21 @@ if not args.tempf :
     selectS = tempfile.NamedTemporaryFile()
     selectedSeq = selectS.name
 else :
-    alnN="resultat/aln_out_"+ext+".sam"
+    alnN="result/aln_out_"+ext+".sam"
     fasta1Out=(args.fasta1).split(".")
-    selectedSeq="resultat/"+fasta1Out[0].split("/")[-1]+"_selected_"+ext+"."+fasta1Out[1]
+    selectedSeq="result/"+fasta1Out[0].split("/")[-1]+"_selected_"+ext+"."+fasta1Out[1]
     tab=(args.tabinput).split(".")
-    tabOP="resultat/"+tab[0].split("/")[-1]+"_out."+tab[1]
+    tabOP="result/"+tab[0].split("/")[-1]+"_out."+tab[1]
 
-if args.typeF != None and ext != "gff3" :
+if args.typeA != None and ext != "gff3" :
     print("")
-    warnings.warn("L'option --type (-t) est ignorée car le fichier tabulé n'est pas au format GFF.",Warning)
+    warnings.warn("Argument --typeA is ignored because --tabinput format isn't GFF.",Warning)
 
-if args.typeF != None and ext == "gff3" :
-    typ=(re.findall("[a-zA-Z0-9]+",args.typeF))
-    typeFclean=[l.lower() for l in typ]
+if args.typeA != None and ext == "gff3" :
+    typ=(re.findall("[a-zA-Z0-9]+",args.typeA))
+    typeAclean=[l.lower() for l in typ]
 
+# TODO : add ENG comment and remove FR comment 
 # Méthode permettant de récupérer l'ID des chromosomes et leurs tailles à l'aide de biopython
 def parseFa() :
     with open(lenChr.name,"w") as lenC :
@@ -117,6 +112,7 @@ def parseFa() :
 
 parseFa()
 
+# TODO : add ENG comment and remove FR comment 
 # Méthode permettant de modifier le préfixe du fichiers tabulé afin d'obtenir le même que celui dans le fasta1
 change=False
 def prefix() :
@@ -132,26 +128,32 @@ def prefix() :
         change=True
     return
 
+# TODO : add ENG comment and remove FR comment 
 # Méthode permettant de couper un fichier GFF en fonction des types d'annotations passées avec l'option --type
 def cutGff() :
-    global typeFclean
+    global typeAclean
     if args.verbose :
-        print("\n ----- Récupération des features de type : \""+",".join(typeFclean)+"\" dans le GFF. -----")
-    typeFclean="|".join(typeFclean)
-    with open(tabO,"w") as out :
-        call(["awk","tolower($3) ~ /"+typeFclean+"/",args.tabinput],stdout=out)
+        print("\n ----- Extracting GFF's annotation which match '"+",".join(typeAclean)+"'. -----")
+    with open(args.tabinput,"r") as inpTab, open(tabO,"w") as out:
+        for line in inpTab :
+            fields = line.strip().split("\t")
+            fields[2]=fields[2].lower()
+            if fields[2] in typeAclean :
+                out.write(("\t".join(fields))+"\n")
     return
 
+# TODO : add ENG comment and remove FR comment 
 # Méthode permettant de modifier le fichier tabulé pour ajouter des régions flanquantes 
 def getFlank() :
     fileTab2=BedTool(args.tabinput)
-    if (args.typeF != None and ext== "gff3") or change :
+    if (args.typeA != None and ext== "gff3") or change :
         fileTab2=BedTool(tabO)
     if args.verbose and args.tempf:
-        print("\n ----- Création du fichier " +tabOP +". ----- ")
+        print("\n ----- Creating file '"+tabOP +"'. ----- ")
 
     if (fileTab2.file_type != "vcf"):
         fileTab2.slop(b=args.flank, g=lenChr.name ,output=tabOP)
+        # TODO : add ENG comment and remove FR comment 
         # Pour les fichiers VCF, on doit rajouter une colonne. On recrée donc un objet BedTools à partir
         # du fichier VCF original.
     else :
@@ -173,37 +175,45 @@ def getFlank() :
                 res += feature.chrom +" "+str(start)+" "+ str(stop)+"\n"
         BedTool(res, from_string=True).saveas(tabOP)
     return
+    # TODO : add ENG comment and remove FR comment 
     # Fichier [nom fichier tabulé]_out.[ext] (nom stocké dans tabOut) en sortie  
 
+# TODO : add ENG comment and remove FR comment 
 # Méthode permettant de sélectionner les séquences fasta1 spécifié dans le fichier tabulé 
 def getFasta():
     if args.verbose :
-        print("\n ----- Récupération des séquences flanquantes dans le fichier "+args.fasta1+". -----")
+        print("\n ----- Extracting flanking sequences in '"+args.fasta1+"'. -----")
     BedTool(tabOP).sequence(fi=args.fasta1).save_seqs(selectedSeq)
+    # TODO : add ENG comment and remove FR comment 
     # Sauvegarde dans le fichier désigné par la variable selectedSeq les séquences fasta correspondantes au informations contenue dans le fichier tabulé
     return
 
+# TODO : add ENG comment and remove FR comment 
 # Méthode permettant de réaliser l'index du fichier fasta2
 def index() :
     if args.verbose :
-        print("\n ----- Indexation du fichier "+args.fasta2+" par BWA. ----- \n")
+        print("\n ----- Generating index of '"+args.fasta2+"' using 'bwa index'. ----- \n")
+    #TODO : remove system call and add a check if index is already generate
     call(["bwa","index",args.fasta2])
     print("")
     return
 
+# TODO : add ENG comment and remove FR comment 
 # Méthode permettant de réaliser l'alignement des séquences sélectionnés sur le fichier fasta2     
 def align():
     getFasta()
     if args.verbose :
-        print("\n ----- Réalisation de l'alignement. ----- \n")
+        print("\n ----- Generating alignement file using 'bwa mem'. ----- \n")
     with open(alnN,"w") as out:
         if args.verbose :
             call(["bwa","mem", args.fasta2, selectedSeq],stdout=out)
+            print("")
         else :
             call(["bwa","mem","-v","0", args.fasta2, selectedSeq],stdout=out)
-    #Fichier .sam ici, next ?
+            print("")
     return
 
+# TODO : add ENG comment and remove FR comment 
 # Méthode permettant de traiter le CIGAR du fichier d'alignement (.SAM) afin de récupérer la taille du match
 def parseCigar(sam) :
     lenCig=[]
@@ -218,6 +228,7 @@ def parseCigar(sam) :
         lenCig.append(leng)
     return lenCig
 
+# TODO : add ENG comment and remove FR comment 
 # Méthode permettant la "conversion" du fichier d'alignement en un fichier tabulé.
 # On récupère un fichier tabulé au même format que celui passé en entrée. Toutes les annotations
 # sont conservés, juste les positions sont modifiés.
@@ -229,7 +240,7 @@ def samToTab() :
     samf=BedTool(alnN)
     lengh=parseCigar(samf)
     countLine=0
-    if (ext=="gff3" and args.typeF != None) or change:
+    if (ext=="gff3" and args.typeA != None) or change:
         args.tabinput=tabO
     with open(args.tabinput,"r") as tabi :
         for i in tabi : # i parcours tabinput (ou tabO après cutGff)
@@ -262,8 +273,8 @@ def samToTab() :
                                 break
                         else :
                             countLine+=1
-                if f[11][-1]!="0" and f[5]=="101M":     # Affiche l'ID des séquences contenant un missmatch
-                    print(f[0].split(":")[1]+"\t"+f[11])
+                #if f[11][-1]!="0" and f[5]=="101M":     # Affiche l'ID des séquences contenant un missmatch
+                #    print(f[0].split(":")[1]+"\t"+f[12])
                 if ext == "vcf" and f[5]==str(args.flank*2+1)+"M": # Match parfait uniquement pour un SNP
                     tabou+=f[2]+" "+ str(start) +" "+ " ".join(line[2:11])
                 elif ext == "bed" :
@@ -278,15 +289,16 @@ def samToTab() :
             BedTool(tabou,from_string=True).saveas(args.out)
     return
 
+# TODO : add ENG comment and remove FR comment 
 # Méthode permettant de récupérer les postions relatives des CDS dans les ARNm (par défaut) ou dans les gènes.
 def getPosCds(tab) :
     dicoPos={}
     posGene=()
-    global typeFclean
-    if args.typeF == None :
+    global typeAclean
+    if args.typeA == None :
         typeD = True
     else :
-        if ("gene" in typeFclean and "mrna" in typeFclean) :
+        if ("gene" in typeAclean and "mrna" in typeAclean) :
             typeD = True
         else :
             typeD=False
@@ -315,6 +327,7 @@ def getPosCds(tab) :
                     dicoPos[posGene].append([cdsStart,cdsStop])
     return dicoPos
 
+# TODO : add ENG comment and remove FR comment 
 # Méthode permettant de comparer les positions relatives des CDS dans les ARNm (ou gène) entre le fichier tabulé
 # passé en entrée et le fichier tabulé généré en sortie. 
 def isComplete() :
@@ -336,14 +349,15 @@ def isComplete() :
                    #     print(dicoPos2[keys])
         for l in range(1,lastG+1) :
             if l in sorted(geneInt) :
-                print("Gène "+str(l)+" intègre.")
+                print("Gene "+str(l)+" complete.")
             else :
-                print("Gène "+str(l)+" non intègre.")
+                print("Gene "+str(l)+" incomplete.")
     return
 
 
+# TODO : add ENG comment and remove FR comment 
 # Exécution des méthodes, implémenté un main ? 
-if args.typeF != None and ext == "gff3" :
+if args.typeA != None and ext == "gff3" :
     cutGff()
 prefix()
 getFlank()
@@ -351,5 +365,5 @@ if args.index:
     index()
 align()
 samToTab()
-if args.cds and ext=="gff3" and (args.typeF==None or (("gene" in typeFclean or "mrna" in typeFclean) and "cds" in typeFclean)) :
+if args.cds and ext=="gff3" and (args.typeA==None or (("gene" in typeAclean or "mrna" in typeAclean) and "cds" in typeAclean)) :
     isComplete()
