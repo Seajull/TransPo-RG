@@ -4,3 +4,4 @@ data/
 doc/
 *.old
 venv/
+__*/

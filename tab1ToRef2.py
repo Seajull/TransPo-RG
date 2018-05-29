@@ -1,7 +1,7 @@
 from Bio import SeqIO
 from subprocess import call
 from pybedtools import BedTool
-import sys, os, re, tempfile, argparse, warnings
+import sys, os, re, tempfile, argparse, warnings, pydoc
 
 parser = argparse.ArgumentParser(add_help=False)
 
@@ -20,88 +20,90 @@ optional.add_argument("-te", "--tempfile",dest="tempf", action="store_true", hel
 optional.add_argument("-v", "--verbose",dest="verbose", action="store_true", help="Enable message.")
 optional.add_argument("-w", "--warning",dest="warn", action="store_true", help="Disable warnings.")
 
-args = parser.parse_args()
+if __name__ == '__main__':
+    args = parser.parse_args()
 
-if args.warn :
-    warnings.filterwarnings("ignore")
+def init() :
+    if args.warn :
+        warnings.filterwarnings("ignore")
 
-if args.fasta1 == None:
-    sys.exit("ERROR : Argument --fasta1 (-f1) is missing.")
-if args.fasta2 == None:
-    sys.exit("ERROR : Argument --fasta2 (-f2) is missing.")
-if args.tabinput == None:
-    sys.exit("ERROR : Argument --tabinput (-ti) is missing.")
+    if args.fasta1 == None:
+        sys.exit("ERROR : Argument --fasta1 (-f1) is missing.")
+    if args.fasta2 == None:
+        sys.exit("ERROR : Argument --fasta2 (-f2) is missing.")
+    if args.tabinput == None:
+        sys.exit("ERROR : Argument --tabinput (-ti) is missing.")
 
-res2 = re.search("/?(\w+)\.",args.fasta2)
+    res2 = re.search("/?(\w+)\.",args.fasta2)
 
-fileTab=BedTool(args.tabinput)
-ext=fileTab.file_type
-if ext =="gff" :
-    ext="gff3"
+    fileTab=BedTool(args.tabinput)
+    ext=fileTab.file_type
+    if ext =="gff" :
+        ext="gff3"
 
 
-lenChr = tempfile.NamedTemporaryFile()
+    lenChr = tempfile.NamedTemporaryFile()
 
-try:
-    os.mkdir("result")
-    if args.verbose :
-        print("\n ----- Creating directory 'result/'. -----")
-except :
-    pass
+    try:
+        os.mkdir("result")
+        if args.verbose :
+            print("\n ----- Creating directory 'result/'. -----")
+    except :
+        pass
 
-if args.out == None:
-    args.out = "result/"+res2.group(1)+"_out."+ext
-else :
-    args.out = "result/"+args.out.split(".")[0]+"."+ext
+    if args.out == None:
+        args.out = "result/"+res2.group(1)+"_out."+ext
+    else :
+        args.out = "result/"+args.out.split(".")[0]+"."+ext
 
-# Check dependance
-mod=tempfile.NamedTemporaryFile()
-listMod=mod.name
-with open(listMod,"r+") as out :
-    call(["module list"],shell=True,stderr=out)
-    out.seek(0)
-    for line in out :
-        res=re.findall("\)\s([^\s]+)\s+",line)
-        if "listM" in locals() :
-            for i in res :
-                listM.append(i)
-        else :
-            listM=res
-mandatoryMod=["bioinfo/bwa/0.7.15","bioinfo/bedtools/2.24.0"]
-goInstall=""
-for i in mandatoryMod:
-    if i not in listM :
-        goInstall += ("/".join(i.split("/")[1:]))+"  "
-if goInstall :
-    sys.exit("ERROR : please, install following tools : " + goInstall)
+    # Check dependance
+    mod=tempfile.NamedTemporaryFile()
+    listMod=mod.name
+    with open(listMod,"r+") as out :
+        call(["module list"],shell=True,stderr=out)
+        out.seek(0)
+        for line in out :
+            res=re.findall("\)\s([^\s]+)\s+",line)
+            if "listM" in locals() :
+                for i in res :
+                    listM.append(i)
+            else :
+                listM=res
+    mandatoryMod=["bioinfo/bwa/0.7.15","bioinfo/bedtools/2.24.0"]
+    goInstall=""
+    for i in mandatoryMod:
+        if i not in listM :
+            goInstall += ("/".join(i.split("/")[1:]))+"  "
+    if goInstall :
+        sys.exit("ERROR : please, install following tools : " + goInstall)
 
-# Creating tempfile (or file if args --tempfile is enable)
-tabOut=tempfile.NamedTemporaryFile()
-tabO=tabOut.name
-tabPre=tempfile.NamedTemporaryFile()
-prefixTab=tabPre.name
-if not args.tempf :
-    aln=tempfile.NamedTemporaryFile()
-    alnN=aln.name
-    tabOPut=tempfile.NamedTemporaryFile()
-    tabOP=tabOPut.name
-    selectS = tempfile.NamedTemporaryFile()
-    selectedSeq = selectS.name
-else :
-    alnN="result/aln_out_"+ext+".sam"
-    fasta1Out=(args.fasta1).split(".")
-    selectedSeq="result/"+fasta1Out[0].split("/")[-1]+"_selected_"+ext+"."+fasta1Out[1]
-    tab=(args.tabinput).split(".")
-    tabOP="result/"+tab[0].split("/")[-1]+"_out."+tab[1]
+    # Creating tempfile (or file if args --tempfile is enable)
+    tabOut=tempfile.NamedTemporaryFile()
+    tabO=tabOut.name
+    tabPre=tempfile.NamedTemporaryFile()
+    prefixTab=tabPre.name
+    if not args.tempf :
+        aln=tempfile.NamedTemporaryFile()
+        alnN=aln.name
+        tabOPut=tempfile.NamedTemporaryFile()
+        tabOP=tabOPut.name
+        selectS = tempfile.NamedTemporaryFile()
+        selectedSeq = selectS.name
+    else :
+        alnN="result/aln_out_"+ext+".sam"
+        fasta1Out=(args.fasta1).split(".")
+        selectedSeq="result/"+fasta1Out[0].split("/")[-1]+"_selected_"+ext+"."+fasta1Out[1]
+        tab=(args.tabinput).split(".")
+        tabOP="result/"+tab[0].split("/")[-1]+"_out."+tab[1]
 
-if args.typeA != None and ext != "gff3" :
-    print("")
-    warnings.warn("Argument --typeA is ignored because --tabinput format isn't GFF.",Warning)
+    if args.typeA != None and ext != "gff3" :
+        print("")
+        warnings.warn("Argument --typeA is ignored because --tabinput format isn't GFF.",Warning)
 
-if args.typeA != None and ext == "gff3" :
-    typ=(re.findall("[a-zA-Z0-9]+",args.typeA))
-    typeAclean=[l.lower() for l in typ]
-
+    if args.typeA != None and ext == "gff3" :
+        typ=(re.findall("[a-zA-Z0-9]+",args.typeA))
+        typeAclean=[l.lower() for l in typ]
+    return
 # TODO : add ENG comment and remove FR comment 
 # Méthode permettant de récupérer l'ID des chromosomes et leurs tailles à l'aide de biopython
 def parseFa() :
@@ -109,8 +111,6 @@ def parseFa() :
         for seqF in SeqIO.parse(args.fasta1,"fasta") :
             lenC.write(seqF.id+"\t"+str(len(seqF)))
     return
-
-parseFa()
 
 # TODO : add ENG comment and remove FR comment 
 # Méthode permettant de modifier le préfixe du fichiers tabulé afin d'obtenir le même que celui dans le fasta1
@@ -145,6 +145,7 @@ def cutGff() :
 # TODO : add ENG comment and remove FR comment 
 # Méthode permettant de modifier le fichier tabulé pour ajouter des régions flanquantes 
 def getFlank() :
+    parseFa()
     fileTab2=BedTool(args.tabinput)
     if (args.typeA != None and ext== "gff3") or change :
         fileTab2=BedTool(tabO)
@@ -331,6 +332,9 @@ def getPosCds(tab) :
 # Méthode permettant de comparer les positions relatives des CDS dans les ARNm (ou gène) entre le fichier tabulé
 # passé en entrée et le fichier tabulé généré en sortie. 
 def isComplete() :
+    """
+        test docstring lol
+    """
     if ext == "gff3" :
         dicoPos1=getPosCds(args.tabinput)
         dicoPos2=getPosCds(args.out)
@@ -354,16 +358,17 @@ def isComplete() :
                 print("Gene "+str(l)+" incomplete.")
     return
 
-
 # TODO : add ENG comment and remove FR comment 
 # Exécution des méthodes, implémenté un main ? 
-if args.typeA != None and ext == "gff3" :
-    cutGff()
-prefix()
-getFlank()
-if args.index:
-    index()
-align()
-samToTab()
-if args.cds and ext=="gff3" and (args.typeA==None or (("gene" in typeAclean or "mrna" in typeAclean) and "cds" in typeAclean)) :
-    isComplete()
+if __name__ == "__main__":
+    init()
+    if args.typeA != None and ext == "gff3" :
+        cutGff()
+    prefix()
+    getFlank()
+    if args.index:
+        index()
+    align()
+    samToTab()
+    if (args.cds and ext=="gff3" and (args.typeA==None or (("gene" in typeAclean or "mrna" in typeAclean) and "cds" in typeAclean))) :
+        isComplete()

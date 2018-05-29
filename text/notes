@@ -65,3 +65,5 @@ ou - 1)
 !!!!! gestion tag NM (edit distance), si > 0 = missmatch, région flanquantes chevauchante
 (plusieurs SNP annoté dans la région) ? 
 
+!!!!! Documentation : utiliser docstring + un générateur style doxygen, sphinx
+
