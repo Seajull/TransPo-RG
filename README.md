@@ -1,4 +1,4 @@
-### Prérequis :  
+### Requires :  
 
 * python 3 (3.4.3)
 * bwa mem (0.7.15)

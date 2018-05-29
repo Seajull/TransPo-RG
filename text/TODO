@@ -1,0 +1,27 @@
+@ Journal
+
+# 29/05/2018 
+-- Objectif
+
+Traduction programme en anglais (but -> internationalisé, portabilité, compatibilité (accent))
+
+Virtualenv pour avoir son install de python indépendante (possibilité de rajouter / enlever des librairies rapidement -> enlever un maximum les appels systèmes).
+
+Dans l'optique de limiter voir suppprimer complétement les appels systèmes, remplacer test module par test rapide (appel --version par exemple et regarder si stderr est bien vide (check de subprocess ?). Remplacer appel système par librairie bwa mem et awk par ??? mais ça doit exister (ou juste recoder manuellement avec pybedtools).
+
+-- Done
+
+Traduction en anglais, manque commentaire.
+
+Virtualenv bien setup (/venv) -> activer venv avec source venv/bin/activate
+Appel système AWK remplacer par une boucle for + split("\t")  
+BWA wrapper trop vieux, aucun ne fonctionne
+
+
+@ TODO
+
+Documentation -> lister outils existant (QOD), différence ?, utiliser concept d'un autre outil ?
+
+
+
+
