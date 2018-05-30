@@ -67,3 +67,6 @@ ou - 1)
 
 !!!!! Documentation : utiliser docstring + un générateur style doxygen, sphinx
 
+!!!!! Versioning : git tag, __version__
+
+
