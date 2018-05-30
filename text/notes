@@ -68,5 +68,10 @@ ou - 1)
 !!!!! Documentation : utiliser docstring + un générateur style doxygen, sphinx
 
 !!!!! Versioning : git tag, __version__
+Git tag oblige à avoir le fichier .version dans le git (et doit être clonés avec le
+programme sinon le getVersion() ne fonctionnera pas. updateTag ne fonctionne que si on a
+accès au git tag ce qui n'est pas le cas.
+
+
 
 
