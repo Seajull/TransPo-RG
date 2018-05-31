@@ -1,7 +1,9 @@
 from subprocess import check_output
-import sys, os
+import sys, os, datetime
 
 def updateTag() :
+    de = datetime.datetime.now()
+    date=de.strftime("%d %b %Y")
     ver=".version"
     if not os.path.isdir(".git"):
         sys.exit("This does not appear to be a Git repository.")
@@ -14,7 +16,7 @@ def updateTag() :
                 if i != "v" and i != "\n" :
                     vers+=i
                 if i == "\n" :
-                    verOut.write(vers+"\n")
+                    verOut.write(vers+" - "+date+"\n")
                     vers=""
     else :
         out = check_output(["git", "describe","--long", "--tags"]).decode("utf-8")
@@ -22,15 +24,16 @@ def updateTag() :
         with open(".version","a+") as verOut :
             verOut.seek(0)
             f=verOut.readlines()
-            if f[-1] != vers :
-                verOut.write(vers)
+            if f[-1].split(" - ")[0]!= vers[:-1] :
+                verOut.write(vers+" - "+date+"\n")
             else :
                 print("Version file already up-to-date.")
 
 def getVersion() :
     with open(".version","r") as verF :
         f=verF.readlines()
-        print("\n"+"Version : "+f[-1])
+        print("\n"+"Version : "+f[-1].split(" - ")[0])
+        print("Last update : "+f[-1].split(" - ")[1])
     return
 
 if __name__ == "__main__" :

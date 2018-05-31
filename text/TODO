@@ -36,6 +36,15 @@ BWA wrapper trop vieux, aucun ne fonctionne
 
 * Restructuration (voir section TODO pour précision)
 
+-- Done 
+
+* Versioning : version.py qui crée un fichier .version contenant l'historique des mise à
+jour (autorise le rollback). Le main possède une option --version (-ver) qui permet
+d'afficher la version et la date du dernier changement de mise à jour. 
+
+* Une partie de la restructuration est faite, reste à vérifier quelque tempfile et 
+à push la nouvelle version
+
 @ TODO
 
 * Bibliographie -> lister outils existant (QOD), différence ?, utiliser concept
