@@ -15,9 +15,9 @@ optional.add_argument("-b", dest="flank", type=int, default=50, help="Size of fl
 optional.add_argument("-c", "--cds",dest="cds", action="store_true", help="Enable control of postions of CDS inside mRNA (or gene).")
 optional.add_argument("-h", "--help", action="help", default=argparse.SUPPRESS,help="Show this help message then exit.")
 optional.add_argument("-i", "--index",dest="index", action="store_true", help="Create the index of fasta2.")
+optional.add_argument("-n", "--notempfile",dest="notempf", action="store_true", help="Create all file instead of using temporary file.")
 optional.add_argument("-o", "--output", dest="out", default=None, help="Output file (same format of tabbed file input).")
 optional.add_argument("-t", "--type",dest="typeA", default=None, help="Only extract annotation of specified type (gff file only) (example : \"mRNA exon cds\" (case insensitive)).")
-optional.add_argument("-te", "--tempfile",dest="tempf", action="store_true", help="Create all file instead of using temporary file.")
 optional.add_argument("-v", "--verbose",dest="verbose", action="store_true", help="Enable message.")
 optional.add_argument("-ver", "--version",dest="version", action="store_true", help="Show version and date of last update then exit.")
 optional.add_argument("-w", "--warning",dest="warn", action="store_true", help="Disable warnings.")
@@ -50,10 +50,10 @@ if __name__ == '__main__':
     except :
         pass
 
-# Creating tempfile (or file if args --tempfile is enable)
+    # Creating tempfile (or file if args --notempfile is enable)
     tabOut=tempfile.NamedTemporaryFile()
     tabO=tabOut.name
-    if not args.tempf :
+    if not args.notempf :
         aln=tempfile.NamedTemporaryFile()
         alnN=aln.name
         selectS = tempfile.NamedTemporaryFile()
@@ -71,9 +71,16 @@ if __name__ == '__main__':
         typ=(re.findall("[a-zA-Z0-9]+",args.typeA))
         typeAclean=[l.lower() for l in typ]
 
-# TODO : add ENG comment and remove FR comment 
 def checkDependency() :
-    # Check dependance
+    """
+        Check if all third-party program are installed by
+        making a system call with "module list" then
+        comparing with a required module list. If at least
+        one thrird-party program isn't installed, it quit.
+        Currently, this function check for environment
+        modules but it need further test or a more generic
+        test.
+    """
     mod=tempfile.NamedTemporaryFile()
     listMod=mod.name
     with open(listMod,"r+") as out :
@@ -95,18 +102,28 @@ def checkDependency() :
         sys.exit("ERROR : please, install following tools : " + goInstall)
     return
 
-# TODO : add ENG comment and remove FR comment 
-# Méthode permettant de récupérer l'ID des chromosomes et leurs tailles à l'aide de biopython
 def parseFa() :
+    """
+        Later, in order to get the flank region and not
+        going over last position of the chromosome, we need
+        to index the length of them.
+        This function parse the inputted file fasta1 and
+        write in a tempfile all the chromosome ID and length.
+    """
     lenChr = tempfile.NamedTemporaryFile()
     with open(lenChr.name,"w") as lenC :
         for seqF in SeqIO.parse(args.fasta1,"fasta") :
             lenC.write(seqF.id+"\t"+str(len(seqF)))
     return (lenChr)
 
-# TODO : add ENG comment and remove FR comment 
-# Méthode permettant de modifier le préfixe du fichiers tabulé afin d'obtenir le même que celui dans le fasta1
 def prefix() :
+    """
+        In order to link the tabbed file and the fasta
+        file, we need to get the same chromosome ID. This
+        function check for this and change ID prefix in the
+        tabbed file to the same as the ID prefix in the
+        fasta file.
+    """
     tabPre=tempfile.NamedTemporaryFile()
     prefixTab=tabPre.name
     global change
@@ -123,9 +140,13 @@ def prefix() :
         change=True
     return
 
-# TODO : add ENG comment and remove FR comment 
-# Méthode permettant de couper un fichier GFF en fonction des types d'annotations passées avec l'option --type
 def cutGff() :
+    """
+        If the argument --typeA is specified, we need to cut
+        the gff in order to keep only specified type. We use
+        lower() function on each type in order to be case
+        insensitive.
+    """
     global typeAclean
     if args.verbose :
         print("\n ----- Extracting GFF's annotation which match '"+",".join(typeAclean)+"'. -----")
@@ -140,7 +161,16 @@ def cutGff() :
 # TODO : add ENG comment and remove FR comment 
 # Méthode permettant de modifier le fichier tabulé pour ajouter des régions flanquantes 
 def getFlank() :
-    if not args.tempf :
+    """
+        Change the position in tabbed file in order to
+        include flank region. For vcf file, we need to
+        generate a new temporary tabbed file which contain
+        the ID, start position and stop position. If the
+        argument --notempfile is passed, it create the file
+        [tabbed_file_name]_out.[ext] in the directory
+        ./result.
+    """
+    if not args.notempf :
         tabOPut=tempfile.NamedTemporaryFile()
         tabOP=tabOPut.name
     else :
@@ -150,13 +180,10 @@ def getFlank() :
     fileTab2=BedTool(args.tabinput)
     if (args.typeA != None and ext== "gff3") or change :
         fileTab2=BedTool(tabO)
-    if args.verbose and args.tempf:
+    if args.verbose and args.notempf:
         print("\n ----- Creating file '"+tabOP +"'. ----- ")
     if (fileTab2.file_type != "vcf"):
         fileTab2.slop(b=args.flank, g=lenChr.name ,output=tabOP)
-        # TODO : add ENG comment and remove FR comment 
-        # Pour les fichiers VCF, on doit rajouter une colonne. On recrée donc un objet BedTools à partir
-        # du fichier VCF original.
     else :
         with open(lenChr.name,"r") as lenC :
             res=""
@@ -175,23 +202,32 @@ def getFlank() :
                     start=feature.start-args.flank-1
                 res += feature.chrom +" "+str(start)+" "+ str(stop)+"\n"
         BedTool(res, from_string=True).saveas(tabOP)
-    return (tabOPut)
-    # TODO : add ENG comment and remove FR comment 
-    # Fichier [nom fichier tabulé]_out.[ext] (nom stocké dans tabOut) en sortie  
+    try :
+        return (tabOPut)
+    except :
+        return (tabOP)
 
-# TODO : add ENG comment and remove FR comment 
-# Méthode permettant de sélectionner les séquences fasta1 spécifié dans le fichier tabulé 
 def getFasta(tabOP):
+    """
+        This function just extract the sequence defined in
+        the tabbed file create by getFlank(). The output is
+        a fasta file. If --notempfile is enable, it create the
+        file [fasta1_name]_selected_[ext].fasta in the
+        directory ./result.
+    """
     if args.verbose :
         print("\n ----- Extracting flanking sequences in '"+args.fasta1+"'. -----")
-    BedTool(tabOP.name).sequence(fi=args.fasta1).save_seqs(selectedSeq)
-    # TODO : add ENG comment and remove FR comment 
-    # Sauvegarde dans le fichier désigné par la variable selectedSeq les séquences fasta correspondantes au informations contenue dans le fichier tabulé
+    if not args.notempf :
+        BedTool(tabOP.name).sequence(fi=args.fasta1).save_seqs(selectedSeq)
+    else :
+        BedTool(tabOP).sequence(fi=args.fasta1).save_seqs(selectedSeq)
     return
 
-# TODO : add ENG comment and remove FR comment 
-# Méthode permettant de réaliser l'index du fichier fasta2
 def index() :
+    """
+        This function generate the index of inputted fasta2
+        file with a system call to bwa index.
+    """
     if args.verbose :
         print("\n ----- Generating index of '"+args.fasta2+"' using 'bwa index'. ----- \n")
     #TODO : remove system call and add a check if index is already generate
@@ -199,9 +235,14 @@ def index() :
     print("")
     return
 
-# TODO : add ENG comment and remove FR comment 
-# Méthode permettant de réaliser l'alignement des séquences sélectionnés sur le fichier fasta2     
 def align(tabOp):
+    """
+        This function make a system call to bwa mem to align
+        fasta2 file with selected sequence of fasta1. The
+        output file is in sam format.
+        If argument --notempfile is enable it create the
+        file "aln_out_[ext].sam".
+    """
     getFasta(tabOp)
     if args.verbose :
         print("\n ----- Generating alignement file using 'bwa mem'. ----- \n")
@@ -214,9 +255,11 @@ def align(tabOp):
             print("")
     return
 
-# TODO : add ENG comment and remove FR comment 
-# Méthode permettant de traiter le CIGAR du fichier d'alignement (.SAM) afin de récupérer la taille du match
 def parseCigar(sam) :
+    """
+        This function parse the CIGAR code in alignment file
+        in order to get the length of the match.
+    """
     lenCig=[]
     for i in sam :
         if int(i[1]) != 0: # On ignore les match complémentaire (flag 2048)
@@ -229,12 +272,22 @@ def parseCigar(sam) :
         lenCig.append(leng)
     return lenCig
 
-# TODO : add ENG comment and remove FR comment 
-# Méthode permettant la "conversion" du fichier d'alignement en un fichier tabulé.
-# On récupère un fichier tabulé au même format que celui passé en entrée. Toutes les annotations
-# sont conservés, juste les positions sont modifiés.
-# C'est le bazar, à simplifier ou au moins à ordonner pour pouvoir facilement rajouter des filtres.
 def samToTab() :
+    """
+        In order to get the result of alignment usable for
+        further  use, we create a new tabbed file in the
+        same format as the inputted tabbed file. This file
+        is the final output of this program.
+        First of all, we extract the start and stop position
+        and remove the flank region to get the initial
+        annotation length. Then we generate the output file
+        with these new position and keep all the information
+        of the original tabbed file.
+        The name of output file is by defaut
+        "[fasta2_name]_out.[ext]" or the name that user
+        specify with argument --output (but still with [ext]
+        as extension.
+    """
     res2 = re.search("/?(\w+)\.",args.fasta2)
     if args.out == None:
         args.out = "result/"+res2.group(1)+"_out."+ext
@@ -249,13 +302,13 @@ def samToTab() :
     if (ext=="gff3" and args.typeA != None) or change:
         args.tabinput=tabO
     with open(args.tabinput,"r") as tabi :
-        for i in tabi : # i parcours tabinput (ou tabO après cutGff)
+        for i in tabi : # tabi = tabbed file after all modification 
             line=i.split("\t")
             if line[0][0] == "#" :
                 tabou+= i
             else :
-                for f in samf : # f parcours le fichier .sam
-                    if int(f[1])!=0 : # On ignore les match complémentaire (flag 2048)
+                for f in samf : # samf = alignment file
+                    if int(f[1])!=0 : # ignoring complementary match (flag 2048)
                         continue
                     res=re.search(":(\d+)-(\d+)",f[0])
                     if res :
@@ -263,14 +316,12 @@ def samToTab() :
                             if int(res.group(1)) == int(line[3])-args.flank -1 :
                                 start=int(f[3])+args.flank
                                 stop=start+lengh[countLine]-(args.flank*2)-1
-                                #print(pos)
                                 countLine+=1
                                 break
                         elif ext == "bed" :
                             if int(res.group(1)) == int(line[1])-args.flank :
                                 start=int(f[3])+args.flank
                                 stop=start+lengh[countLine]-(args.flank*2)-1
-                                #print(pos)
                                 countLine+=1
                                 break
                         elif ext == "vcf" :
@@ -279,9 +330,9 @@ def samToTab() :
                                 break
                         else :
                             countLine+=1
-                #if f[11][-1]!="0" and f[5]=="101M":     # Affiche l'ID des séquences contenant un missmatch
+                #if f[11][-1]!="0" and f[5]=="101M":     # show ID of sequence which contain a missmatch
                 #    print(f[0].split(":")[1]+"\t"+f[12])
-                if ext == "vcf" and f[5]==str(args.flank*2+1)+"M": # Match parfait uniquement pour un SNP
+                if ext == "vcf" and f[5]==str(args.flank*2+1)+"M": # perfect match only for snp
                     tabou+=f[2]+" "+ str(start) +" "+ " ".join(line[2:11])
                 elif ext == "bed" :
                     tabou+=f[2]+" "+ str(start) +" "+ str(stop) +" "+line[3].replace(" ","_")+"\n"
@@ -298,6 +349,14 @@ def samToTab() :
 # TODO : add ENG comment and remove FR comment 
 # Méthode permettant de récupérer les postions relatives des CDS dans les ARNm (par défaut) ou dans les gènes.
 def getPosCds(tab) :
+    """
+        This function extract position of mRNA (by defaut,
+        else it's position of gene) and the relative
+        position of CDS within.
+        It take a file in gff format and return a
+        dictionary with tuple of mRNA (or gene) in keys and
+        list of list of positon of CDS in value.
+    """
     dicoPos={}
     posGene=()
     global typeAclean
@@ -333,12 +392,12 @@ def getPosCds(tab) :
                     dicoPos[posGene].append([cdsStart,cdsStop])
     return dicoPos
 
-# TODO : add ENG comment and remove FR comment 
-# Méthode permettant de comparer les positions relatives des CDS dans les ARNm (ou gène) entre le fichier tabulé
-# passé en entrée et le fichier tabulé généré en sortie. 
 def isComplete(samtotabOut) :
     """
-        test docstring lol
+        This function call the function getPosCds(tab) with
+        both inputted tabbed file and newly generated tabbed
+        file and check if CDS in the newly generated file
+        are in the same position within the mRNA (or gene).
     """
     if ext == "gff3" :
         dicoPos1=getPosCds(args.tabinput)
@@ -363,8 +422,6 @@ def isComplete(samtotabOut) :
                 print("Gene "+str(l)+" incomplete.")
     return
 
-# TODO : add ENG comment and remove FR comment 
-# Exécution des méthodes, implémenté un main ? 
 if __name__ == "__main__":
     checkDependency()
     if args.typeA != None and ext == "gff3" :
