@@ -153,13 +153,10 @@ def cutGff() :
     with open(args.tabinput,"r") as inpTab, open(tabO,"w") as out:
         for line in inpTab :
             fields = line.strip().split("\t")
-            fields[2]=fields[2].lower()
-            if fields[2] in typeAclean :
+            if fields[2].lower() in typeAclean :
                 out.write(("\t".join(fields))+"\n")
     return
 
-# TODO : add ENG comment and remove FR comment 
-# Méthode permettant de modifier le fichier tabulé pour ajouter des régions flanquantes 
 def getFlank() :
     """
         Change the position in tabbed file in order to
@@ -230,7 +227,8 @@ def index() :
     """
     if args.verbose :
         print("\n ----- Generating index of '"+args.fasta2+"' using 'bwa index'. ----- \n")
-    #TODO : remove system call and add a check if index is already generate
+    #TODO : remove system call (possible ? can't find any wrapper) 
+    # and add a check if index is already generate
     call(["bwa","index",args.fasta2])
     print("")
     return
@@ -286,7 +284,7 @@ def samToTab() :
         The name of output file is by defaut
         "[fasta2_name]_out.[ext]" or the name that user
         specify with argument --output (but still with [ext]
-        as extension.
+        as extension. It return the name of the file created.
     """
     res2 = re.search("/?(\w+)\.",args.fasta2)
     if args.out == None:
@@ -346,16 +344,15 @@ def samToTab() :
             BedTool(tabou,from_string=True).saveas(args.out)
     return (args.out)
 
-# TODO : add ENG comment and remove FR comment 
-# Méthode permettant de récupérer les postions relatives des CDS dans les ARNm (par défaut) ou dans les gènes.
 def getPosCds(tab) :
     """
         This function extract position of mRNA (by defaut,
         else it's position of gene) and the relative
         position of CDS within.
         It take a file in gff format and return a
-        dictionary with tuple of mRNA (or gene) in keys and
-        list of list of positon of CDS in value.
+        dictionary with tuple of position of mRNA and his
+        number (or gene) in keys and list of list of positon
+        of CDS in value.
     """
     dicoPos={}
     posGene=()
@@ -398,28 +395,55 @@ def isComplete(samtotabOut) :
         both inputted tabbed file and newly generated tabbed
         file and check if CDS in the newly generated file
         are in the same position within the mRNA (or gene).
+        It take the name of the tabbed file newly generated
+        in argument.
     """
     if ext == "gff3" :
         dicoPos1=getPosCds(args.tabinput)
         dicoPos2=getPosCds(samtotabOut)
+        outTab = samtotabOut.split("/")[-1]
         geneInt=[]
         lastG=0
-        for key in dicoPos1.keys() :
-            for keys in dicoPos2.keys() :
-                if keys[0]>lastG :
-                    lastG=keys[0]
-                if keys[0]==key[0]:
-                    if dicoPos1[key]==dicoPos2[keys]:
-                        geneInt.append(keys[0])
-                   # else :
-                   #     print(key[0])
-                   #     print(dicoPos1[key])
-                   #     print(dicoPos2[keys])
+        geneOk=0
+        countG=0
+        selectable=False
+        filtered=""
+        for key1 in dicoPos1.keys() :
+            for key2 in dicoPos2.keys() :
+                if key2[0]>lastG :
+                    lastG=key2[0]
+                if key2[0]==key1[0]:
+                    if len(dicoPos1[key1]) == len(dicoPos2[key2]) :
+                        for v in range (0,len(dicoPos1[key1])) :
+                            if dicoPos1[key1][v] == dicoPos2[key2][v] :
+                                geneOk+=1
+                        print(key1[0])
+                        print(len(dicoPos1[key1]))
+                        print("")
+                        if geneOk >= len(dicoPos1[key1]) : # here we can add/rm condition to accept or not the mRNA/gene
+                            geneInt.append(key1[0]) # add the mRNA/gene number to the list of "acceptable mRNA/gene to select"
+                            #genePos
+                            geneOk = 0
+                        else :
+                            geneOk = 0
+        if "gene" in typeAclean :
+            typeC="gene"
+        elif "mrna" in typeAclean :
+            typeC="mrna"
         for l in range(1,lastG+1) :
             if l in sorted(geneInt) :
-                print("Gene "+str(l)+" complete.")
-            else :
-                print("Gene "+str(l)+" incomplete.")
+                with open(samtotabOut,"r") as tabou :
+                    for line in tabou :
+                        lineS=line.strip().split("\t")
+                        if lineS[2].lower() ==typeC :
+                            selectable=False
+                            countG+=1
+                            if countG==l :
+                                selectable=True
+                        if selectable :
+                            filtered+=(" ".join(lineS))+"\n"
+                    countG=0
+        BedTool(filtered, from_string=True).saveas("result/filtered_"+outTab)
     return
 
 if __name__ == "__main__":
@@ -432,5 +456,6 @@ if __name__ == "__main__":
         index()
     align(tabOp)
     samtotabOut=samToTab()
+    samtotabOut="result/fastav2_out.gff3"
     if (args.cds and ext=="gff3" and (args.typeA==None or (("gene" in typeAclean or "mrna" in typeAclean) and "cds" in typeAclean))) :
         isComplete(samtotabOut)

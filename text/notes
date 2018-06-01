@@ -65,13 +65,20 @@ ou - 1)
 !!!!! gestion tag NM (edit distance), si > 0 = missmatch, région flanquantes chevauchante
 (plusieurs SNP annoté dans la région) ? 
 
-!!!!! Documentation : utiliser docstring + un générateur style doxygen, sphinx
+##### Documentation : utiliser docstring + un générateur style doxygen, sphinx
 
-!!!!! Versioning : git tag, __version__
+@@@@@ Versioning : git tag, __version__
 Git tag oblige à avoir le fichier .version dans le git (et doit être clonés avec le
 programme sinon le getVersion() ne fonctionnera pas. updateTag ne fonctionne que si on a
 accès au git tag ce qui n'est pas le cas.
 
+!!!!! Réflexion sur le stage : rapport -> que mettre dedans ? Faire son rapport uniquement
+sur la problèmatique dont je m'occupe actuellement ou stopper maintenant le dev et passer
+à la suite (j'aurais surement pas le temps de faire grand chose mais au moins un état de
+l'art et comment je compte faire) ? Nom du programme / repo git ? 
+
+##### Toujours annoté de la même façon les gff ? c'est à dire toujours ordre gene, ARNm,
+CDS ? Ou cela peut être ARNm, gene, CDS ? Surement vu que c'est ordonné par position.
 
 
 

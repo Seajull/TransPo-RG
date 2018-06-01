@@ -1,13 +1,14 @@
 import sys, os, re
 
+dico={}
+dico[(1,546431,6546846)]="lol"
+dico[(2,54,65)]="lol"
 
-lol=10
-
-for i in range (1,lol) :
-    if i==2 or i==5:
-       continue
+chouette=list(dico)
 
 
-p="mm"
-if p :
-    print("p")
+for i in chouette :
+    if 2 in i :
+        print(i)
+
+print ([i for i in chouette if 2 in i])

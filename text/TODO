@@ -22,7 +22,7 @@ mais ça doit exister (ou juste recoder manuellement avec pybedtools).
 
 * Virtualenv bien setup (/venv) -> activer venv avec source venv/bin/activate
 
-* Appel système AWK remplacer par une boucle for + split("\t") BWA wrapper trop vieux,
+* Appel système AWK remplacer par une boucle for + split("\t"), BWA wrapper trop vieux,
 aucun ne fonctionne
 
 # 30/05/2018
@@ -57,6 +57,17 @@ directement au lieu de manuellement)
 
 * Push de la nouvelle version v0.2.0, passe les générateurs de doc maintenant
 
+* Commentaire das fonctions
+
+# 01/06/2018
+-- Objectif
+
+* Réflexion sur le futur du stage : Rapport ? Biblio ? Continuer à dev ? Définir point 
+sur lesquels revenir pendant la mise au point hebdomadaire (normalement le lundi).
+
+* Améliorer fonction isComplete() et gestion indel pour vcf
+
+-- Done
 
 
 @ TODO
@@ -66,7 +77,9 @@ outil ?
 
 * Galaxy   
 
-* Documentation -> commentaire (doxygen, pydoc) 
+* Documentation -> commentaire -> mise en place des docstrings,
+à approfondir plus tard pour le choix du générateur de doc par exemple (doxygen, pydoc).
 
 * Test unitaire 
 
+* Mettre à jour recap et commencer à réfléchir au rapport
