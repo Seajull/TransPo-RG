@@ -17,7 +17,7 @@ optional.add_argument("-h", "--help", action="help", default=argparse.SUPPRESS,h
 optional.add_argument("-i", "--index",dest="index", action="store_true", help="Create the index of fasta2.")
 optional.add_argument("-n", "--notempfile",dest="notempf", action="store_true", help="Create all file instead of using temporary file.")
 optional.add_argument("-o", "--output", dest="out", default=None, help="Output file (same format of tabbed file input).")
-optional.add_argument("-t", "--type",dest="typeA", default=None, help="Only extract annotation of specified type (gff file only) (example : \"mRNA exon cds\" (case insensitive)).")
+optional.add_argument("-t", "--type",dest="typeA", default=None, help="Only extract annotation of specified type (gff file only) (example : \"mRNA exon cDs\" (case insensitive)).")
 optional.add_argument("-v", "--verbose",dest="verbose", action="store_true", help="Enable message.")
 optional.add_argument("-ver", "--version",dest="version", action="store_true", help="Show version and date of last update then exit.")
 optional.add_argument("-w", "--warning",dest="warn", action="store_true", help="Disable warnings.")
@@ -284,7 +284,7 @@ def samToTab() :
         The name of output file is by defaut
         "[fasta2_name]_out.[ext]" or the name that user
         specify with argument --output (but still with [ext]
-        as extension. It return the name of the file created.
+        as extension). It return the name of the file created.
     """
     res2 = re.search("/?(\w+)\.",args.fasta2)
     if args.out == None:
