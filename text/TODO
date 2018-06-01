@@ -69,6 +69,13 @@ sur lesquels revenir pendant la mise au point hebdomadaire (normalement le lundi
 
 -- Done
 
+* Pour questions sur le déroulement du stage : voir fichier notes.
+
+* Fonction isComplete() génère maintenant un fichier gff et possibilité de rajouter des
+filtres vu qu'on compare les positions de chaque CDS et non de l\'ARNm (ou gène) comme
+auparavant. Gestion indel pour les vcf était déja implemanté mais pas fonctionnel, il
+fallait modifier le CIGAR qu'on acceptait.
+
 
 @ TODO
 

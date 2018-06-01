@@ -189,7 +189,7 @@ def getFlank() :
                     lenghtC=re.search(feature.chrom+"\t(\d+)",line)
                     if lenghtC :
                         break
-                if feature.stop+args.flank-1+(len(feature[3])-1) > int(lenghtC.group(1)):
+                if feature.stop+args.flank-1+(len(feature[3])-1) > int(lenghtC.group(1)): # TODO : unreadable, gotta change that
                     stop=int(lenghtC.group(1))
                 else :
                     stop=feature.stop+args.flank-1+(len(feature[3])-1)
@@ -330,7 +330,7 @@ def samToTab() :
                             countLine+=1
                 #if f[11][-1]!="0" and f[5]=="101M":     # show ID of sequence which contain a missmatch
                 #    print(f[0].split(":")[1]+"\t"+f[12])
-                if ext == "vcf" and f[5]==str(args.flank*2+1)+"M": # perfect match only for snp
+                if ext == "vcf" and f[5]==f[12].split(":")[-1]+"M": # perfect match only for snp
                     tabou+=f[2]+" "+ str(start) +" "+ " ".join(line[2:11])
                 elif ext == "bed" :
                     tabou+=f[2]+" "+ str(start) +" "+ str(stop) +" "+line[3].replace(" ","_")+"\n"
@@ -417,9 +417,6 @@ def isComplete(samtotabOut) :
                         for v in range (0,len(dicoPos1[key1])) :
                             if dicoPos1[key1][v] == dicoPos2[key2][v] :
                                 geneOk+=1
-                        print(key1[0])
-                        print(len(dicoPos1[key1]))
-                        print("")
                         if geneOk >= len(dicoPos1[key1]) : # here we can add/rm condition to accept or not the mRNA/gene
                             geneInt.append(key1[0]) # add the mRNA/gene number to the list of "acceptable mRNA/gene to select"
                             #genePos
