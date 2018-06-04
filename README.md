@@ -13,31 +13,29 @@
 
 ``` python3
 usage: tab1ToRef2.py [-f1 FASTA1] [-f2 FASTA2] [-ti TABINPUT] [-b FLANK] [-c]
-                     [-h] [-i] [-o OUT] [-t TYPEF] [-te] [-v] [-w]
+                     [-h] [-i] [-n] [-o OUT] [-t TYPEA] [-v] [-ver] [-w]
 
-Arguments requis :
+Required arguments:
   -f1 FASTA1, --fasta1 FASTA1
-                        Input de la référence fasta 1 (originelle).
+                        Input of reference fasta1 (old) <fasta>.
   -f2 FASTA2, --fasta2 FASTA2
-                        Input de la référence fasta 2 (nouvelle).
+                        Input of reference fasta2 (new) <fasta>.
   -ti TABINPUT, --tabinput TABINPUT
-                        Input du fichier tabulé associé à fasta1.
+                        Input of tabbed file related to fasta1 <bed/gff/vcf>
 
-Arguments optionnels :
-  -b FLANK              Taille des régions flanquantes à extraire de par et
-                        d'autre de l'annotation (par défaut : 50).
-  -c, --cds             Active la vérification des positions des CDS par
-                        rapport aux gènes ou au mRNA.
-  -h, --help            Affiche ces messages d'aide.
-  -i, --index           Force l'indexation du fichier fasta 2.
-  -o OUT, --output OUT  Fichier de sortie (format tabulé).
-  -t TYPEF, --type TYPEF
-                        Sélectionne uniquement les types souhaiter dans un
-                        gff3 (exemple de format de l'option : "mRNA exon cds"
-                        (insensible a la casse)).
-  -te, --tempfile       Force la création du fichier fasta des séquences
-                        sélectionnées, du ficher tabulé intermédiaire et du
-                        fichier d'alignement .sam.
-  -v, --verbose         Active l'affichage des messages.
-  -w, --warning         Désactive l'affichage des warnings.
+Optional arguments:
+  -b FLANK              Size of flank region to extract from each side of the
+                        annotation (default : 50).
+  -c, --cds             Enable control of postions of CDS inside mRNA (or
+                        gene).
+  -h, --help            Show this help message then exit.
+  -i, --index           Create the index of fasta2.
+  -n, --notempfile      Create all file instead of using temporary file.
+  -o OUT, --output OUT  Output file (same format of tabbed file input).
+  -t TYPEA, --type TYPEA
+                        Only extract annotation of specified type (gff file
+                        only) (example : "mRNA exon cDs" (case insensitive)).
+  -v, --verbose         Enable message.
+  -ver, --version       Show version and date of last update then exit.
+  -w, --warning         Disable warnings.
 ```

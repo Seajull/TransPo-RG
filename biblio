@@ -1,0 +1,18 @@
+NCBI Genome Remapping Service : 
+    Les données disponible sont limité à celle disponible dans la base de données de NCBI,
+    il n'y a pas la possibilité de fournir son propre jeu de données autre que le fichier
+    d'annotation.
+    Algorithme ? Pas ou peu décrit, quelque informations sur "What is NCBI Remap?"
+
+UCSC LiftOver :
+    Même problèmes qu'avec NCBI Remap, les génomes doivent provenir de leur banque de
+    données.
+    Algorithme ?
+
+Ensembl :
+    Même problèmes.
+
+
+
+
+

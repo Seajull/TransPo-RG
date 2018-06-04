@@ -77,6 +77,22 @@ auparavant. Gestion indel pour les vcf était déja implemanté mais pas fonctio
 fallait modifier le CIGAR qu'on acceptait.
 
 
+--- SEMAINE 23 ---
+
+# 04/06/2018
+-- Objectif
+
+* Bibliographie 
+
+* Recap à jour ?
+
+* Ajouter tag sur fichiers générés, possibilité de récuperer la ligne de
+commande entrée ? (possible avec un appel système à l'historique)
+
+-- Done
+
+
+
 @ TODO
 
 * Bibliographie -> lister outils existant (QOD), différence ?, utiliser concept d'un autre

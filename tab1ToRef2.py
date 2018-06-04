@@ -23,6 +23,15 @@ optional.add_argument("-ver", "--version",dest="version", action="store_true", h
 optional.add_argument("-w", "--warning",dest="warn", action="store_true", help="Disable warnings.")
 
 if __name__ == '__main__':
+    """
+        Some configuration for the argument parser like
+        checking require argument : --fasta1, --fasta2
+        and --tabinput. We setup the output file name,
+        create output directory (result/), setup the
+        tempfile or file depending --notempfile option
+        and signal useless argument (e.g. --type if the
+        format of tabinput isn't GFF).
+    """
     args = parser.parse_args()
     if args.version :
         getVersion()
@@ -67,9 +76,17 @@ if __name__ == '__main__':
         print("")
         warnings.warn("Argument --typeA is ignored because --tabinput format isn't GFF.",Warning)
 
+    if args.cds and ext != "gff3" :
+        print("")
+        warnings.warn("Argument --cds is ignored because --tabinput format isn't GFF.",Warning)
+
     if args.typeA != None and ext == "gff3" :
         typ=(re.findall("[a-zA-Z0-9]+",args.typeA))
         typeAclean=[l.lower() for l in typ]
+    else :
+        typeAclean=""
+    if ext == "gff3" and args.cds and ("gene" not in typeAclean and "mrna" not in typeAclean or "cds" not in typeAclean) :
+        warnings.warn("Argument --cds is ignored because there is missing type in --type argument (required : 'CDS' and mRNA or gene)",Warning)
 
 def checkDependency() :
     """
@@ -227,7 +244,7 @@ def index() :
     """
     if args.verbose :
         print("\n ----- Generating index of '"+args.fasta2+"' using 'bwa index'. ----- \n")
-    #TODO : remove system call (possible ? can't find any wrapper) 
+    #TODO : remove system call (possible ? can't find any wrapper)
     # and add a check if index is already generate
     call(["bwa","index",args.fasta2])
     print("")
@@ -297,13 +314,14 @@ def samToTab() :
     samf=BedTool(alnN)
     lengh=parseCigar(samf)
     countLine=0
+    begin = True
     if (ext=="gff3" and args.typeA != None) or change:
         args.tabinput=tabO
     with open(args.tabinput,"r") as tabi :
         for i in tabi : # tabi = tabbed file after all modification 
             line=i.split("\t")
             if line[0][0] == "#" :
-                tabou+= i
+                tabou += i.replace(" ","_")
             else :
                 for f in samf : # samf = alignment file
                     if int(f[1])!=0 : # ignoring complementary match (flag 2048)
@@ -367,6 +385,8 @@ def getPosCds(tab) :
     with open(tab,"r") as out :
         numGene=0
         for line in out :
+            if line[0]=="#" :
+                continue
             lineSplit=line.split("\t")
             typeA = lineSplit[2].lower()
             if typeD and typeA == "gene" :
@@ -431,6 +451,8 @@ def isComplete(samtotabOut) :
             if l in sorted(geneInt) :
                 with open(samtotabOut,"r") as tabou :
                     for line in tabou :
+                        if line[0]=="#":
+                            continue
                         lineS=line.strip().split("\t")
                         if lineS[2].lower() ==typeC :
                             selectable=False
@@ -456,3 +478,6 @@ if __name__ == "__main__":
     samtotabOut="result/fastav2_out.gff3"
     if (args.cds and ext=="gff3" and (args.typeA==None or (("gene" in typeAclean or "mrna" in typeAclean) and "cds" in typeAclean))) :
         isComplete(samtotabOut)
+    #if begin :
+    #    tabou += "#File generated with this command line\n"+"#"+"".join(sys.argv)+"\n"
+    #    begin = False

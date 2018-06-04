@@ -81,9 +81,11 @@
 
         Dans le cas d'un fichier GFF contenant les annotations de type CDS et mRNA (ou
     gene), la méthode getPosCds([file]) permet de récupérer les postions relatives des
-    CDS dans les ARNm (ou dans les gènes). Cela nous permet par la suite de comparer ces
-    positions relative entre les deux versions du fasta pour vérifier l'intégrité des ARNm
-    (ou gène) dans le fichier fasta2.
+    CDS dans les ARNm (ou dans les gènes). Cela nous permet par la suite de comparer
+    ces positions relative entre les deux versions du fasta pour vérifier l'intégrité
+    des ARNm (ou gène) dans le fichier fasta2 et de regénèrer un fichier tabulé
+    contenant uniquement les ARNm (et/ou gènes) qui correspondent aux critères de
+    séléctions. 
         
 --- Problèmes rencontrés :
 

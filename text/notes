@@ -75,10 +75,14 @@ accès au git tag ce qui n'est pas le cas.
 !!!!! Réflexion sur le stage : rapport -> que mettre dedans ? Faire son rapport uniquement
 sur la problèmatique dont je m'occupe actuellement ou stopper maintenant le dev et passer
 à la suite (j'aurais surement pas le temps de faire grand chose mais au moins un état de
-l'art et comment je compte faire) ? Nom du programme / repo git ? 
+l'art et comment je compte faire) ? Nom du programme / repo git ? Bibliographie -> comment
+réagir fasse à des programmes plus performant ? Justifier usage du mien ?
 
 ##### Toujours annoté de la même façon les gff ? c'est à dire toujours ordre gene, ARNm,
 CDS ? Ou cela peut être ARNm, gene, CDS ? Surement vu que c'est ordonné par position.
 
+!!!!! Ajout tag problématique : parser de pybedtools modifie tout les espaces en
+tabulation.  Il faudrait rajouter a la main sur le fichier final. Il reste le problème des
+espaces dans les annotations que je remplace par des "_" du coup.  
 
-
+##### Possibilité de modifié "tabbed file" par "coordinate file" 
