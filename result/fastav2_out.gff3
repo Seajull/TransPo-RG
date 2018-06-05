@@ -1,9 +1,10 @@
-#lol
-Chr01	phytozome	gene	1951	2616	.	+	.	ID=Sb01g000200;Name=Sb01g000200;Note=similar_to_Putative_uncharacterized_protein
-Chr01	phytozome	mRNA	1951	2616	.	+	.	ID=Sb01g000200.1;Parent=Sb01g000200;Dbxref=Phytozome:1949293,TAIR:AT4G05220.1,MSU:LOC_Os07g34720.1;Name=Sb01g000200.1;Note=similar_to_Putative_uncharacterized_protein
+# File generated the 05 Jun 2018 with following command line : 
+# tab1ToRef2.py -f1 data/fasta/fastav1.fasta -f2 data/fasta/fastav2.fasta -ti data/tab/v1.gff3 -v -c -t cds,gene,mrna -n
+Chr01	phytozome	gene	1951	2616	.	+	.	ID=Sb01g000200;Name=Sb01g000200;Note=similar to Putative uncharacterized protein
+Chr01	phytozome	mRNA	1951	2616	.	+	.	ID=Sb01g000200.1;Parent=Sb01g000200;Dbxref=Phytozome:1949293,TAIR:AT4G05220.1,MSU:LOC_Os07g34720.1;Name=Sb01g000200.1;Note=similar to Putative uncharacterized protein
 Chr01	phytozome	CDS	1951	2616	.	+	0	Parent=Sb01g000200.1
-Chr01	phytozome	gene	11205	14601	.	-	.	ID=Sb01g000210;Name=Sb01g000210;Note=similar_to_RabGAP/TBC_domain-containing_protein%2C_putative%2C_expressed
-Chr01	phytozome	mRNA	11205	14601	.	-	.	ID=Sb01g000210.1;Parent=Sb01g000210;Dbxref=Phytozome:1949294,KOG:KOG2197,TAIR:AT4G27100.1,MSU:LOC_Os11g37690.1;Name=Sb01g000210.1;Note=similar_to_RabGAP/TBC_domain-containing_protein%2C_putative%2C_expressed;Ontology_term=GO:0005097,GO:0032313,GO:0005622
+Chr01	phytozome	gene	11205	14601	.	-	.	ID=Sb01g000210;Name=Sb01g000210;Note=similar to RabGAP/TBC domain-containing protein%2C putative%2C expressed
+Chr01	phytozome	mRNA	11205	14601	.	-	.	ID=Sb01g000210.1;Parent=Sb01g000210;Dbxref=Phytozome:1949294,KOG:KOG2197,TAIR:AT4G27100.1,MSU:LOC_Os11g37690.1;Name=Sb01g000210.1;Note=similar to RabGAP/TBC domain-containing protein%2C putative%2C expressed;Ontology_term=GO:0005097,GO:0032313,GO:0005622
 Chr01	phytozome	CDS	11511	11531	.	-	0	Parent=Sb01g000210.1
 Chr01	phytozome	CDS	11649	11732	.	-	0	Parent=Sb01g000210.1
 Chr01	phytozome	CDS	11892	12152	.	-	0	Parent=Sb01g000210.1
@@ -15,8 +16,8 @@ Chr01	phytozome	CDS	13637	13908	.	-	1	Parent=Sb01g000210.1
 Chr01	phytozome	CDS	14017	14120	.	-	0	Parent=Sb01g000210.1
 Chr01	phytozome	CDS	14321	14416	.	-	0	Parent=Sb01g000210.1
 Chr01	phytozome	CDS	14503	14601	.	-	0	Parent=Sb01g000210.1
-Chr01	phytozome	gene	24632	42234	.	-	.	ID=Sb01g000220;Name=Sb01g000220;Note=similar_to_PDR-like_ABC_transporter
-Chr01	phytozome	mRNA	24632	42234	.	-	.	ID=Sb01g000220.1;Parent=Sb01g000220;Dbxref=Phytozome:1949295,KOG:KOG0065,TAIR:AT2G36380.1,MSU:LOC_Os11g37700.1;Name=Sb01g000220.1;Note=similar_to_PDR-like_ABC_transporter;Ontology_term=GO:0005524,GO:0016887,GO:0016020
+Chr01	phytozome	gene	24632	42234	.	-	.	ID=Sb01g000220;Name=Sb01g000220;Note=similar to PDR-like ABC transporter
+Chr01	phytozome	mRNA	24632	42234	.	-	.	ID=Sb01g000220.1;Parent=Sb01g000220;Dbxref=Phytozome:1949295,KOG:KOG0065,TAIR:AT2G36380.1,MSU:LOC_Os11g37700.1;Name=Sb01g000220.1;Note=similar to PDR-like ABC transporter;Ontology_term=GO:0005524,GO:0016887,GO:0016020
 Chr01	phytozome	CDS	24632	24907	.	-	0	Parent=Sb01g000220.1
 Chr01	phytozome	CDS	25001	25255	.	-	0	Parent=Sb01g000220.1
 Chr01	phytozome	CDS	25695	25866	.	-	1	Parent=Sb01g000220.1
@@ -36,15 +37,15 @@ Chr01	phytozome	CDS	36815	36899	.	-	1	Parent=Sb01g000220.1
 Chr01	phytozome	CDS	37358	37440	.	-	0	Parent=Sb01g000220.1
 Chr01	phytozome	CDS	41705	41825	.	-	1	Parent=Sb01g000220.1
 Chr01	phytozome	CDS	42029	42234	.	-	0	Parent=Sb01g000220.1
-Chr01	phytozome	gene	59914	63287	.	+	.	ID=Sb01g000230;Name=Sb01g000230;Note=similar_to_Putative_uncharacterized_protein
-Chr01	phytozome	mRNA	59914	63287	.	+	.	ID=Sb01g000230.1;Parent=Sb01g000230;Dbxref=Phytozome:1949296,KOG:KOG0867,TAIR:AT5G41210.1,MSU:LOC_Os11g37730.1;Name=Sb01g000230.1;Note=similar_to_Putative_uncharacterized_protein
+Chr01	phytozome	gene	59914	63287	.	+	.	ID=Sb01g000230;Name=Sb01g000230;Note=similar to Putative uncharacterized protein
+Chr01	phytozome	mRNA	59914	63287	.	+	.	ID=Sb01g000230.1;Parent=Sb01g000230;Dbxref=Phytozome:1949296,KOG:KOG0867,TAIR:AT5G41210.1,MSU:LOC_Os11g37730.1;Name=Sb01g000230.1;Note=similar to Putative uncharacterized protein
 Chr01	phytozome	CDS	60737	60786	.	+	0	Parent=Sb01g000230.1
 Chr01	phytozome	CDS	61255	61308	.	+	1	Parent=Sb01g000230.1
 Chr01	phytozome	CDS	62068	62147	.	+	1	Parent=Sb01g000230.1
 Chr01	phytozome	CDS	62571	62776	.	+	2	Parent=Sb01g000230.1
 Chr01	phytozome	CDS	62849	63061	.	+	0	Parent=Sb01g000230.1
-Chr01	phytozome	gene	63441	69306	.	-	.	ID=Sb01g000240;Name=Sb01g000240;Note=similar_to_Expressed_protein
-Chr01	phytozome	mRNA	63441	69306	.	-	.	ID=Sb01g000240.1;Parent=Sb01g000240;Dbxref=Phytozome:1949297,TAIR:AT5G23890.1,MSU:LOC_Os03g64400.1;Name=Sb01g000240.1;Note=similar_to_Expressed_protein
+Chr01	phytozome	gene	63441	69306	.	-	.	ID=Sb01g000240;Name=Sb01g000240;Note=similar to Expressed protein
+Chr01	phytozome	mRNA	63441	69306	.	-	.	ID=Sb01g000240.1;Parent=Sb01g000240;Dbxref=Phytozome:1949297,TAIR:AT5G23890.1,MSU:LOC_Os03g64400.1;Name=Sb01g000240.1;Note=similar to Expressed protein
 Chr01	phytozome	CDS	63698	64196	.	-	1	Parent=Sb01g000240.1
 Chr01	phytozome	CDS	64995	65526	.	-	2	Parent=Sb01g000240.1
 Chr01	phytozome	CDS	65597	65711	.	-	0	Parent=Sb01g000240.1
@@ -55,22 +56,22 @@ Chr01	phytozome	CDS	66495	66583	.	-	0	Parent=Sb01g000240.1
 Chr01	phytozome	CDS	67407	68383	.	-	2	Parent=Sb01g000240.1
 Chr01	phytozome	CDS	68518	68610	.	-	2	Parent=Sb01g000240.1
 Chr01	phytozome	CDS	68830	69082	.	-	0	Parent=Sb01g000240.1
-Chr01	phytozome	gene	79602	81452	.	+	.	ID=Sb01g000250;Name=Sb01g000250;Note=Predicted_protein
-Chr01	phytozome	mRNA	79602	81452	.	+	.	ID=Sb01g000250.1;Parent=Sb01g000250;Dbxref=Phytozome:1949299,TAIR:AT5G17910.1,MSU:LOC_Os07g28920.1;Name=Sb01g000250.1;Note=Predicted_protein
+Chr01	phytozome	gene	79602	81452	.	+	.	ID=Sb01g000250;Name=Sb01g000250;Note=Predicted protein
+Chr01	phytozome	mRNA	79602	81452	.	+	.	ID=Sb01g000250.1;Parent=Sb01g000250;Dbxref=Phytozome:1949299,TAIR:AT5G17910.1,MSU:LOC_Os07g28920.1;Name=Sb01g000250.1;Note=Predicted protein
 Chr01	phytozome	CDS	79602	80805	.	+	0	Parent=Sb01g000250.1
 Chr01	phytozome	CDS	80881	81452	.	+	2	Parent=Sb01g000250.1
-Chr01	phytozome	gene	81890	107126	.	+	.	ID=Sb01g000255;Name=Sb01g000255;Note=similar_to_Putative_uncharacterized_protein
-Chr01	phytozome	mRNA	81890	107126	.	+	.	ID=Sb01g000255.1;Parent=Sb01g000255;Dbxref=Phytozome:1949300,TAIR:AT5G41470.1,MSU:LOC_Os03g64380.1;Name=Sb01g000255.1;Note=similar_to_Putative_uncharacterized_protein
+Chr01	phytozome	gene	81890	107126	.	+	.	ID=Sb01g000255;Name=Sb01g000255;Note=similar to Putative uncharacterized protein
+Chr01	phytozome	mRNA	81890	107126	.	+	.	ID=Sb01g000255.1;Parent=Sb01g000255;Dbxref=Phytozome:1949300,TAIR:AT5G41470.1,MSU:LOC_Os03g64380.1;Name=Sb01g000255.1;Note=similar to Putative uncharacterized protein
 Chr01	phytozome	CDS	81890	82264	.	+	0	Parent=Sb01g000255.1
 Chr01	phytozome	CDS	82387	82501	.	+	0	Parent=Sb01g000255.1
 Chr01	phytozome	CDS	82583	82664	.	+	2	Parent=Sb01g000255.1
 Chr01	phytozome	CDS	106907	106958	.	+	1	Parent=Sb01g000255.1
 Chr01	phytozome	CDS	107073	107126	.	+	0	Parent=Sb01g000255.1
-Chr01	phytozome	gene	109971	112306	.	-	.	ID=Sb01g000260;Name=Sb01g000260;Note=similar_to_Os03g0861900_protein
-Chr01	phytozome	mRNA	109971	112306	.	-	.	ID=Sb01g000260.1;Parent=Sb01g000260;Dbxref=Phytozome:1949301,TAIR:AT5G52850.1,MSU:LOC_Os03g64370.1;Name=Sb01g000260.1;Note=similar_to_Os03g0861900_protein
+Chr01	phytozome	gene	109971	112306	.	-	.	ID=Sb01g000260;Name=Sb01g000260;Note=similar to Os03g0861900 protein
+Chr01	phytozome	mRNA	109971	112306	.	-	.	ID=Sb01g000260.1;Parent=Sb01g000260;Dbxref=Phytozome:1949301,TAIR:AT5G52850.1,MSU:LOC_Os03g64370.1;Name=Sb01g000260.1;Note=similar to Os03g0861900 protein
 Chr01	phytozome	CDS	110234	112279	.	-	0	Parent=Sb01g000260.1
-Chr01	phytozome	gene	112766	115843	.	+	.	ID=Sb01g000270;Name=Sb01g000270;Note=similar_to_Rhodanese-like_domain_containing_protein%2C_expressed
-Chr01	phytozome	mRNA	112766	115843	.	+	.	ID=Sb01g000270.1;Parent=Sb01g000270;Dbxref=Phytozome:1949302,TAIR:AT1G17850.2,MSU:LOC_Os03g64350.1;Name=Sb01g000270.1;Note=similar_to_Rhodanese-like_domain_containing_protein%2C_expressed
+Chr01	phytozome	gene	112766	115843	.	+	.	ID=Sb01g000270;Name=Sb01g000270;Note=similar to Rhodanese-like domain containing protein%2C expressed
+Chr01	phytozome	mRNA	112766	115843	.	+	.	ID=Sb01g000270.1;Parent=Sb01g000270;Dbxref=Phytozome:1949302,TAIR:AT1G17850.2,MSU:LOC_Os03g64350.1;Name=Sb01g000270.1;Note=similar to Rhodanese-like domain containing protein%2C expressed
 Chr01	phytozome	CDS	112797	113090	.	+	0	Parent=Sb01g000270.1
 Chr01	phytozome	CDS	113227	113280	.	+	0	Parent=Sb01g000270.1
 Chr01	phytozome	CDS	113627	113776	.	+	0	Parent=Sb01g000270.1
@@ -79,8 +80,8 @@ Chr01	phytozome	CDS	114789	114877	.	+	2	Parent=Sb01g000270.1
 Chr01	phytozome	CDS	114973	115079	.	+	0	Parent=Sb01g000270.1
 Chr01	phytozome	CDS	115264	115518	.	+	1	Parent=Sb01g000270.1
 Chr01	phytozome	CDS	115600	115732	.	+	1	Parent=Sb01g000270.1
-Chr01	phytozome	gene	116217	136379	.	-	.	ID=Sb01g000280;Name=Sb01g000280;Note=similar_to_Expressed_protein
-Chr01	phytozome	mRNA	116217	136379	.	-	.	ID=Sb01g000280.1;Parent=Sb01g000280;Dbxref=Phytozome:1949303,TAIR:AT5G43310.2,MSU:LOC_Os03g64320.1;Name=Sb01g000280.1;Note=similar_to_Expressed_protein
+Chr01	phytozome	gene	116217	136379	.	-	.	ID=Sb01g000280;Name=Sb01g000280;Note=similar to Expressed protein
+Chr01	phytozome	mRNA	116217	136379	.	-	.	ID=Sb01g000280.1;Parent=Sb01g000280;Dbxref=Phytozome:1949303,TAIR:AT5G43310.2,MSU:LOC_Os03g64320.1;Name=Sb01g000280.1;Note=similar to Expressed protein
 Chr01	phytozome	CDS	116530	116591	.	-	2	Parent=Sb01g000280.1
 Chr01	phytozome	CDS	116805	116858	.	-	2	Parent=Sb01g000280.1
 Chr01	phytozome	CDS	117069	117426	.	-	0	Parent=Sb01g000280.1
@@ -94,12 +95,12 @@ Chr01	phytozome	CDS	135384	135423	.	-	0	Parent=Sb01g000280.1
 Chr01	phytozome	CDS	135509	135629	.	-	1	Parent=Sb01g000280.1
 Chr01	phytozome	CDS	135726	135905	.	-	1	Parent=Sb01g000280.1
 Chr01	phytozome	CDS	136321	136379	.	-	0	Parent=Sb01g000280.1
-Chr01	phytozome	gene	154770	155186	.	+	.	ID=Sb01g000290;Name=Sb01g000290;Note=weakly_similar_to_Putative_uncharacterized_protein
-Chr01	phytozome	mRNA	154770	155186	.	+	.	ID=Sb01g000290.1;Parent=Sb01g000290;Dbxref=Phytozome:1949304,MSU:LOC_Os03g64310.1;Name=Sb01g000290.1;Note=weakly_similar_to_Putative_uncharacterized_protein
+Chr01	phytozome	gene	154770	155186	.	+	.	ID=Sb01g000290;Name=Sb01g000290;Note=weakly similar to Putative uncharacterized protein
+Chr01	phytozome	mRNA	154770	155186	.	+	.	ID=Sb01g000290.1;Parent=Sb01g000290;Dbxref=Phytozome:1949304,MSU:LOC_Os03g64310.1;Name=Sb01g000290.1;Note=weakly similar to Putative uncharacterized protein
 Chr01	phytozome	CDS	154770	154938	.	+	0	Parent=Sb01g000290.1
 Chr01	phytozome	CDS	155044	155186	.	+	2	Parent=Sb01g000290.1
-Chr01	phytozome	gene	155696	161756	.	-	.	ID=Sb01g000300;Name=Sb01g000300;Note=similar_to_Transcriptional_corepressor_LEUNIG%2C_putative%2C_expressed
-Chr01	phytozome	mRNA	155696	161756	.	-	.	ID=Sb01g000300.1;Parent=Sb01g000300;Dbxref=Phytozome:1949305,KOG:KOG0266,TAIR:AT2G32700.6,MSU:LOC_Os03g64300.1;Name=Sb01g000300.1;Note=similar_to_Transcriptional_corepressor_LEUNIG%2C_putative%2C_expressed;Ontology_term=GO:0005515
+Chr01	phytozome	gene	155696	161756	.	-	.	ID=Sb01g000300;Name=Sb01g000300;Note=similar to Transcriptional corepressor LEUNIG%2C putative%2C expressed
+Chr01	phytozome	mRNA	155696	161756	.	-	.	ID=Sb01g000300.1;Parent=Sb01g000300;Dbxref=Phytozome:1949305,KOG:KOG0266,TAIR:AT2G32700.6,MSU:LOC_Os03g64300.1;Name=Sb01g000300.1;Note=similar to Transcriptional corepressor LEUNIG%2C putative%2C expressed;Ontology_term=GO:0005515
 Chr01	phytozome	CDS	155696	155839	.	-	0	Parent=Sb01g000300.1
 Chr01	phytozome	CDS	155940	156137	.	-	0	Parent=Sb01g000300.1
 Chr01	phytozome	CDS	156210	156338	.	-	0	Parent=Sb01g000300.1
@@ -116,8 +117,8 @@ Chr01	phytozome	CDS	160545	160599	.	-	1	Parent=Sb01g000300.1
 Chr01	phytozome	CDS	160681	160925	.	-	0	Parent=Sb01g000300.1
 Chr01	phytozome	CDS	161050	161350	.	-	1	Parent=Sb01g000300.1
 Chr01	phytozome	CDS	161488	161519	.	-	0	Parent=Sb01g000300.1
-Chr01	phytozome	gene	162163	167322	.	-	.	ID=Sb01g000310;Name=Sb01g000310;Note=weakly_similar_to_Putative_uncharacterized_protein
-Chr01	phytozome	mRNA	162163	167322	.	-	.	ID=Sb01g000310.1;Parent=Sb01g000310;Dbxref=Phytozome:1949306,KOG:KOG0192,TAIR:AT2G35050.1,MSU:LOC_Os07g25680.1;Name=Sb01g000310.1;Note=weakly_similar_to_Putative_uncharacterized_protein;Ontology_term=GO:0004672,GO:0005524,GO:0006468,GO:0005515
+Chr01	phytozome	gene	162163	167322	.	-	.	ID=Sb01g000310;Name=Sb01g000310;Note=weakly similar to Putative uncharacterized protein
+Chr01	phytozome	mRNA	162163	167322	.	-	.	ID=Sb01g000310.1;Parent=Sb01g000310;Dbxref=Phytozome:1949306,KOG:KOG0192,TAIR:AT2G35050.1,MSU:LOC_Os07g25680.1;Name=Sb01g000310.1;Note=weakly similar to Putative uncharacterized protein;Ontology_term=GO:0004672,GO:0005524,GO:0006468,GO:0005515
 Chr01	phytozome	CDS	162505	162704	.	-	2	Parent=Sb01g000310.1
 Chr01	phytozome	CDS	162787	162874	.	-	0	Parent=Sb01g000310.1
 Chr01	phytozome	CDS	163047	163169	.	-	0	Parent=Sb01g000310.1
@@ -126,8 +127,8 @@ Chr01	phytozome	CDS	163488	163651	.	-	0	Parent=Sb01g000310.1
 Chr01	phytozome	CDS	163856	164008	.	-	0	Parent=Sb01g000310.1
 Chr01	phytozome	CDS	164471	164551	.	-	0	Parent=Sb01g000310.1
 Chr01	phytozome	CDS	164635	167322	.	-	0	Parent=Sb01g000310.1
-Chr01	phytozome	gene	185499	204632	.	+	.	ID=Sb01g000330;Name=Sb01g000330;Note=similar_to_Putative_myosin_heavy_chain
-Chr01	phytozome	mRNA	185499	204632	.	+	.	ID=Sb01g000330.1;Parent=Sb01g000330;Dbxref=Phytozome:1949308,KOG:KOG0160,TAIR:AT1G04160.1,MSU:LOC_Os03g64290.1;Name=Sb01g000330.1;Note=similar_to_Putative_myosin_heavy_chain;Ontology_term=GO:0003774,GO:0005524,GO:0016459,GO:0005515
+Chr01	phytozome	gene	185499	204632	.	+	.	ID=Sb01g000330;Name=Sb01g000330;Note=similar to Putative myosin heavy chain
+Chr01	phytozome	mRNA	185499	204632	.	+	.	ID=Sb01g000330.1;Parent=Sb01g000330;Dbxref=Phytozome:1949308,KOG:KOG0160,TAIR:AT1G04160.1,MSU:LOC_Os03g64290.1;Name=Sb01g000330.1;Note=similar to Putative myosin heavy chain;Ontology_term=GO:0003774,GO:0005524,GO:0016459,GO:0005515
 Chr01	phytozome	CDS	185499	185717	.	+	0	Parent=Sb01g000330.1
 Chr01	phytozome	CDS	185923	186066	.	+	0	Parent=Sb01g000330.1
 Chr01	phytozome	CDS	186518	186907	.	+	0	Parent=Sb01g000330.1

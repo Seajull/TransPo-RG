@@ -87,10 +87,28 @@ fallait modifier le CIGAR qu'on acceptait.
 * Recap à jour ?
 
 * Ajouter tag sur fichiers générés, possibilité de récuperer la ligne de
-commande entrée ? (possible avec un appel système à l'historique)
+commande entrée ? -> sys.argv (voir notes pour détail)
+
 
 -- Done
 
+* Un peu de biblio sur LiftOver, à creuser
+
+# 05/06/2018
+-- Objectif
+
+* Bibliographie
+
+* Changer méthode _init_ de pybedtools pour choisir le délimiteur
+
+
+
+-- Done
+
+* Méthode _init_ de pybedtools modifier, permet l'ajout de la date et de la ligne de
+commande utilisé pour générer les fichiers
+
+* Choix du nom de dossier résultat maintenant possible avec l'option --directory (-d)
 
 
 @ TODO

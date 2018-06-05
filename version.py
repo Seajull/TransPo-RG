@@ -4,7 +4,7 @@ import sys, os, datetime, re
 def updateTag() :
     if not os.path.isdir(".git"):
         sys.exit("This does not appear to be a Git repository.")
-    out = check_output(["git", "log", "--tags", "--simplify-by-decoration", "--pretty='format=:%aD %d'"]).decode("utf-8")
+    out=check_output(["git", "log", "--tags", "--simplify-by-decoration", "--pretty='format=:%aD %d'"]).decode("utf-8")
     vers=""
     outs=out.split("\n")
     with open(".version","w") as verOut :

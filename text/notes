@@ -83,6 +83,12 @@ CDS ? Ou cela peut être ARNm, gene, CDS ? Surement vu que c'est ordonné par po
 
 !!!!! Ajout tag problématique : parser de pybedtools modifie tout les espaces en
 tabulation.  Il faudrait rajouter a la main sur le fichier final. Il reste le problème des
-espaces dans les annotations que je remplace par des "_" du coup.  
+espaces dans les annotations que je remplace par des "_" du coup. Problème, comment
+ajouter une ligne au milieu ? Opération lourde. Sinon ajout dernière ligne ou ajout à
+l'écriture mais problème décris ci-dessus des espaces.
 
 ##### Possibilité de modifié "tabbed file" par "coordinate file" 
+
+##### Chain file ??? "A chained alignment (or 'chain') between two species consists of
+an ordered sequence of traditional pairwise nucleotide alignments ('blocks') separated
+by larger gaps, some of which may be $simultaneous gaps in both species." 

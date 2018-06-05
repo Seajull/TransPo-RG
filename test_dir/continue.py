@@ -1,14 +1,5 @@
-import sys, os, re
+import sys, os, re, datetime
 
-dico={}
-dico[(1,546431,6546846)]="lol"
-dico[(2,54,65)]="lol"
-
-chouette=list(dico)
+print(datetime.datetime.now().strftime("%d %b %Y"))
 
 
-for i in chouette :
-    if 2 in i :
-        print(i)
-
-print ([i for i in chouette if 2 in i])

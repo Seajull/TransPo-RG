@@ -2,22 +2,23 @@ from Bio import SeqIO
 from subprocess import call
 from pybedtools import BedTool
 from version import getVersion
-import sys, os, re, tempfile, argparse, warnings, pydoc
+import sys, os, re, tempfile, argparse, warnings, pydoc, datetime
 
 parser = argparse.ArgumentParser(add_help=False)
 
-required = parser.add_argument_group("Required arguments")
-optional = parser.add_argument_group("Optional arguments")
+required = parser.add_argument_group("Required arguments ")
+optional = parser.add_argument_group("Optional arguments ")
 required.add_argument("-f1", "--fasta1", dest="fasta1",default=None, help="Input of reference fasta1 (old) <fasta>.")
 required.add_argument("-f2", "--fasta2", dest="fasta2", default=None, help="Input of reference fasta2 (new) <fasta>.")
 required.add_argument("-ti", "--tabinput", dest="tabinput", default=None, help="Input of tabbed file related to fasta1 <bed/gff/vcf>")
-optional.add_argument("-b", dest="flank", type=int, default=50, help="Size of flank region to extract from each side of the annotation (default : 50).")
+optional.add_argument("-b", "--flank", dest="flank", type=int, default=50, help="Size of flank region to extract from each side of the annotation (default : 50).")
 optional.add_argument("-c", "--cds",dest="cds", action="store_true", help="Enable control of postions of CDS inside mRNA (or gene).")
+optional.add_argument("-d", "--directory", dest="directory", default="result/", help="Name of the directory where files are generated (default : result/).")
 optional.add_argument("-h", "--help", action="help", default=argparse.SUPPRESS,help="Show this help message then exit.")
 optional.add_argument("-i", "--index",dest="index", action="store_true", help="Create the index of fasta2.")
 optional.add_argument("-n", "--notempfile",dest="notempf", action="store_true", help="Create all file instead of using temporary file.")
 optional.add_argument("-o", "--output", dest="out", default=None, help="Output file (same format of tabbed file input).")
-optional.add_argument("-t", "--type",dest="typeA", default=None, help="Only extract annotation of specified type (gff file only) (example : \"mRNA exon cDs\" (case insensitive)).")
+optional.add_argument("-t", "--type",dest="typeA", default=None, help="Only extract annotation of specified type (gff file only) (example : \"mRNA exon cds\" (case insensitive)).")
 optional.add_argument("-v", "--verbose",dest="verbose", action="store_true", help="Enable message.")
 optional.add_argument("-ver", "--version",dest="version", action="store_true", help="Show version and date of last update then exit.")
 optional.add_argument("-w", "--warning",dest="warn", action="store_true", help="Disable warnings.")
@@ -33,9 +34,15 @@ if __name__ == '__main__':
         format of tabinput isn't GFF).
     """
     args = parser.parse_args()
+
+    if len(sys.argv)<2:
+        getVersion()
+        parser.print_help()
+        sys.exit(1)
+
     if args.version :
         getVersion()
-        sys.exit()
+        sys.exit(1)
 
     if args.warn :
         warnings.filterwarnings("ignore")
@@ -51,11 +58,12 @@ if __name__ == '__main__':
     ext=BedTool(args.tabinput).file_type
     if ext == "gff" :
         ext ="gff3"
-
+    if args.directory[-1]=="/" :
+        args.directory=args.directory[:-1]
     try:
-        os.mkdir("result")
+        os.mkdir(args.directory)
         if args.verbose :
-            print("\n ----- Creating directory 'result/'. -----")
+            print("\n ----- Creating directory '"+args.directory+"/'. -----")
     except :
         pass
 
@@ -68,9 +76,9 @@ if __name__ == '__main__':
         selectS = tempfile.NamedTemporaryFile()
         selectedSeq = selectS.name
     else :
-        alnN="result/aln_out_"+ext+".sam"
+        alnN=args.directory+"/aln_out_"+ext+".sam"
         fasta1Out=(args.fasta1).split(".")
-        selectedSeq="result/"+fasta1Out[0].split("/")[-1]+"_selected_"+ext+"."+fasta1Out[1]
+        selectedSeq=args.directory+"/"+fasta1Out[0].split("/")[-1]+"_selected_"+ext+"."+fasta1Out[1]
 
     if args.typeA != None and ext != "gff3" :
         print("")
@@ -152,8 +160,8 @@ def prefix() :
     if (fileTab[0][0][0:-1])!= (first_seq.id[0:-1]) :
         with open(prefixTab,"w") as pre :
             for feat in fileTab :
-                nul+= first_seq.id[0:-1]+feat[0][-1]+" "+(" ".join(feat[1:])+"\n")
-        BedTool(nul, from_string=True).saveas(tabO)
+                nul+= first_seq.id[0:-1]+feat[0][-1]+"\s"+("\s".join(feat[1:])+"\n")
+        BedTool(nul, from_string=True, deli="\s").saveas(tabO)
         change=True
     return
 
@@ -189,7 +197,7 @@ def getFlank() :
         tabOP=tabOPut.name
     else :
         tab=(args.tabinput).split(".")
-        tabOP="result/"+tab[0].split("/")[-1]+"_out."+tab[1]
+        tabOP=args.directory+"/"+tab[0].split("/")[-1]+"_out."+tab[1]
     lenChr=parseFa()
     fileTab2=BedTool(args.tabinput)
     if (args.typeA != None and ext== "gff3") or change :
@@ -214,8 +222,8 @@ def getFlank() :
                     start=0
                 else :
                     start=feature.start-args.flank-1
-                res += feature.chrom +" "+str(start)+" "+ str(stop)+"\n"
-        BedTool(res, from_string=True).saveas(tabOP)
+                res += feature.chrom +"\s"+str(start)+"\s"+ str(stop)+"\n"
+        BedTool(res, from_string=True, deli="\s").saveas(tabOP)
     try :
         return (tabOPut)
     except :
@@ -305,9 +313,9 @@ def samToTab() :
     """
     res2 = re.search("/?(\w+)\.",args.fasta2)
     if args.out == None:
-        args.out = "result/"+res2.group(1)+"_out."+ext
+        args.out = args.directory+"/"+res2.group(1)+"_out."+ext
     else :
-        args.out = "result/"+args.out.split(".")[0]+"."+ext
+        args.out = args.directory+"/"+args.out.split(".")[0]+"."+ext
     start=0
     stop=0
     tabou=""
@@ -321,8 +329,11 @@ def samToTab() :
         for i in tabi : # tabi = tabbed file after all modification 
             line=i.split("\t")
             if line[0][0] == "#" :
-                tabou += i.replace(" ","_")
+                tabou += i
             else :
+                if begin :
+                    tabou += "# File generated the "+datetime.datetime.now().strftime("%d %b %Y") + " with following command line : \n"+"# "+" ".join(sys.argv)+"\n"
+                    begin = False
                 for f in samf : # samf = alignment file
                     if int(f[1])!=0 : # ignoring complementary match (flag 2048)
                         continue
@@ -349,17 +360,17 @@ def samToTab() :
                 #if f[11][-1]!="0" and f[5]=="101M":     # show ID of sequence which contain a missmatch
                 #    print(f[0].split(":")[1]+"\t"+f[12])
                 if ext == "vcf" and f[5]==f[12].split(":")[-1]+"M": # perfect match only for snp
-                    tabou+=f[2]+" "+ str(start) +" "+ " ".join(line[2:11])
+                    tabou+=f[2]+"\s"+ str(start) +"\s"+ "\s".join(line[2:11])
                 elif ext == "bed" :
-                    tabou+=f[2]+" "+ str(start) +" "+ str(stop) +" "+line[3].replace(" ","_")+"\n"
+                    tabou+=f[2]+"\s"+ str(start) +"\s"+ str(stop) +"\s"+line[3]+"\n"
                 elif ext == "gff3" :
-                    tabou+=f[2]+" "+line[1]+" "+line[2]+" "+ str(start) +" "+ str(stop) +" "+" ".join(line[5:8])+" "+line[8].replace(" ","_")+"\n"
+                    tabou+=f[2]+"\s"+line[1]+"\s"+line[2]+"\s"+ str(start) +"\s"+ str(stop) +"\s"+"\s".join(line[5:8])+"\s"+line[8]+"\n"
         if ext == "vcf" :
-            BedTool(tabou,from_string=True).saveas(args.out)
+            BedTool(tabou,from_string=True, deli="\s").saveas(args.out)
         elif ext == "bed" :
-            BedTool(tabou,from_string=True).saveas(args.out)
+            BedTool(tabou,from_string=True, deli="\s").saveas(args.out)
         elif ext == "gff3" :
-            BedTool(tabou,from_string=True).saveas(args.out)
+            BedTool(tabou,from_string=True, deli="\s").saveas(args.out)
     return (args.out)
 
 def getPosCds(tab) :
@@ -427,7 +438,7 @@ def isComplete(samtotabOut) :
         geneOk=0
         countG=0
         selectable=False
-        filtered=""
+        filtered = "# File generated the "+datetime.datetime.now().strftime("%d %b %Y") + " with following command line : \n"+"# "+" ".join(sys.argv)+"\n"
         for key1 in dicoPos1.keys() :
             for key2 in dicoPos2.keys() :
                 if key2[0]>lastG :
@@ -460,9 +471,9 @@ def isComplete(samtotabOut) :
                             if countG==l :
                                 selectable=True
                         if selectable :
-                            filtered+=(" ".join(lineS))+"\n"
+                            filtered+=("\s".join(lineS))+"\n"
                     countG=0
-        BedTool(filtered, from_string=True).saveas("result/filtered_"+outTab)
+        BedTool(filtered, from_string=True, deli="\s").saveas(args.directory+"/filtered_"+outTab)
     return
 
 if __name__ == "__main__":
@@ -475,9 +486,5 @@ if __name__ == "__main__":
         index()
     align(tabOp)
     samtotabOut=samToTab()
-    samtotabOut="result/fastav2_out.gff3"
     if (args.cds and ext=="gff3" and (args.typeA==None or (("gene" in typeAclean or "mrna" in typeAclean) and "cds" in typeAclean))) :
         isComplete(samtotabOut)
-    #if begin :
-    #    tabou += "#File generated with this command line\n"+"#"+"".join(sys.argv)+"\n"
-    #    begin = False
