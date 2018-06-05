@@ -1,5 +1,6 @@
 from Bio import SeqIO
-from subprocess import call
+from subprocess import call, Popen, PIPE
+from subprocess import call, Popen, PIPE
 from pybedtools import BedTool
 from version import getVersion
 import sys, os, re, tempfile, argparse, warnings, pydoc, datetime
@@ -13,13 +14,13 @@ required.add_argument("-f2", "--fasta2", dest="fasta2", default=None, help="Inpu
 required.add_argument("-ti", "--tabinput", dest="tabinput", default=None, help="Input of tabbed file related to fasta1 <bed/gff/vcf>")
 optional.add_argument("-b", "--flank", dest="flank", type=int, default=50, help="Size of flank region to extract from each side of the annotation (default : 50).")
 optional.add_argument("-c", "--cds",dest="cds", action="store_true", help="Enable control of postions of CDS inside mRNA (or gene).")
-optional.add_argument("-d", "--directory", dest="directory", default="result/", help="Name of the directory where files are generated (default : result/).")
+optional.add_argument("-d", "--directory", dest="directory", default="result", help="Name of the directory where files are generated (default : result).")
 optional.add_argument("-h", "--help", action="help", default=argparse.SUPPRESS,help="Show this help message then exit.")
-optional.add_argument("-i", "--index",dest="index", action="store_true", help="Create the index of fasta2.")
+optional.add_argument("-i", "--index",dest="index", default=None, action="count", help="Create the index of fasta2 if it doesn't exist (-ii for forcing).")
 optional.add_argument("-n", "--notempfile",dest="notempf", action="store_true", help="Create all file instead of using temporary file.")
 optional.add_argument("-o", "--output", dest="out", default=None, help="Output file (same format of tabbed file input).")
 optional.add_argument("-t", "--type",dest="typeA", default=None, help="Only extract annotation of specified type (gff file only) (example : \"mRNA exon cds\" (case insensitive)).")
-optional.add_argument("-v", "--verbose",dest="verbose", action="store_true", help="Enable message.")
+optional.add_argument("-v", "--verbose",dest="verbose", default=1, type=int, choices=[0,1,2], help="Change verbosity.")
 optional.add_argument("-ver", "--version",dest="version", action="store_true", help="Show version and date of last update then exit.")
 optional.add_argument("-w", "--warning",dest="warn", action="store_true", help="Disable warnings.")
 
@@ -28,7 +29,7 @@ if __name__ == '__main__':
         Some configuration for the argument parser like
         checking require argument : --fasta1, --fasta2
         and --tabinput. We setup the output file name,
-        create output directory (result/), setup the
+        create output directory (default : 'result/'), setup the
         tempfile or file depending --notempfile option
         and signal useless argument (e.g. --type if the
         format of tabinput isn't GFF).
@@ -43,7 +44,6 @@ if __name__ == '__main__':
     if args.version :
         getVersion()
         sys.exit(1)
-
     if args.warn :
         warnings.filterwarnings("ignore")
 
@@ -62,7 +62,7 @@ if __name__ == '__main__':
         args.directory=args.directory[:-1]
     try:
         os.mkdir(args.directory)
-        if args.verbose :
+        if args.verbose !=0 :
             print("\n ----- Creating directory '"+args.directory+"/'. -----")
     except :
         pass
@@ -94,6 +94,7 @@ if __name__ == '__main__':
     else :
         typeAclean=""
     if ext == "gff3" and args.cds and ("gene" not in typeAclean and "mrna" not in typeAclean or "cds" not in typeAclean) :
+        print("")
         warnings.warn("Argument --cds is ignored because there is missing type in --type argument (required : 'CDS' and mRNA or gene)",Warning)
 
 def checkDependency() :
@@ -173,7 +174,7 @@ def cutGff() :
         insensitive.
     """
     global typeAclean
-    if args.verbose :
+    if args.verbose != 0:
         print("\n ----- Extracting GFF's annotation which match '"+",".join(typeAclean)+"'. -----")
     with open(args.tabinput,"r") as inpTab, open(tabO,"w") as out:
         for line in inpTab :
@@ -202,7 +203,7 @@ def getFlank() :
     fileTab2=BedTool(args.tabinput)
     if (args.typeA != None and ext== "gff3") or change :
         fileTab2=BedTool(tabO)
-    if args.verbose and args.notempf:
+    if args.verbose!=0 and args.notempf:
         print("\n ----- Creating file '"+tabOP +"'. ----- ")
     if (fileTab2.file_type != "vcf"):
         fileTab2.slop(b=args.flank, g=lenChr.name ,output=tabOP)
@@ -237,7 +238,7 @@ def getFasta(tabOP):
         file [fasta1_name]_selected_[ext].fasta in the
         directory ./result.
     """
-    if args.verbose :
+    if args.verbose!=0 :
         print("\n ----- Extracting flanking sequences in '"+args.fasta1+"'. -----")
     if not args.notempf :
         BedTool(tabOP.name).sequence(fi=args.fasta1).save_seqs(selectedSeq)
@@ -249,13 +250,18 @@ def index() :
     """
         This function generate the index of inputted fasta2
         file with a system call to bwa index.
+        Only called if call of bwa mem failed or if argument
+        --index lvl 2 is specified.
     """
-    if args.verbose :
-        print("\n ----- Generating index of '"+args.fasta2+"' using 'bwa index'. ----- \n")
+    if args.verbose !=0:
+        print(" ----- Generating index of '"+args.fasta2+"' using 'bwa index'. -----")
     #TODO : remove system call (possible ? can't find any wrapper)
-    # and add a check if index is already generate
-    call(["bwa","index",args.fasta2])
-    print("")
+    if args.verbose ==2:
+        print("")
+        call(["bwa","index",args.fasta2])
+    else :
+        p=Popen(["bwa","index",args.fasta2], stderr=PIPE)
+        err=p.communicate()
     return
 
 def align(tabOp):
@@ -267,15 +273,24 @@ def align(tabOp):
         file "aln_out_[ext].sam".
     """
     getFasta(tabOp)
-    if args.verbose :
-        print("\n ----- Generating alignement file using 'bwa mem'. ----- \n")
     with open(alnN,"w") as out:
-        if args.verbose :
-            call(["bwa","mem", args.fasta2, selectedSeq],stdout=out)
-            print("")
-        else :
-            call(["bwa","mem","-v","0", args.fasta2, selectedSeq],stdout=out)
-            print("")
+        while True :
+            if args.verbose !=0:
+                print("\n ----- Generating alignement file using 'bwa mem'. ----- \n")
+            p=Popen(["bwa","mem", args.fasta2, selectedSeq],stdout=out, stderr=PIPE)
+            err=p.communicate()
+            if err[-1].decode("utf-8")[1]=="E" :
+                if args.index == None :
+                    print("")
+                    warnings.warn("Fail to locate the index files.",Warning)
+                if args.index==1 :
+                    index()
+                else :
+                    sys.exit(1)
+            else :
+                break
+        if args.verbose==2:
+            print(err[-1].decode("utf-8"))
     return
 
 def parseCigar(sam) :
@@ -285,7 +300,7 @@ def parseCigar(sam) :
     """
     lenCig=[]
     for i in sam :
-        if int(i[1]) != 0: # On ignore les match complémentaire (flag 2048)
+        if int(i[1]) != 0: # Ignoring complementary match (flag 2048)
             continue
         leng=0
         res =re.findall("\d+\w",i[5])
@@ -473,6 +488,8 @@ def isComplete(samtotabOut) :
                         if selectable :
                             filtered+=("\s".join(lineS))+"\n"
                     countG=0
+        if args.verbose != 0 :
+            print(" ----- Generating filtered GFF file '"+(args.directory+"/filtered_"+outTab)+"'. -----\n")
         BedTool(filtered, from_string=True, deli="\s").saveas(args.directory+"/filtered_"+outTab)
     return
 
@@ -482,7 +499,7 @@ if __name__ == "__main__":
         cutGff()
     prefix()
     tabOp = getFlank()
-    if args.index:
+    if args.index==2:
         index()
     align(tabOp)
     samtotabOut=samToTab()

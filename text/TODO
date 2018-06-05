@@ -101,8 +101,6 @@ commande entrée ? -> sys.argv (voir notes pour détail)
 
 * Changer méthode _init_ de pybedtools pour choisir le délimiteur
 
-
-
 -- Done
 
 * Méthode _init_ de pybedtools modifier, permet l'ajout de la date et de la ligne de
@@ -120,6 +118,8 @@ outil ?
 
 * Documentation -> commentaire -> mise en place des docstrings,
 à approfondir plus tard pour le choix du générateur de doc par exemple (doxygen, pydoc).
+
+* Plan et introduction du rapport (avant fin de semaine)
 
 * Test unitaire 
 
