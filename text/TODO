@@ -6,15 +6,15 @@
 -- Objectif
 
 * Traduction programme en anglais (but -> internationalisé, portabilité, compatibilité
-(accent))
+    (accent))
 
 * Virtualenv pour avoir son install de python indépendante (possibilité de rajouter /
-enlever des librairies rapidement -> enlever un maximum les appels systèmes).
+    enlever des librairies rapidement -> enlever un maximum les appels systèmes).
 
 * Dans loptique de limiter voir suppprimer complétement les appels systèmes, remplacer
-test module par test rapide (appel --version par exemple et regarder si stderr est bien
-vide (check de subprocess ?). Remplacer appel système par librairie bwa mem et awk par ???
-mais ça doit exister (ou juste recoder manuellement avec pybedtools).
+    test module par test rapide (appel --version par exemple et regarder si stderr est bien
+    vide (check de subprocess ?). Remplacer appel système par librairie bwa mem et awk par ???
+    mais ça doit exister (ou juste recoder manuellement avec pybedtools).
 
 -- Done
 
@@ -23,7 +23,7 @@ mais ça doit exister (ou juste recoder manuellement avec pybedtools).
 * Virtualenv bien setup (/venv) -> activer venv avec source venv/bin/activate
 
 * Appel système AWK remplacer par une boucle for + split("\t"), BWA wrapper trop vieux,
-aucun ne fonctionne
+    aucun ne fonctionne
 
 # 30/05/2018
 -- Objectif
@@ -37,11 +37,11 @@ aucun ne fonctionne
 -- Done 
 
 * Versioning : version.py qui crée un fichier .version contenant l\'historique des mise à
-jour (autorise le rollback). Le main possède une option --version (-ver) qui permet
-d\'afficher la version et la date du dernier changement de mise à jour. 
+    jour (autorise le rollback). Le main possède une option --version (-ver) qui permet
+    d\'afficher la version et la date du dernier changement de mise à jour. 
 
 * Une partie de la restructuration est faite, reste à vérifier quelque tempfile et à push
-la nouvelle version
+    la nouvelle version
 
 # 31/05/2018
 -- Objectif 
@@ -63,7 +63,7 @@ directement au lieu de manuellement)
 -- Objectif
 
 * Réflexion sur le futur du stage : Rapport ? Biblio ? Continuer à dev ? Définir point 
-sur lesquels revenir pendant la mise au point hebdomadaire (normalement le lundi).
+    sur lesquels revenir pendant la mise au point hebdomadaire (normalement le lundi).
 
 * Améliorer fonction isComplete() et gestion indel pour vcf
 
@@ -72,9 +72,9 @@ sur lesquels revenir pendant la mise au point hebdomadaire (normalement le lundi
 * Pour questions sur le déroulement du stage : voir fichier notes.
 
 * Fonction isComplete() génère maintenant un fichier gff et possibilité de rajouter des
-filtres vu qu\'on compare les positions de chaque CDS et non de l\'ARNm (ou gène) comme
-auparavant. Gestion indel pour les vcf était déja implemanté mais pas fonctionnel, il
-fallait modifier le CIGAR qu\'on acceptait.
+    filtres vu qu\'on compare les positions de chaque CDS et non de l\'ARNm (ou gène) comme
+    auparavant. Gestion indel pour les vcf était déja implemanté mais pas fonctionnel, il
+    fallait modifier le CIGAR qu\'on acceptait.
 
 
 --- SEMAINE 23 ---
@@ -87,7 +87,7 @@ fallait modifier le CIGAR qu\'on acceptait.
 * Recap à jour ?
 
 * Ajouter tag sur fichiers générés, possibilité de récuperer la ligne de
-commande entrée ? -> sys.argv (voir notes pour détail)
+    commande entrée ? -> sys.argv (voir notes pour détail)
 
 
 -- Done
@@ -104,7 +104,7 @@ commande entrée ? -> sys.argv (voir notes pour détail)
 -- Done
 
 * Méthode _init_ de pybedtools modifier, permet l\'ajout de la date et de la ligne de
-commande utilisé pour générer les fichiers
+    commande utilisé pour générer les fichiers
 
 * Choix du nom de dossier résultat maintenant possible avec l\'option --directory (-d)
 
@@ -119,6 +119,36 @@ commande utilisé pour générer les fichiers
 
 -- Done
 
+# 07/06/2018
+-- Objectif
+
+-- Done
+
+* Création du projet overleaf pour rapport.
+
+# 08/06/2018
+-- Objectif
+
+-- Done
+
+* Formation galaxy, création du dossier et du xml type
+
+* Page de garde du rapport et template fini (reste plus ou moins qu'à remplir de texte)
+
+--- SEMAINE 24 ---
+
+# 11/06/2018
+-- Objectif
+
+* Galaxy gestion module et venv pour librairie python custom
+
+* Bibliographie -> segment.liftover
+
+* Introduction du rapport
+
+-- Done
+
+* Mise en place de l'environnement virtuel python3 et installation des librairies.
 
 
 @ TODO
@@ -126,13 +156,12 @@ commande utilisé pour générer les fichiers
 * Bibliographie -> lister outils existant (QOD), différence ?, utiliser concept d\'un autre
 outil ?  
 
-* Galaxy   
+* Galaxy -> pause, voir plus tard si temps  
 
 * Documentation -> commentaire -> mise en place des docstrings,
-à approfondir plus tard pour le choix du générateur de doc par exemple (doxygen, pydoc).
+    à approfondir plus tard pour le choix du générateur de doc par exemple (doxygen, pydoc).
 
-* Plan et introduction du rapport (avant fin de semaine)
+* Plan et introduction du rapport (avant fin de semaine 23) -> Plan fait, à modifier lors
+    de l'écriture
 
 * Test unitaire 
-
-* Mettre à jour recap et commencer à réfléchir au rapport

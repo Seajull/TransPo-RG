@@ -155,14 +155,14 @@ def prefix() :
     global change
     change=False
     fileTab=BedTool(args.tabinput)
-    nul=""
     fasta=SeqIO.parse(args.fasta1,"fasta")
     first_seq=next(fasta)
     if (fileTab[0][0][0:-1])!= (first_seq.id[0:-1]) :
+        s=""
         with open(prefixTab,"w") as pre :
             for feat in fileTab :
-                nul+= first_seq.id[0:-1]+feat[0][-1]+"\s"+("\s".join(feat[1:])+"\n")
-        BedTool(nul, from_string=True, deli="\s").saveas(tabO)
+                s+= first_seq.id[0:-1]+feat[0][-1]+"\s"+("\s".join(feat[1:])+"\n")
+        BedTool(s, from_string=True, deli="\s").saveas(tabO)
         change=True
     return
 

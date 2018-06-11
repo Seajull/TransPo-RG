@@ -59,10 +59,10 @@ faidx puis par bedtools getfasta Pour getfasta -> parcours très partiel dans le
 vcf mais certaines séquences en x2 ou x3 dans le cas d'un gff3 avec gene,cds,mrna ->
 stockage fasta1_selected.fasta conséquent.
 
-##### VCF indel, comment faire pour mixed records ? (ATC -> AT,ATCG) stop = start + len(alt) (+
+@@@@@ VCF indel, comment faire pour mixed records ? (ATC -> AT,ATCG) stop = start + len(alt) (+
 ou - 1)
 
-!!!!! gestion tag NM (edit distance), si > 0 = missmatch, région flanquantes chevauchante
+##### gestion tag NM (edit distance), si > 0 = missmatch, région flanquantes chevauchante
 (plusieurs SNP annoté dans la région) ? 
 
 ##### Documentation : utiliser docstring + un générateur style doxygen, sphinx
@@ -81,7 +81,7 @@ réagir fasse à des programmes plus performant ? Justifier usage du mien ?
 ##### Toujours annoté de la même façon les gff ? c'est à dire toujours ordre gene, ARNm,
 CDS ? Ou cela peut être ARNm, gene, CDS ? Surement vu que c'est ordonné par position.
 
-!!!!! Ajout tag problématique : parser de pybedtools modifie tout les espaces en
+@@@@@ Ajout tag problématique : parser de pybedtools modifie tout les espaces en
 tabulation.  Il faudrait rajouter a la main sur le fichier final. Il reste le problème des
 espaces dans les annotations que je remplace par des "_" du coup. Problème, comment
 ajouter une ligne au milieu ? Opération lourde. Sinon ajout dernière ligne ou ajout à
