@@ -11,7 +11,7 @@
 * Virtualenv pour avoir son install de python indépendante (possibilité de rajouter /
 enlever des librairies rapidement -> enlever un maximum les appels systèmes).
 
-* Dans l'optique de limiter voir suppprimer complétement les appels systèmes, remplacer
+* Dans loptique de limiter voir suppprimer complétement les appels systèmes, remplacer
 test module par test rapide (appel --version par exemple et regarder si stderr est bien
 vide (check de subprocess ?). Remplacer appel système par librairie bwa mem et awk par ???
 mais ça doit exister (ou juste recoder manuellement avec pybedtools).
@@ -36,9 +36,9 @@ aucun ne fonctionne
 
 -- Done 
 
-* Versioning : version.py qui crée un fichier .version contenant l'historique des mise à
+* Versioning : version.py qui crée un fichier .version contenant l\'historique des mise à
 jour (autorise le rollback). Le main possède une option --version (-ver) qui permet
-d'afficher la version et la date du dernier changement de mise à jour. 
+d\'afficher la version et la date du dernier changement de mise à jour. 
 
 * Une partie de la restructuration est faite, reste à vérifier quelque tempfile et à push
 la nouvelle version
@@ -72,9 +72,9 @@ sur lesquels revenir pendant la mise au point hebdomadaire (normalement le lundi
 * Pour questions sur le déroulement du stage : voir fichier notes.
 
 * Fonction isComplete() génère maintenant un fichier gff et possibilité de rajouter des
-filtres vu qu'on compare les positions de chaque CDS et non de l\'ARNm (ou gène) comme
+filtres vu qu\'on compare les positions de chaque CDS et non de l\'ARNm (ou gène) comme
 auparavant. Gestion indel pour les vcf était déja implemanté mais pas fonctionnel, il
-fallait modifier le CIGAR qu'on acceptait.
+fallait modifier le CIGAR qu\'on acceptait.
 
 
 --- SEMAINE 23 ---
@@ -82,7 +82,7 @@ fallait modifier le CIGAR qu'on acceptait.
 # 04/06/2018
 -- Objectif
 
-* Bibliographie 
+* Bibliographie
 
 * Recap à jour ?
 
@@ -103,15 +103,27 @@ commande entrée ? -> sys.argv (voir notes pour détail)
 
 -- Done
 
-* Méthode _init_ de pybedtools modifier, permet l'ajout de la date et de la ligne de
+* Méthode _init_ de pybedtools modifier, permet l\'ajout de la date et de la ligne de
 commande utilisé pour générer les fichiers
 
-* Choix du nom de dossier résultat maintenant possible avec l'option --directory (-d)
+* Choix du nom de dossier résultat maintenant possible avec l\'option --directory (-d)
+
+* Modification option --verbose et --index, différent niveau sont disponibles
+
+# 06/06/2018
+-- Objectif
+
+* Bibliographie
+
+* Page de garde rapport de stage
+
+-- Done
+
 
 
 @ TODO
 
-* Bibliographie -> lister outils existant (QOD), différence ?, utiliser concept d'un autre
+* Bibliographie -> lister outils existant (QOD), différence ?, utiliser concept d\'un autre
 outil ?  
 
 * Galaxy   

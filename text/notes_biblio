@@ -13,9 +13,6 @@ Ensembl :
     Même problèmes.
 
 
-
-
-
 Pour l'instant, tous les programmes dérivent de UCSC LiftOver qui utilisent un fichier
 chain mais pourquoi un fichier chain ? Comment le générer ? Il y a t'il un avantage ?
 

@@ -1,3 +1,8 @@
+--- Introduction : 
+    
+   Les gènomes de référence sont de plus en plus mis à jour grâce aux nouvelles techniques
+   de séquençage (NGS)
+    
 --- Objectif :
 
     On dispose d'un fichier fasta (une version d'un génome qui fait office de référence)
@@ -6,7 +11,8 @@
     autre référence). C'est à dire obtenir un fichier tabulé pour la seconde référence
     avec un maximum d'informations tirés des fichiers tabulés de la première référence.
     (exon, cds, snp, indel, gene, etc).
-
+    Cela nous permettrait de pouvoir comparer les différents fichiers d'analyses entre
+    deux versions du gènome et de pouvoir utiliser le nouveau génome avec ses annotations.
 
 --- Méthodes :
 

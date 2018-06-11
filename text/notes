@@ -91,4 +91,6 @@ l'écriture mais problème décris ci-dessus des espaces.
 
 ##### Chain file ??? "A chained alignment (or 'chain') between two species consists of
 an ordered sequence of traditional pairwise nucleotide alignments ('blocks') separated
-by larger gaps, some of which may be $simultaneous gaps in both species." 
+by larger gaps, some of which may be simultaneous gaps in both species." 
+
+##### Pourquoi bwa mem ? Faire des tests avec bowtie2 (ou autre aligneur) pertinent ?
