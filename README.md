@@ -1,5 +1,5 @@
-TransPo-RG
-For : Transfert of Position to Resequenced Genome
+###TransPo-RG
+for : Transfert of Position to Resequenced Genome
 ### Requires :  
 
 * bwa mem (0.7.15)
