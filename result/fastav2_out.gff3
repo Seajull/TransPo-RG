@@ -1,5 +1,5 @@
-# File generated the 11 Jun 2018 with following command line : 
-# tab1ToRef2.py -f1 data/fasta/fastav1.fasta -f2 data/fasta/fastav2.fasta -ti data/tab/v1.gff3 -c -t cds,gene -n -ii
+# File generated the 12 Jun 2018 with following command line : 
+# transpo-rg.py -f1 data/fasta/fastav1.fasta -f2 data/fasta/fastav2.fasta -ti data/tab/v1.gff3 -i -n -c -t cds,gene
 Chr01	phytozome	gene	1951	2616	.	+	.	ID=Sb01g000200;Name=Sb01g000200;Note=similar to Putative uncharacterized protein
 Chr01	phytozome	CDS	1951	2616	.	+	0	Parent=Sb01g000200.1
 Chr01	phytozome	gene	11205	14601	.	-	.	ID=Sb01g000210;Name=Sb01g000210;Note=similar to RabGAP/TBC domain-containing protein%2C putative%2C expressed

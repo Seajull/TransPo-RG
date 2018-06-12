@@ -148,7 +148,19 @@ directement au lieu de manuellement)
 
 -- Done
 
-* Mise en place de l'environnement virtuel python3 et installation des librairies.
+* Mise en place de l'environnement virtuel python3 et installation des librairies pour
+    galaxy.
+
+# 12/06/2018
+-- Objectif 
+
+* Rédaction résumé article
+
+* Test python2
+
+-- Done
+
+* Test python2, débuggage de quelque fonction
 
 
 @ TODO

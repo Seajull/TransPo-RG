@@ -93,9 +93,25 @@ if __name__ == '__main__':
         typeAclean=[l.lower() for l in typ]
     else :
         typeAclean=""
+    for i in typeAclean :
+        if i not in ["cds","mrna","gene"] :
+            print("")
+            warnings.warn("Argument --cds is ignored because there is unsupported type in --type argument when -c is passed.",Warning)
+            args.cds=None
+            break
     if ext == "gff3" and args.cds and ("gene" not in typeAclean and "mrna" not in typeAclean or "cds" not in typeAclean) :
         print("")
-        warnings.warn("Argument --cds is ignored because there is missing type in --type argument (required : 'CDS' and mRNA or gene)",Warning)
+        warnings.warn("Argument --cds is ignored because there is missing type in --type argument (required : 'CDS' and mRNA or gene).",Warning)
+ 
+    res2 = re.search("/?(\w+)\.",args.fasta2)
+    if args.out == None:
+        args.out = args.directory+"/"+res2.group(1)+"_out."+ext
+    else :
+        args.out = args.directory+"/"+args.out.split(".")[0]+"."+ext
+        if os.path.isfile(args.out) :
+            print("")
+            warnings.warn("Argument --output is ignored because file '"+args.out+"' already exist.",Warning)
+            args.out = args.directory+"/"+res2.group(1)+"_out."+ext
 
 def checkDependency() :
     """
@@ -254,7 +270,7 @@ def index() :
         --index lvl 2 is specified.
     """
     if args.verbose !=0:
-        print(" ----- Generating index of '"+args.fasta2+"' using 'bwa index'. -----")
+        print("\n ----- Generating index of '"+args.fasta2+"' using 'bwa index'. -----")
     #TODO : remove system call (possible ? can't find any wrapper)
     if args.verbose ==2:
         print("")
@@ -276,7 +292,7 @@ def align(tabOp):
     with open(alnN,"w") as out:
         while True :
             if args.verbose !=0:
-                print("\n ----- Generating alignement file using 'bwa mem'. ----- \n")
+                print("\n ----- Mapping selected sequence to fasta2 using 'bwa mem'. ----- \n")
             p=Popen(["bwa","mem", args.fasta2, selectedSeq],stdout=out, stderr=PIPE)
             err=p.communicate()
             if err[-1].decode("utf-8")[1]=="E" :
@@ -326,11 +342,6 @@ def samToTab() :
         specify with argument --output (but still with [ext]
         as extension). It return the name of the file created.
     """
-    res2 = re.search("/?(\w+)\.",args.fasta2)
-    if args.out == None:
-        args.out = args.directory+"/"+res2.group(1)+"_out."+ext
-    else :
-        args.out = args.directory+"/"+args.out.split(".")[0]+"."+ext
     start=0
     stop=0
     tabou=""
@@ -350,6 +361,9 @@ def samToTab() :
             else :
                 if begin :
                     tabou += "# File generated the "+datetime.datetime.now().strftime("%d %b %Y") + " with following command line : \n"+"# "+" ".join(sys.argv)+"\n"
+                    if line [0][0] == "#" :
+                        tabou += i
+                        continue
                     begin = False
                 for f in samf : # samf = alignment file
                     if int(f[1])!=0 : # ignoring complementary match (flag 2048)

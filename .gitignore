@@ -5,3 +5,4 @@ doc/
 *.old
 venv/
 __*/
+result/
