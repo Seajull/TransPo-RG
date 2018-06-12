@@ -1,4 +1,4 @@
-###TransPo-RG
+### TransPo-RG
 for : Transfert of Position to Resequenced Genome
 ### Requires :  
 
