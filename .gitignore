@@ -6,3 +6,4 @@ doc/
 venv/
 __*/
 result/
+*.pyc

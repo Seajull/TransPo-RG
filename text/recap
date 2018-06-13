@@ -5,7 +5,7 @@
     
 --- Objectif :
 
-    On dispose d'un fichier fasta (une version d'un génome qui fait office de référence)
+[M aJ    On dispose d'un fichier fasta (une version d'un génome qui fait office de référence)
     et d'un ou plusieurs fichiers tabulés associé (.bed, .vcf ou .gff3).  On souhaite
     projeter les données des fichiers tabulés sur une autre version de ce génome (une
     autre référence). C'est à dire obtenir un fichier tabulé pour la seconde référence
@@ -28,7 +28,7 @@
     même format que celui passé en entrée).
 
 
---- Description du script tab1ToRef2.py :
+--- Description du script TransPo-RG.py :
 
     Lib : biopython pybedtools tempfile argparse warnings subprocess
 

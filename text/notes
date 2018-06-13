@@ -24,7 +24,8 @@ type pour GFF ofc)) -> création de fichier tabulé non formater ? Ou format imp
 utilisation ultérieur ?
 
 @@@@@ -> stocker pos des gene ? oui pour pouvoir les retrouver 
-les stocker dans keys avec list[start,stop] et stocker pos cds dans values list[list[start,pos]]
+les stocker dans keys avec list[start,stop] et stocker pos cds dans values
+list[list[start,pos]]
 
 @@@@@ Tempfile mini requis pour gain d'espace même si on a que 1 ref de base à traiter
 (envisager la possibilité de mettre plusieurs version d'un coup pour comparer sur cette
@@ -39,8 +40,8 @@ getfasta directement (qui est appelé dans align) -> redirigé dans un objet fil
 est géré ? Mémoire vive ? -> trop conséquent et risque de gros problème !  Solution de
 perte de temps de calcul pour reparcourir une fois la ref 1 et ?????.
 
-##### Ca devrait passer vu qu'on travaille que sur une ref à la fois (1 fasta + 1 fichier tabulé
-(-> possibilité d'en rentrer plusieurs d'un coup ? Intérêt ?)) et compare à un seul
+##### Ca devrait passer vu qu'on travaille que sur une ref à la fois (1 fasta + 1 fichier
+tabulé (-> possibilité d'en rentrer plusieurs d'un coup ? Intérêt ?)) et compare à un seul
 fichier fasta (encore une fois possibilité d'en rentrer plusieurs pour optimiser et pas
 devoir recalculer fasta_selected.fasta pour la ref 1) qui sera juste aligné.
 
@@ -54,13 +55,13 @@ comparer pour chaque gène
 Possibilité de mettre des seuils -> exemple : 90 % des CDS présent à 90% de match minimum.
 S'il manque un CDS on élimine ?
 
-##### Optimisation ? Nombre de parcours d'un génome ? Lecture par biopython puis par samtools
-faidx puis par bedtools getfasta Pour getfasta -> parcours très partiel dans le cas d'un
-vcf mais certaines séquences en x2 ou x3 dans le cas d'un gff3 avec gene,cds,mrna ->
-stockage fasta1_selected.fasta conséquent.
+@@@@@ Optimisation ? Nombre de parcours d'un génome ? Lecture par biopython puis par
+samtools faidx puis par bedtools getfasta Pour getfasta -> parcours très partiel dans le
+cas d'un vcf mais certaines séquences en x2 ou x3 dans le cas d'un gff3 avec gene,cds,mrna
+-> stockage fasta1_selected.fasta conséquent.
 
-@@@@@ VCF indel, comment faire pour mixed records ? (ATC -> AT,ATCG) stop = start + len(alt) (+
-ou - 1)
+@@@@@ VCF indel, comment faire pour mixed records ? (ATC -> AT,ATCG) stop = start +
+len(alt) (+ ou - 1)
 
 ##### gestion tag NM (edit distance), si > 0 = missmatch, région flanquantes chevauchante
 (plusieurs SNP annoté dans la région) ? 
@@ -72,13 +73,13 @@ Git tag oblige à avoir le fichier .version dans le git (et doit être clonés a
 programme sinon le getVersion() ne fonctionnera pas. updateTag ne fonctionne que si on a
 accès au git tag ce qui n'est pas le cas.
 
-!!!!! Réflexion sur le stage : rapport -> que mettre dedans ? Faire son rapport uniquement
+##### Réflexion sur le stage : rapport -> que mettre dedans ? Faire son rapport uniquement
 sur la problèmatique dont je m'occupe actuellement ou stopper maintenant le dev et passer
 à la suite (j'aurais surement pas le temps de faire grand chose mais au moins un état de
 l'art et comment je compte faire) ? Nom du programme / repo git ? Bibliographie -> comment
 réagir fasse à des programmes plus performant ? Justifier usage du mien ?
 
-##### Toujours annoté de la même façon les gff ? c'est à dire toujours ordre gene, ARNm,
+##### Toujours annoté de la même façon les gff ? C'est à dire toujours ordre gene, ARNm,
 CDS ? Ou cela peut être ARNm, gene, CDS ? Surement vu que c'est ordonné par position.
 
 @@@@@ Ajout tag problématique : parser de pybedtools modifie tout les espaces en
@@ -89,8 +90,32 @@ l'écriture mais problème décris ci-dessus des espaces.
 
 ##### Possibilité de modifié "tabbed file" par "coordinate file" 
 
-##### Chain file ??? "A chained alignment (or 'chain') between two species consists of
-an ordered sequence of traditional pairwise nucleotide alignments ('blocks') separated
-by larger gaps, some of which may be simultaneous gaps in both species." 
+@@@@@ Pourquoi bwa mem ? Faire des tests avec bowtie2 (ou autre aligneur) pertinent ?
+    Oui mais rajoute de la complexité au projet, je travaille sur la méthode afin de
+    comparer les deux méthodes. Le tester d'autres aligneur n'est pas crucial. De même
+    pour tout ce qui est optimisation (cython par exemple).
 
-##### Pourquoi bwa mem ? Faire des tests avec bowtie2 (ou autre aligneur) pertinent ?
+##### Chain file ??? "A chained alignment (or 'chain') between two species consists of an
+ordered sequence of traditional pairwise nucleotide alignments ('blocks') separated by
+larger gaps, some of which may be simultaneous gaps in both species." 
+Description rapides
+des chain file faites dans le fichier notes_biblio. Problème : complexe a utiliser, peu
+intuitif. Il faudrait faire un pipeline (ils l'ont fait mais très spécifique à leur cas
+qui est sur le génome humain). Beaucoup de temps juste pour réaliser des tests, chercher 
+des publis qui utilisent et expliquent liftover ?
+
+##### Discussion rapide pour méthode liftover -> voir ci-dessus pour problèmes avec chain
+    file. Implanté des tests quitte à prendre beaucoup ? !! Chercher publis rapidement
+    pour voir si test pas déjà réalisé ou si d'autre étude du même style que
+    segment_liftover existe !!
+
+##### Parser de notes pour fichier TODO notamment, utilité ? Pour journal je pourrais
+générer un tableau, jsute pour avoir un visuel plus parlant et rapidement se rendre compte
+des tâches faites / à faire -> pour le fun sur temps libre ou temps mort post soutenance.
+
+!!!!! Période de rush soon, besoin d'avancer et vite sur le rapport. Lundi je dois avoir
+    des trucs à montrer/discuter quitte à travailler 2/3h par jour ce week-end
+    (obligatoire à partir du week-end prochain)
+
+
+

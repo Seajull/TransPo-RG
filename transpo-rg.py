@@ -1,9 +1,8 @@
 from Bio import SeqIO
 from subprocess import call, Popen, PIPE
-from subprocess import call, Popen, PIPE
 from pybedtools import BedTool
 from version import getVersion
-import sys, os, re, tempfile, argparse, warnings, pydoc, datetime
+import sys, os, re, tempfile, argparse, warnings, datetime
 
 parser = argparse.ArgumentParser(add_help=False)
 

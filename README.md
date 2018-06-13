@@ -4,7 +4,7 @@ Transfert of Position to Resequenced Genome
 
 * bwa mem (0.7.15)
 * bedtools (2.24.0)
-* python lib :
+    * lib python :
     * biopython (1.65+) 
     * bedtools (2.24.0)
     * pybedtools (0.7.10)

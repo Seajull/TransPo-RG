@@ -12,7 +12,21 @@ UCSC LiftOver :
 Ensembl :
     Même problèmes.
 
+Crossmap :
+    Same but different but same
 
 Pour l'instant, tous les programmes dérivent de UCSC LiftOver qui utilisent un fichier
-chain mais pourquoi un fichier chain ? Comment le générer ? Il y a t'il un avantage ?
+chain mais pourquoi un fichier chain ? Comment le générer ? Il y a-t-il un avantage ?
 
+Chain file :
+    Fichier d'alignement entre les deux versions du génome qui prend en compte les gaps
+    dans les deux séquences simultanément (il enregistre la taille des blocs sans gap et
+    les différences de longueur entre deux blocs sans gap dans les deux séquences).
+    Cela permet de récupérer rapidement les séquences qui ont matchs.
+    Protocole pour créer un chain file décris ici :
+                http://genomewiki.ucsc.edu/index.php/LiftOver_Howto
+    Compliqué et time-consuming ? Alignement de génome 1 sur génome 2 nécessaire puis
+    manipulation pour obtenir un chain file. BLAT puis axtChain puis chainNet and
+    chainNetSubset.
+    Très compliqué à executer, découpage des génomes en des morceaux < 3 kb et utilisation
+    d'un cluster pour l'alignement avec BLAT. 
