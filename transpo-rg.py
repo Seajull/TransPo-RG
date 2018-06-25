@@ -92,8 +92,10 @@ if __name__ == '__main__':
         typeAclean=[l.lower() for l in typ]
     else :
         typeAclean=""
+    if typeAclean ==[] :
+        sys.exit("ERROR : Argument --type (-t) is empty.")
     for i in typeAclean :
-        if i not in ["cds","mrna","gene"] :
+        if i not in ["cds","mrna","gene"] and args.cds :
             print("")
             warnings.warn("Argument --cds is ignored because there is unsupported type in --type argument when -c is passed.",Warning)
             args.cds=None
@@ -154,7 +156,7 @@ def parseFa() :
     lenChr = tempfile.NamedTemporaryFile()
     with open(lenChr.name,"w") as lenC :
         for seqF in SeqIO.parse(args.fasta1,"fasta") :
-            lenC.write(seqF.id+"\t"+str(len(seqF)))
+            lenC.write(seqF.id+"\t"+str(len(seqF))+"\n")
     return (lenChr)
 
 def prefix() :
@@ -215,6 +217,7 @@ def getFlank() :
         tab=(args.tabinput).split(".")
         tabOP=args.directory+"/"+tab[0].split("/")[-1]+"_out."+tab[1]
     lenChr=parseFa()
+    print(" lul parseFa\n")
     fileTab2=BedTool(args.tabinput)
     if (args.typeA != None and ext== "gff3") or change :
         fileTab2=BedTool(tabO)
@@ -230,11 +233,12 @@ def getFlank() :
                     lenghtC=re.search(feature.chrom+"\t(\d+)",line)
                     if lenghtC :
                         break
+                lenC.seek(0)
                 if feature.stop+args.flank-1+(len(feature[3])-1) > int(lenghtC.group(1)): # TODO : unreadable, gotta change that
                     stop=int(lenghtC.group(1))
                 else :
                     stop=feature.stop+args.flank-1+(len(feature[3])-1)
-                if feature.start-args.flank < 0 :
+                if feature.start-args.flank-1 < 0 :
                     start=0
                 else :
                     start=feature.start-args.flank-1
@@ -258,6 +262,8 @@ def getFasta(tabOP):
     if not args.notempf :
         BedTool(tabOP.name).sequence(fi=args.fasta1).save_seqs(selectedSeq)
     else :
+        if args.verbose !=0 :
+            print("\n ----- Creating file '"+selectedSeq+"'. ----- ")
         BedTool(tabOP).sequence(fi=args.fasta1).save_seqs(selectedSeq)
     return
 
@@ -266,7 +272,7 @@ def index() :
         This function generate the index of inputted fasta2
         file with a system call to bwa index.
         Only called if call of bwa mem failed or if argument
-        --index lvl 2 is specified.
+        -ii is specified.
     """
     if args.verbose !=0:
         print("\n ----- Generating index of '"+args.fasta2+"' using 'bwa index'. -----")
@@ -288,6 +294,9 @@ def align(tabOp):
         file "aln_out_[ext].sam".
     """
     getFasta(tabOp)
+    print(" lul camarchpa ")
+    if args.notempf and args.verbose !=0 :
+          print("\n ----- Creating file '"+alnN+"'. ----- ")
     with open(alnN,"w") as out:
         while True :
             if args.verbose !=0:
@@ -297,7 +306,7 @@ def align(tabOp):
             if err[-1].decode("utf-8")[1]=="E" :
                 if args.index == None :
                     print("")
-                    warnings.warn("Fail to locate the index files.",Warning)
+                    sys.exit("ERROR : Fail to locate the index files.")
                 if args.index==1 :
                     index()
                 else :
@@ -347,6 +356,7 @@ def samToTab() :
     samf=BedTool(alnN)
     lengh=parseCigar(samf)
     countLine=0
+    lmp=0
     begin = True
     if (ext=="gff3" and args.typeA != None) or change:
         args.tabinput=tabO
@@ -391,10 +401,16 @@ def samToTab() :
                 #    print(f[0].split(":")[1]+"\t"+f[12])
                 if ext == "vcf" and f[5]==f[12].split(":")[-1]+"M": # perfect match only for snp
                     tabou+=f[2]+"\s"+ str(start) +"\s"+ "\s".join(line[2:11])
+                    lmp+=1
                 elif ext == "bed" :
                     tabou+=f[2]+"\s"+ str(start) +"\s"+ str(stop) +"\s"+line[3]+"\n"
+                    lmp+=1
                 elif ext == "gff3" :
                     tabou+=f[2]+"\s"+line[1]+"\s"+line[2]+"\s"+ str(start) +"\s"+ str(stop) +"\s"+"\s".join(line[5:8])+"\s"+line[8]+"\n"
+                    lmp+=1
+                print("ça tourne mal lol " + str(lmp))
+        if args.verbose != 0 :
+            print(" ----- Creating file '"+args.out+"'. ----- \n")
         if ext == "vcf" :
             BedTool(tabou,from_string=True, deli="\s").saveas(args.out)
         elif ext == "bed" :
@@ -510,13 +526,21 @@ def isComplete(samtotabOut) :
 
 if __name__ == "__main__":
     checkDependency()
+    print(" lul 1\n")
     if args.typeA != None and ext == "gff3" :
         cutGff()
+        print(" lul 2\n")
     prefix()
+    print(" lul 3\n")
     tabOp = getFlank()
+    print(" lul flank\n")
     if args.index==2:
         index()
+        print(" lul 4\n")
     align(tabOp)
+    print(" lul 5\n")
     samtotabOut=samToTab()
+    print(" lul 6\n")
     if (args.cds and ext=="gff3" and (args.typeA==None or (("gene" in typeAclean or "mrna" in typeAclean) and "cds" in typeAclean))) :
         isComplete(samtotabOut)
+        print(" lul 7\n")

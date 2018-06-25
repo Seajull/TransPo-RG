@@ -23,9 +23,8 @@ récupérer la taille ? (CIGAR ?) Que récupérer ? Strict minimum ? (REFID QUER
 type pour GFF ofc)) -> création de fichier tabulé non formater ? Ou format important pour
 utilisation ultérieur ?
 
-@@@@@ -> stocker pos des gene ? oui pour pouvoir les retrouver 
-les stocker dans keys avec list[start,stop] et stocker pos cds dans values
-list[list[start,pos]]
+@@@@@ -> stocker pos des gene ? oui pour pouvoir les retrouver les stocker dans keys avec
+list[start,stop] et stocker pos cds dans values list[list[start,pos]]
 
 @@@@@ Tempfile mini requis pour gain d'espace même si on a que 1 ref de base à traiter
 (envisager la possibilité de mettre plusieurs version d'un coup pour comparer sur cette
@@ -97,12 +96,11 @@ l'écriture mais problème décris ci-dessus des espaces.
 
 ##### Chain file ??? "A chained alignment (or 'chain') between two species consists of an
 ordered sequence of traditional pairwise nucleotide alignments ('blocks') separated by
-larger gaps, some of which may be simultaneous gaps in both species." 
-Description rapides
+larger gaps, some of which may be simultaneous gaps in both species." Description rapides
 des chain file faites dans le fichier notes_biblio. Problème : complexe a utiliser, peu
 intuitif. Il faudrait faire un pipeline (ils l'ont fait mais très spécifique à leur cas
-qui est sur le génome humain). Beaucoup de temps juste pour réaliser des tests, chercher 
-des publis qui utilisent et expliquent liftover ?
+qui est sur le génome humain). Beaucoup de temps juste pour réaliser des tests, chercher
+des publis qui utilisent et expliquent liftover ? Comment sont gérer les missmatchs ? 
 
 ##### Discussion rapide pour méthode liftover -> voir ci-dessus pour problèmes avec chain
     file. Implanté des tests quitte à prendre beaucoup ? !! Chercher publis rapidement
@@ -113,9 +111,15 @@ des publis qui utilisent et expliquent liftover ?
 générer un tableau, jsute pour avoir un visuel plus parlant et rapidement se rendre compte
 des tâches faites / à faire -> pour le fun sur temps libre ou temps mort post soutenance.
 
-!!!!! Période de rush soon, besoin d'avancer et vite sur le rapport. Lundi je dois avoir
+!!!!! Période de rush soon, besoin d'avancer vite sur le rapport. Lundi je dois avoir
     des trucs à montrer/discuter quitte à travailler 2/3h par jour ce week-end
     (obligatoire à partir du week-end prochain)
 
+##### QOD -> alignement global puis transfert des annotations présent dans les blocs sans
+    gap / missmatch. Approche similaire a LiftOver au final 
 
+##### Riz ? Quelle problématique ? En parler dans le rapport ? Présenter au moins les
+données dans l'intro avant de parler des génomes de référence et tout ?
 
+##### SNP = 1 base qui varie d'une version d'un génome à une autre ? Du coup 100M et pas
+101M accepté ? mais beaucoup de 101M  

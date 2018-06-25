@@ -5,7 +5,7 @@
     
 --- Objectif :
 
-[M aJ    On dispose d'un fichier fasta (une version d'un génome qui fait office de référence)
+    On dispose d'un fichier fasta (une version d'un génome qui fait office de référence)
     et d'un ou plusieurs fichiers tabulés associé (.bed, .vcf ou .gff3).  On souhaite
     projeter les données des fichiers tabulés sur une autre version de ce génome (une
     autre référence). C'est à dire obtenir un fichier tabulé pour la seconde référence

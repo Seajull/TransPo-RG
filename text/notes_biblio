@@ -10,7 +10,8 @@ UCSC LiftOver :
     Algorithme ?
 
 Ensembl :
-    Même problèmes.
+    Même problèmes. Disponible sur EnsemblPlants avec leur génome. Outils basé sur
+    CrossMap. 50 Mb upload limit pour fichier tabulé en plus donc inutilisable. 
 
 Crossmap :
     Same but different but same
@@ -30,3 +31,18 @@ Chain file :
     chainNetSubset.
     Très compliqué à executer, découpage des génomes en des morceaux < 3 kb et utilisation
     d'un cluster pour l'alignement avec BLAT. 
+
+Publication segment_liftover -> décris 2 méthodes : 
+    - Réaligné tout le génome sur le génome de référence, donne les meilleurs résultats
+      mais prend beaucoup de temps.
+    - Utiliser un "mapping file" (chain file du coup ? Mais alignement obligatoire au
+      préalable donc ?? Juste plus rapide si on à déjà le fichier chain de générer mais le
+      fichier chain ne sert qu'à ça et de plus il est compliqué à générer/utiliser)
+    => 2 méthodes similaire en somme, ma méthode diffère dans le fait que je n'aligne que
+    les séquences cibles avec les régions flanquantes. Donc la seconde méthode est
+    seulement intéressante si on a une utilité autre du chain file (pas rentable de
+    générer le chain file uniquement pour cela).
+
+QOD :
+    Pas la même problématique, mais méthode intéressante ? 
+

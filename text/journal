@@ -1,0 +1,254 @@
+@@@ Journal @@@
+
+--- SEMAINE 22 ---
+
+# 29/05/2018 
+-- Objectif
+
+* Traduction programme en anglais (but -> internationalisé, portabilité, compatibilité
+    (accent))
+
+* Virtualenv pour avoir son install de python indépendante (possibilité de rajouter /
+    enlever des librairies rapidement -> enlever un maximum les appels systèmes).
+
+* Dans l'optique de limiter voir suppprimer complétement les appels systèmes, remplacer
+    test module par test rapide (appel --version par exemple et regarder si stderr est bien
+    vide (check de subprocess ?). Remplacer appel système par librairie bwa mem et awk par ???
+    mais ça doit exister (ou juste recoder manuellement avec pybedtools).
+
+-- Done
+
+* Traduction en anglais, manque commentaire.
+:wq
+* Virtualenv bien setup (/venv) -> activer venv avec source venv/bin/activate
+
+* Appel système AWK remplacer par une boucle for + split("\t"), BWA wrapper trop vieux,
+    aucun ne fonctionne
+
+# 30/05/2018
+-- Objectif
+
+* Bibliographie -> résumer de la situation 
+
+* Versioning (dans le but de changer de version post-restructuration)
+
+* Restructuration (voir section TODO pour précision)
+
+-- Done 
+
+* Versioning : version.py qui crée un fichier .version contenant l\'historique des mise à
+    jour (autorise le rollback). Le main possède une option --version (-ver) qui permet
+    d\'afficher la version et la date du dernier changement de mise à jour. 
+
+* Une partie de la restructuration est faite, reste à vérifier quelque tempfile et à push
+    la nouvelle version
+
+# 31/05/2018
+-- Objectif 
+
+* Bibliographie
+
+* Fin de restructuration 
+
+-- Done
+
+* Changement versioning (git log au lieu de git tag / git describe pour récupérer la date
+directement au lieu de manuellement)
+
+* Push de la nouvelle version v0.2.0, passe les générateurs de doc maintenant
+
+* Commentaire das fonctions
+
+# 01/06/2018
+-- Objectif
+
+* Réflexion sur le futur du stage : Rapport ? Biblio ? Continuer à dev ? Définir point 
+    sur lesquels revenir pendant la mise au point hebdomadaire (normalement le lundi).
+
+* Améliorer fonction isComplete() et gestion indel pour vcf
+
+-- Done
+
+* Pour questions sur le déroulement du stage : voir fichier notes.
+
+* Fonction isComplete() génère maintenant un fichier gff et possibilité de rajouter des
+    filtres vu qu\'on compare les positions de chaque CDS et non de l\'ARNm (ou gène) comme
+    auparavant. Gestion indel pour les vcf était déja implemanté mais pas fonctionnel, il
+    fallait modifier le CIGAR qu\'on acceptait.
+
+
+--- SEMAINE 23 ---
+
+# 04/06/2018
+-- Objectif
+
+* Bibliographie
+
+* Recap à jour ?
+
+* Ajouter tag sur fichiers générés, possibilité de récuperer la ligne de
+    commande entrée ? -> sys.argv (voir notes pour détail)
+
+
+-- Done
+
+* Un peu de biblio sur LiftOver, à creuser
+
+# 05/06/2018
+-- Objectif
+
+* Bibliographie
+
+* Changer méthode _init_ de pybedtools pour choisir le délimiteur
+
+-- Done
+
+* Méthode _init_ de pybedtools modifier, permet l\'ajout de la date et de la ligne de
+    commande utilisé pour générer les fichiers
+
+* Choix du nom de dossier résultat maintenant possible avec l\'option --directory (-d)
+
+* Modification option --verbose et --index, différent niveau sont disponibles
+
+# 06/06/2018
+-- Objectif
+
+* Bibliographie
+
+* Page de garde rapport de stage
+
+-- Done
+
+# 07/06/2018
+-- Objectif
+
+-- Done
+
+* Création du projet overleaf pour rapport.
+
+# 08/06/2018
+-- Objectif
+
+-- Done
+
+* Formation galaxy, création du dossier et du xml type
+
+* Page de garde du rapport et template fini (reste plus ou moins qu'à remplir de texte)
+
+--- SEMAINE 24 ---
+
+# 11/06/2018
+-- Objectif
+
+* Galaxy gestion module et venv pour librairie python custom
+
+* Bibliographie -> segment.liftover
+
+* Introduction du rapport
+
+-- Done
+
+* Mise en place de l'environnement virtuel python3 et installation des librairies pour
+    galaxy.
+
+# 12/06/2018
+-- Objectif 
+
+* Rédaction résumé article
+
+* Test python2
+
+-- Done
+
+* Test python2, débuggage de quelque fonction
+
+* Réflexion sur chain file (voir notes_biblio et notes pour plus de détails)
+
+# 13/06/2018
+-- Objectif
+
+* Rédaction, reprendre fichier recap pour l'intégrer dans le rapport
+
+* Bibliographie
+
+-- Done
+
+* Adaptation fichier recap pour intégration dans le rapport
+
+* Survivre
+
+# 14/06/2018
+-- Objectif 
+
+* Finir de réécrire recap pour le rapport
+
+* Redéfinir le plan interne à introduction et à méthodes / résultats.
+
+* Résumé publication segment_liftover, réflexion sur complexité des tests ? (voir notes)
+
+-- Done 
+
+* 
+
+# 15/06/2018
+-- Objectif
+
+* Rapport
+
+-- Done
+
+* 
+
+# 18/06/2018
+-- Objectif
+
+* Rapport
+
+-- Done
+
+* Ajout image et screenshot et avancé
+
+# 19/06/2018
+-- Objectif
+
+* Rapport
+
+-- Done
+
+* Clarification méthode
+
+# 20/06/2018
+-- Objectif
+
+* Rapport
+
+-- Done
+
+* Introduction
+
+# 21/06/2018
+-- Objectif
+
+* Rapport
+
+-- Done
+
+
+
+@@@ TODO @@@
+
+* Bibliographie -> lister outils existant (QOD), différence ?, utiliser concept d\'un autre
+outil ?  
+
+# Galaxy -> pause, voir plus tard si temps  
+
+# Documentation -> commentaire -> mise en place des docstrings,
+    à approfondir plus tard pour le choix du générateur de doc par exemple (doxygen, pydoc).
+
+# Plan et introduction du rapport (avant fin de semaine 23) -> Plan fait, à modifier lors
+    de l'écriture
+
+# Test unitaire -> voir plus tard si temps
+    
+* Introduction + bonne moitié de méthode et résultats doit être faite avant fin de
+    semaine 24
