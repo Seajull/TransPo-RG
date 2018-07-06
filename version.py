@@ -22,8 +22,3 @@ def getVersion() :
         print("Last update : "+f[0].split(" - ")[1])
     return
 
-if __name__ == "__main__" :
-    if sys.argv[1] == "update" :
-        updateTag()
-    if sys.argv[1] == "version" :
-        getVersion()

@@ -1,7 +1,7 @@
 from Bio import SeqIO
 from subprocess import call, Popen, PIPE
 from pybedtools import BedTool
-from version import getVersion
+from version import getVersion, updateTag
 import sys, os, re, tempfile, argparse, warnings, datetime
 
 parser = argparse.ArgumentParser(add_help=False)
@@ -19,7 +19,8 @@ optional.add_argument("-i", "--index",dest="index", default=None, action="count"
 optional.add_argument("-n", "--notempfile",dest="notempf", action="store_true", help="Create all file instead of using temporary file.")
 optional.add_argument("-o", "--output", dest="out", default=None, help="Output file (same format of tabbed file input).")
 optional.add_argument("-t", "--type",dest="typeA", default=None, help="Only extract annotation of specified type (gff file only) (example : \"mRNA exon cds\" (case insensitive)).")
-optional.add_argument("-v", "--verbose",dest="verbose", default=1, type=int, choices=[0,1,2], help="Change verbosity.")
+optional.add_argument("-u", "--update", dest="update", action="store_true", help="Update the .version file by checking the git log")
+optional.add_argument("-v", "--verbose",dest="verbose", default=1, type=int, choices=[0,1,2], help="Change verbosity level.")
 optional.add_argument("-ver", "--version",dest="version", action="store_true", help="Show version and date of last update then exit.")
 optional.add_argument("-w", "--warning",dest="warn", action="store_true", help="Disable warnings.")
 
@@ -39,7 +40,9 @@ if __name__ == '__main__':
         getVersion()
         parser.print_help()
         sys.exit(1)
-
+    if args.update :
+        updateTag()
+        sys.exit(1)
     if args.version :
         getVersion()
         sys.exit(1)
@@ -175,6 +178,7 @@ def prefix() :
     fasta=SeqIO.parse(args.fasta1,"fasta")
     first_seq=next(fasta)
     if (fileTab[0][0][0:-1])!= (first_seq.id[0:-1]) :
+        print(" ----- Changing prefix of chromosome ID in '"+ args.tabinput+"' to match with chromosome ID in '"+args.fasta1+"' ----- \n")
         s=""
         with open(prefixTab,"w") as pre :
             for feat in fileTab :
@@ -217,7 +221,6 @@ def getFlank() :
         tab=(args.tabinput).split(".")
         tabOP=args.directory+"/"+tab[0].split("/")[-1]+"_out."+tab[1]
     lenChr=parseFa()
-    print(" lul parseFa\n")
     fileTab2=BedTool(args.tabinput)
     if (args.typeA != None and ext== "gff3") or change :
         fileTab2=BedTool(tabO)
@@ -294,7 +297,6 @@ def align(tabOp):
         file "aln_out_[ext].sam".
     """
     getFasta(tabOp)
-    print(" lul camarchpa ")
     if args.notempf and args.verbose !=0 :
           print("\n ----- Creating file '"+alnN+"'. ----- ")
     with open(alnN,"w") as out:
@@ -353,14 +355,14 @@ def samToTab() :
     start=0
     stop=0
     tabou=""
-    samf=BedTool(alnN)
-    lengh=parseCigar(samf)
+    samff=BedTool(alnN) #ptdr samf c'est pas un fichier, c'est un putain d'objet Bedtools
+    #print(alnN) #c'est alnN le fichier d'alignement
+    lengh=parseCigar(samff)
     countLine=0
-    lmp=0
     begin = True
     if (ext=="gff3" and args.typeA != None) or change:
         args.tabinput=tabO
-    with open(args.tabinput,"r") as tabi :
+    with open(args.tabinput,"r") as tabi, open(alnN,"r") as sam :
         for i in tabi : # tabi = tabbed file after all modification 
             line=i.split("\t")
             if line[0][0] == "#" and ext!="vcf":
@@ -374,41 +376,45 @@ def samToTab() :
                         tabou += i
                         continue
                     begin = False
-                for f in samf : # samf = alignment file
-                    if int(f[1])!=0 : # ignoring complementary match (flag 2048)
+                for f in sam : # samf = alignment file inside Bedtools object
+                    samf=f.split("\t")
+                    try :
+                        int(samf[1])
+                    except :
+                        continue
+                    if int(samf[1])!=0 : # ignoring complementary match (flag 2048)
                         continue
                     res=re.search(":(\d+)-(\d+)",f[0])
                     if res :
                         if ext == "gff3" :
                             if int(res.group(1)) == int(line[3])-args.flank -1 :
-                                start=int(f[3])+args.flank
+                                start=int(samf[3])+args.flank
                                 stop=start+lengh[countLine]-(args.flank*2)-1
                                 countLine+=1
                                 break
                         elif ext == "bed" :
                             if int(res.group(1)) == int(line[1])-args.flank :
-                                start=int(f[3])+args.flank
+                                start=int(samf[3])+args.flank
                                 stop=start+lengh[countLine]-(args.flank*2)-1
                                 countLine+=1
                                 break
                         elif ext == "vcf" :
+                            print(res.group(1) +"\t\t\t" +str(int(line[1])-args.flank-1))
                             if int(res.group(1)) == int(line[1])-args.flank-1:
-                                start=int(f[3])+args.flank
+                                start=int(samf[3])+args.flank
                                 break
+                            #else :
+                                #seek(0) ça va tout casser mais c'est l'idée
                         else :
                             countLine+=1
                 #if f[11][-1]!="0" and f[5]=="101M":     # show ID of sequence which contain a missmatch
-                #    print(f[0].split(":")[1]+"\t"+f[12])
-                if ext == "vcf" and f[5]==f[12].split(":")[-1]+"M": # perfect match only for snp
-                    tabou+=f[2]+"\s"+ str(start) +"\s"+ "\s".join(line[2:11])
-                    lmp+=1
+                #    print(f[0].split(":")[1]+"\t"+f[12]) 
+                if ext == "vcf" and samf[5]==samf[12].split(":")[-1]+"M": # perfect match only for snp
+                    tabou+=samf[2]+"\s"+ str(start) +"\s"+ "\s".join(line[2:11])
                 elif ext == "bed" :
-                    tabou+=f[2]+"\s"+ str(start) +"\s"+ str(stop) +"\s"+line[3]+"\n"
-                    lmp+=1
+                    tabou+=samf[2]+"\s"+ str(start) +"\s"+ str(stop) +"\s"+line[3]+"\n"
                 elif ext == "gff3" :
-                    tabou+=f[2]+"\s"+line[1]+"\s"+line[2]+"\s"+ str(start) +"\s"+ str(stop) +"\s"+"\s".join(line[5:8])+"\s"+line[8]+"\n"
-                    lmp+=1
-                print("ça tourne mal lol " + str(lmp))
+                    tabou+=samf[2]+"\s"+line[1]+"\s"+line[2]+"\s"+ str(start) +"\s"+ str(stop) +"\s"+"\s".join(line[5:8])+"\s"+line[8]+"\n"
         if args.verbose != 0 :
             print(" ----- Creating file '"+args.out+"'. ----- \n")
         if ext == "vcf" :
@@ -526,21 +532,13 @@ def isComplete(samtotabOut) :
 
 if __name__ == "__main__":
     checkDependency()
-    print(" lul 1\n")
     if args.typeA != None and ext == "gff3" :
         cutGff()
-        print(" lul 2\n")
     prefix()
-    print(" lul 3\n")
     tabOp = getFlank()
-    print(" lul flank\n")
     if args.index==2:
         index()
-        print(" lul 4\n")
     align(tabOp)
-    print(" lul 5\n")
     samtotabOut=samToTab()
-    print(" lul 6\n")
     if (args.cds and ext=="gff3" and (args.typeA==None or (("gene" in typeAclean or "mrna" in typeAclean) and "cds" in typeAclean))) :
         isComplete(samtotabOut)
-        print(" lul 7\n")

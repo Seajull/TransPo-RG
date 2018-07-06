@@ -78,7 +78,7 @@ sur la problèmatique dont je m'occupe actuellement ou stopper maintenant le dev
 l'art et comment je compte faire) ? Nom du programme / repo git ? Bibliographie -> comment
 réagir fasse à des programmes plus performant ? Justifier usage du mien ?
 
-##### Toujours annoté de la même façon les gff ? C'est à dire toujours ordre gene, ARNm,
+@@@@@ Toujours annoté de la même façon les gff ? C'est à dire toujours ordre gene, ARNm,
 CDS ? Ou cela peut être ARNm, gene, CDS ? Surement vu que c'est ordonné par position.
 
 @@@@@ Ajout tag problématique : parser de pybedtools modifie tout les espaces en
@@ -109,17 +109,18 @@ des publis qui utilisent et expliquent liftover ? Comment sont gérer les missma
 
 ##### Parser de notes pour fichier TODO notamment, utilité ? Pour journal je pourrais
 générer un tableau, jsute pour avoir un visuel plus parlant et rapidement se rendre compte
-des tâches faites / à faire -> pour le fun sur temps libre ou temps mort post soutenance.
+des tâches faites / à faire -> pour le fun sur temps libre ou temps mort s'il y a post
+soutenance.
 
 !!!!! Période de rush soon, besoin d'avancer vite sur le rapport. Lundi je dois avoir
     des trucs à montrer/discuter quitte à travailler 2/3h par jour ce week-end
     (obligatoire à partir du week-end prochain)
 
-##### QOD -> alignement global puis transfert des annotations présent dans les blocs sans
+@@@@@ QOD -> alignement global puis transfert des annotations présent dans les blocs sans
     gap / missmatch. Approche similaire a LiftOver au final 
 
 ##### Riz ? Quelle problématique ? En parler dans le rapport ? Présenter au moins les
 données dans l'intro avant de parler des génomes de référence et tout ?
 
-##### SNP = 1 base qui varie d'une version d'un génome à une autre ? Du coup 100M et pas
+@@@@@ SNP = 1 base qui varie d'une version d'un génome à une autre ? Du coup 100M et pas
 101M accepté ? mais beaucoup de 101M  
