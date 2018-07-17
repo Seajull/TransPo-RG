@@ -1,5 +1,13 @@
-### TransPo-RG
-Transfer of Position to Resequenced Genome
+# TransPo-RG
+
+TransPo-RG, *Transfer of Position to Resequenced Genome* (or TPRG), is a python
+script for transfering position of annotation from one genome assembly to a another
+(e.g. newer version for a reference genome). It extract sequences with flanking
+nucleotide (50bp in each side by default) and map them on the target genome.
+Then we generate the output file in the same format of the entry file with only
+changing positions. 
+
+
 ### Requires :  
 
 * bwa mem (0.7.15)
@@ -13,7 +21,7 @@ Transfer of Position to Resequenced Genome
 ----------
 
 
-``` python3
+``` python
 usage: tab1ToRef2.py [-f1 FASTA1] [-f2 FASTA2] [-ti TABINPUT] [-b FLANK] [-c]
                      [-d DIRECTORY] [-h] [-i] [-n] [-o OUT] [-t TYPEA] [-v]
                      [-ver] [-w]
