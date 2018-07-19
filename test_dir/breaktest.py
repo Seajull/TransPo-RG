@@ -1,9 +1,8 @@
 import os, sys, re
+j=0
 with open(sys.argv[1],"r") as fai :
-    for i in fai :
-        lul=i.split("\t")
-        try :
-            int(lul[0])
-        except :
-            print("cool")
-            print(lul[0])
+    while j < 30 :
+        print(j)
+        j+=1
+        for i in fai :
+            print(i)

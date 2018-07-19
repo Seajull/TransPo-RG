@@ -336,6 +336,19 @@ def parseCigar(sam) :
         lenCig.append(leng)
     return lenCig
 
+def sorting(aln) :
+    fil=[]
+    with open(aln, "r") as samsoul, open("samsoul2","w") as soulsam :
+        for i in samsoul :
+            if i[0]!="@" :
+                fil.append(i.split("\t"))
+            else :
+                soulsam.write(i)
+        #for i in sorted(samsoul) :
+        #    soulsam.write(i)
+        for i in sorted(fil, key=lambda ok: (ok[0][0],int(ok[0].split("_")[1].split(":")[0]),int(ok[0].split(":")[1].split("-")[0]),int(ok[0].split(":")[1].split("-")[1]))) :
+            soulsam.write("\t".join(i))
+        alnN="samsoul2"
 def samToTab() :
     """
         In order to get the result of alignment usable for
@@ -360,6 +373,8 @@ def samToTab() :
     lengh=parseCigar(samff)
     countLine=0
     begin = True
+    reset = True
+    lol=0
     if (ext=="gff3" and args.typeA != None) or change:
         args.tabinput=tabO
     with open(args.tabinput,"r") as tabi, open(alnN,"r") as sam :
@@ -371,12 +386,14 @@ def samToTab() :
                 tabou += i
             else :
                 if begin :
-                    tabou += "# File generated the "+datetime.datetime.now().strftime("%d %b %Y") + " with following command line : \n"+"# "+" ".join(sys.argv)+"\n"
                     if line [0][0] == "#" :
                         tabou += i
                         continue
+                    tabou += "# File generated the "+datetime.datetime.now().strftime("%d %b %Y") + " with following command line : \n"+"# "+" ".join(sys.argv)+"\n"
                     begin = False
                 for f in sam : # samf = alignment file inside Bedtools object
+                    lol+=1
+                    #print("PASSAGE NUMBER : \t" + str(lol))
                     samf=f.split("\t")
                     try :
                         int(samf[1])
@@ -384,37 +401,46 @@ def samToTab() :
                         continue
                     if int(samf[1])!=0 : # ignoring complementary match (flag 2048)
                         continue
-                    res=re.search(":(\d+)-(\d+)",f[0])
+                    res=re.search(":(\d+)-(\d+)",samf[0])
                     if res :
                         if ext == "gff3" :
                             if int(res.group(1)) == int(line[3])-args.flank -1 :
                                 start=int(samf[3])+args.flank
                                 stop=start+lengh[countLine]-(args.flank*2)-1
                                 countLine+=1
+                                okw=True
+                                reset = False
                                 break
                         elif ext == "bed" :
                             if int(res.group(1)) == int(line[1])-args.flank :
                                 start=int(samf[3])+args.flank
                                 stop=start+lengh[countLine]-(args.flank*2)-1
                                 countLine+=1
+                                okw=True
+                                reset = False
                                 break
                         elif ext == "vcf" :
-                            print(res.group(1) +"\t\t\t" +str(int(line[1])-args.flank-1))
                             if int(res.group(1)) == int(line[1])-args.flank-1:
                                 start=int(samf[3])+args.flank
+                                okw=True
+                                reset = False
                                 break
-                            #else :
-                                #seek(0) ça va tout casser mais c'est l'idée
                         else :
+                            okw=False
                             countLine+=1
+                else :
+                    if not reset :  # ptdr unreadable
+                        sam.seek(0)
+                    reset=not reset
+                #print("start ptdr : " + str(start))
                 #if f[11][-1]!="0" and f[5]=="101M":     # show ID of sequence which contain a missmatch
                 #    print(f[0].split(":")[1]+"\t"+f[12]) 
-                if ext == "vcf" and samf[5]==samf[12].split(":")[-1]+"M": # perfect match only for snp
-                    tabou+=samf[2]+"\s"+ str(start) +"\s"+ "\s".join(line[2:11])
-                elif ext == "bed" :
-                    tabou+=samf[2]+"\s"+ str(start) +"\s"+ str(stop) +"\s"+line[3]+"\n"
-                elif ext == "gff3" :
-                    tabou+=samf[2]+"\s"+line[1]+"\s"+line[2]+"\s"+ str(start) +"\s"+ str(stop) +"\s"+"\s".join(line[5:8])+"\s"+line[8]+"\n"
+                if ext == "vcf" and samf[5]==samf[12].split(":")[-1]+"M" and okw: # perfect match only for snp
+                    tabou+=line[0]+"\s"+ str(start) +"\s"+ "\s".join(line[2:11])
+                elif ext == "bed" and okw:
+                    tabou+=line[0]+"\s"+ str(start) +"\s"+ str(stop) +"\s"+line[3]+"\n"
+                elif ext == "gff3" and okw:
+                    tabou+=line[0]+"\s"+line[1]+"\s"+line[2]+"\s"+ str(start) +"\s"+ str(stop) +"\s"+"\s".join(line[5:8])+"\s"+line[8]+"\n"
         if args.verbose != 0 :
             print(" ----- Creating file '"+args.out+"'. ----- \n")
         if ext == "vcf" :
@@ -539,6 +565,7 @@ if __name__ == "__main__":
     if args.index==2:
         index()
     align(tabOp)
+    sorting(alnN)
     samtotabOut=samToTab()
     if (args.cds and ext=="gff3" and (args.typeA==None or (("gene" in typeAclean or "mrna" in typeAclean) and "cds" in typeAclean))) :
         isComplete(samtotabOut)
