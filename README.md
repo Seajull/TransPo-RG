@@ -40,12 +40,12 @@ use the option -n (--notempfile).
 
 ----------
 ```
-Version : 0.4.1
-Last update : 19 Jul 2018
+Version : 0.5.0
+Last update : 20 Jul 2018
 
 usage: transpo-rg.py [-f1 FASTA1] [-f2 FASTA2] [-ti TABINPUT] [-b FLANK] [-c]
-                     [-d DIRECTORY] [-h] [-i] [-n] [-o OUT] [-t TYPEA] [-u]
-                     [-v {0,1,2}] [-ver] [-w]
+                     [-d DIRECTORY] [-h] [-i] [-l] [-n] [-o OUT] [-t TYPEA]
+                     [-u] [-v {0,1,2}] [-ver] [-w]
 
 Required arguments :
   -f1 FASTA1, --fasta1 FASTA1
@@ -67,6 +67,8 @@ Optional arguments :
   -h, --help            Show this help message then exit.
   -i, --index           Create the index of fasta2 if it doesn't exist (-ii
                         for forcing).
+  -l, --loss            Enable the creation of 'StatsLoss' file which contain
+                        percentage of loss.
   -n, --notempfile      Create all file instead of using temporary file.
   -o OUT, --output OUT  Output file (same format of tabbed file input).
   -t TYPEA, --type TYPEA
