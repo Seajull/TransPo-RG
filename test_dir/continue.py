@@ -2,11 +2,9 @@ from subprocess import call, Popen,PIPE
 import sys, os, re, datetime
 
 
+lp=[0,1,2,3,4,5,6,7,8,9]
 
-
-with open("wat","w") as wat :
-    p = Popen(["bwa", "mem", sys.argv[1], sys.argv[2]], stdout=wat, stderr=PIPE)
-
-    err=p.communicate()
-    print(err[-1].decode("utf-8"))
-
+for i in lp :
+    if i%2 == 0 :
+        continue
+    print(i)

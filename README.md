@@ -40,8 +40,8 @@ use the option -n (--notempfile).
 
 ----------
 ```
-Version : 0.4.0
-Last update : 13 Jun 2018
+Version : 0.4.1
+Last update : 19 Jul 2018
 
 usage: transpo-rg.py [-f1 FASTA1] [-f2 FASTA2] [-ti TABINPUT] [-b FLANK] [-c]
                      [-d DIRECTORY] [-h] [-i] [-n] [-o OUT] [-t TYPEA] [-u]
@@ -49,9 +49,9 @@ usage: transpo-rg.py [-f1 FASTA1] [-f2 FASTA2] [-ti TABINPUT] [-b FLANK] [-c]
 
 Required arguments :
   -f1 FASTA1, --fasta1 FASTA1
-                        Input of reference fasta1 (old) <fasta>.
+                        Input of genome fasta1 (reference) <fasta>.
   -f2 FASTA2, --fasta2 FASTA2
-                        Input of reference fasta2 (new) <fasta>.
+                        Input of genome fasta2 (target) <fasta>.
   -ti TABINPUT, --tabinput TABINPUT
                         Input of tabbed file related to fasta1 <bed/gff/vcf>
 
