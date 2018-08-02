@@ -1,0 +1,46 @@
+
+ ----- Creating directory 'run_test/bedV3/'. -----
+
+ ----- Creating file 'run_test/bedV3/gene_sorgh_v1_out.bed'. ----- 
+
+ ----- Extracting flanking sequences in 'data/example/Sbicolor_79.assembly.fna'. -----
+
+ ----- Creating file 'run_test/bedV3/Sbicolor_79.assembly_selected_bed.fasta'. ----- 
+
+ ----- Creating file 'run_test/bedV3/aln_out_bed.sam'. ----- 
+
+ ----- Mapping selected sequence to fasta2 using 'bwa mem'. ----- 
+
+[M::bwa_idx_load_from_disk] read 0 ALT contigs
+[M::process] read 2934 sequences (10001593 bp)...
+[M::process] read 3002 sequences (10008660 bp)...
+[M::mem_process_seqs] Processed 2934 reads in 9.703 CPU sec, 9.677 real sec
+[M::process] read 2900 sequences (10003575 bp)...
+[M::mem_process_seqs] Processed 3002 reads in 8.208 CPU sec, 8.182 real sec
+[M::process] read 3198 sequences (10002871 bp)...
+[M::mem_process_seqs] Processed 2900 reads in 11.052 CPU sec, 11.011 real sec
+[M::process] read 2906 sequences (10000095 bp)...
+[M::mem_process_seqs] Processed 3198 reads in 9.066 CPU sec, 9.031 real sec
+[M::process] read 3004 sequences (10004728 bp)...
+[M::mem_process_seqs] Processed 2906 reads in 8.081 CPU sec, 8.042 real sec
+[M::process] read 3046 sequences (10000271 bp)...
+[M::mem_process_seqs] Processed 3004 reads in 8.986 CPU sec, 8.960 real sec
+[M::process] read 3134 sequences (10006456 bp)...
+[M::mem_process_seqs] Processed 3046 reads in 11.798 CPU sec, 11.819 real sec
+[M::process] read 2900 sequences (10002734 bp)...
+[M::mem_process_seqs] Processed 3134 reads in 11.306 CPU sec, 11.269 real sec
+[M::process] read 584 sequences (1807143 bp)...
+[M::mem_process_seqs] Processed 2900 reads in 9.609 CPU sec, 9.621 real sec
+[M::mem_process_seqs] Processed 584 reads in 2.587 CPU sec, 2.577 real sec
+[main] Version: 0.7.15-r1140
+[main] CMD: bwa mem data/example/Sbicolor_313_v3.1.assembly.fna run_test/bedV3/Sbicolor_79.assembly_selected_bed.fasta
+[main] Real time: 377.183 sec; CPU: 90.952 sec
+
+ ----- Creating file 'run_test/bedV3/Sbicolor_313_v3.1.assembly_out.bed'. ----- 
+
+ ----- Creating file 'run_test/bedV3/Sbicolor_79.assembly_statsLoss'. ----- 
+
+
+real	7m53.959s
+user	1m41.127s
+sys	0m3.336s

@@ -1,0 +1,50 @@
+
+ ----- Creating directory 'run_test/snpV3/'. -----
+
+ ----- Creating file 'run_test/snpV3/s10.snp_out.vcf'. ----- 
+
+ ----- Extracting flanking sequences in 'data/example/Sbicolor_79.assembly.fna'. -----
+
+ ----- Creating file 'run_test/snpV3/Sbicolor_79.assembly_selected_vcf.fasta'. ----- 
+
+ ----- Creating file 'run_test/snpV3/aln_out_vcf.sam'. ----- 
+
+ ----- Mapping selected sequence to fasta2 using 'bwa mem'. ----- 
+
+[M::bwa_idx_load_from_disk] read 0 ALT contigs
+[M::process] read 99010 sequences (10000010 bp)...
+[M::process] read 99010 sequences (10000010 bp)...
+[M::mem_process_seqs] Processed 99010 reads in 11.783 CPU sec, 11.700 real sec
+[M::process] read 99010 sequences (10000010 bp)...
+[M::mem_process_seqs] Processed 99010 reads in 15.242 CPU sec, 15.132 real sec
+[M::process] read 99010 sequences (10000010 bp)...
+[M::mem_process_seqs] Processed 99010 reads in 10.467 CPU sec, 10.337 real sec
+[M::process] read 99010 sequences (10000010 bp)...
+[M::mem_process_seqs] Processed 99010 reads in 17.022 CPU sec, 16.903 real sec
+[M::process] read 99010 sequences (10000010 bp)...
+[M::mem_process_seqs] Processed 99010 reads in 16.484 CPU sec, 16.347 real sec
+[M::process] read 99012 sequences (10000191 bp)...
+[M::mem_process_seqs] Processed 99010 reads in 12.315 CPU sec, 12.204 real sec
+[M::process] read 99010 sequences (10000010 bp)...
+[M::mem_process_seqs] Processed 99012 reads in 13.875 CPU sec, 13.732 real sec
+[M::process] read 99010 sequences (10000010 bp)...
+[M::mem_process_seqs] Processed 99010 reads in 15.678 CPU sec, 15.521 real sec
+[M::process] read 99010 sequences (10000010 bp)...
+[M::mem_process_seqs] Processed 99010 reads in 15.846 CPU sec, 15.717 real sec
+[M::process] read 99010 sequences (10000010 bp)...
+[M::mem_process_seqs] Processed 99010 reads in 14.844 CPU sec, 14.722 real sec
+[M::process] read 95961 sequences (9691515 bp)...
+[M::mem_process_seqs] Processed 99010 reads in 12.350 CPU sec, 12.211 real sec
+[M::mem_process_seqs] Processed 95961 reads in 46.595 CPU sec, 46.497 real sec
+[main] Version: 0.7.15-r1140
+[main] CMD: bwa mem data/example/Sbicolor_313_v3.1.assembly.fna run_test/snpV3/Sbicolor_79.assembly_selected_vcf.fasta
+[main] Real time: 625.506 sec; CPU: 203.198 sec
+
+ ----- Creating file 'run_test/snpV3/Sbicolor_313_v3.1.assembly_out.vcf'. ----- 
+
+ ----- Creating file 'run_test/snpV3/Sbicolor_79.assembly_statsLoss'. ----- 
+
+
+real	17m6.309s
+user	4m49.256s
+sys	0m10.585s

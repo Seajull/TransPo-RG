@@ -76,11 +76,15 @@ if __name__ == '__main__':
     sortS=tempfile.NamedTemporaryFile()
     sortSam=sortS.name
     if not args.notempf :
+        tabOPut=tempfile.NamedTemporaryFile()
+        tabOP=tabOPut.name
         aln=tempfile.NamedTemporaryFile()
         alnN=aln.name
         selectS = tempfile.NamedTemporaryFile()
         selectedSeq = selectS.name
     else :
+        tab=".".join((args.tabinput).split(".")[:-1])
+        tabOP=args.directory+"/"+tab.split("/")[-1]+"_out."+ext
         alnN=args.directory+"/aln_out_"+ext+".sam"
         fasta1Out=".".join((args.fasta1).split(".")[:-1])
         selectedSeq=args.directory+"/"+fasta1Out.split("/")[-1]+"_selected_"+ext+".fasta"
@@ -222,12 +226,6 @@ def getFlank() :
         [tabbed_file_name]_out.[ext] in the directory
         ./result.
     """
-    if not args.notempf :
-        tabOPut=tempfile.NamedTemporaryFile()
-        tabOP=tabOPut.name
-    else :
-        tab=".".join((args.tabinput).split(".")[:-1])
-        tabOP=args.directory+"/"+tab.split("/")[-1]+"_out."+ext
     lenChr=parseFa()
     if (args.typeA != None and ext== "gff3") or change :
         fileTab2=BedTool(tabO)
@@ -449,7 +447,7 @@ def samToTab() :
                 tabou+="\s".join(map(str,tab))+"\n"
             elif ext == "bed" :
                 tab[1]=int(samf[3])+args.flank
-                tab[2]=int(tab[3])+leng-args.flank
+                tab[2]=int(tab[1])+leng-args.flank
                 tabou+="\s".join(map(str,tab))+"\n"
             elif ext == "vcf" and samf[5]==str(len(tab[3])+(args.flank*2))+"M" :
                 tab[1]=int(samf[3])+args.flank
