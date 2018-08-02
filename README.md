@@ -40,8 +40,8 @@ use the option -n (--notempfile).
 
 ----------
 ```
-Version : 0.5.0
-Last update : 20 Jul 2018
+Version : 0.6.1
+Last update : 2 Aug 2018
 
 usage: transpo-rg.py [-f1 FASTA1] [-f2 FASTA2] [-ti TABINPUT] [-b FLANK] [-c]
                      [-d DIRECTORY] [-h] [-i] [-l] [-n] [-o OUT] [-t TYPEA]
@@ -79,4 +79,4 @@ Optional arguments :
                         Change verbosity level.
   -ver, --version       Show version and date of last update then exit.
   -w, --warning         Disable warnings.
-```
+ ```
