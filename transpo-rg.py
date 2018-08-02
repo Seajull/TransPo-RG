@@ -82,8 +82,8 @@ if __name__ == '__main__':
         selectedSeq = selectS.name
     else :
         alnN=args.directory+"/aln_out_"+ext+".sam"
-        fasta1Out=(args.fasta1).split(".")
-        selectedSeq=args.directory+"/"+fasta1Out[0].split("/")[-1]+"_selected_"+ext+"."+fasta1Out[1]
+        fasta1Out=".".join((args.fasta1).split(".")[:-1])
+        selectedSeq=args.directory+"/"+fasta1Out.split("/")[-1]+"_selected_"+ext+".fasta"
 
     if args.typeA != None and ext != "gff3" :
         print("")
@@ -110,7 +110,7 @@ if __name__ == '__main__':
         print("")
         warnings.warn("Argument --cds is ignored because there is missing type in --type argument (required : 'CDS' and mRNA or gene).",Warning)
  
-    res2 = re.search("/?(\w+)\.",args.fasta2)
+    res2 = re.search("/([^/]+)(\.\w+)",args.fasta2)
     if args.out == None:
         args.out = args.directory+"/"+res2.group(1)+"_out."+ext
     else :
@@ -173,19 +173,24 @@ def prefix() :
         tabbed file to the same as the ID prefix in the
         fasta file.
     """
-    tabPre=tempfile.NamedTemporaryFile()
-    prefixTab=tabPre.name
     global change
     change=False
     fileTab=BedTool(args.tabinput)
     fasta=SeqIO.parse(args.fasta1,"fasta")
     first_seq=next(fasta)
     if (fileTab[0][0][0:-1])!= (first_seq.id[0:-1]) :
-        print(" ----- Changing prefix of chromosome ID in '"+ args.tabinput+"' to match with chromosome ID in '"+args.fasta1+"' ----- \n")
+        print("\n ----- Changing prefix of chromosome ID in '"+ args.tabinput+"' to match with chromosome ID in '"+args.fasta1+"' ----- ")
         s=""
-        with open(prefixTab,"w") as pre :
+        with open(args.tabinput) as tabHash :
+            for hasht in tabHash :
+                if hasht[0] == "#" :
+                    s+=hasht
+                else :
+                    break
             for feat in fileTab :
-                s+= first_seq.id[0:-1]+feat[0][-1]+"\s"+("\s".join(feat[1:])+"\n")
+                numc=re.search("[^\d]?(\d+)$",feat[0])
+                if numc :
+                    s+= first_seq.id[0:-1]+numc.group(1)+"\s"+("\s".join(feat[1:])+"\n")
         BedTool(s, from_string=True, deli="\s").saveas(tabO)
         change=True
     return
@@ -221,20 +226,62 @@ def getFlank() :
         tabOPut=tempfile.NamedTemporaryFile()
         tabOP=tabOPut.name
     else :
-        tab=(args.tabinput).split(".")
-        tabOP=args.directory+"/"+tab[0].split("/")[-1]+"_out."+tab[1]
+        tab=".".join((args.tabinput).split(".")[:-1])
+        tabOP=args.directory+"/"+tab.split("/")[-1]+"_out."+ext
     lenChr=parseFa()
-    fileTab2=BedTool(args.tabinput)
     if (args.typeA != None and ext== "gff3") or change :
         fileTab2=BedTool(tabO)
+    else :
+        fileTab2=BedTool(args.tabinput)
     if args.verbose!=0 and args.notempf:
         print("\n ----- Creating file '"+tabOP +"'. ----- ")
-    if (fileTab2.file_type != "vcf"):
-        fileTab2.slop(b=args.flank, g=lenChr.name ,output=tabOP)
-    else :
+    if (fileTab2.file_type == "bed"):
         with open(lenChr.name,"r") as lenC :
             res=""
             for feature in fileTab2 :
+                fjoin=("__".join(str(feature).split("\t"))).replace(" ","\\s")
+                for line in lenC :
+                    lenghtC=re.search(feature.chrom+"\t(\d+)",line)
+                    if lenghtC :
+                        break
+                lenC.seek(0)
+                if feature.stop+args.flank > int(lenghtC.group(1)): # TODO : unreadable, gotta change that
+                    stop=int(lenghtC.group(1))
+                else :
+                    stop=feature.stop+args.flank
+                if feature.start-args.flank < 0 :
+                    start=0
+                else :
+                    start=feature.start-args.flank
+                res += feature.chrom +"\t"+str(start)+"\t"+ str(stop)+"\t"+fjoin+"\n"
+        BedTool(res, from_string=True, deli="\t").saveas(tabOP)
+        #fileTab2.slop(b=args.flank, g=lenChr.name ,output=tabOP, header=True)
+    if (fileTab2.file_type == "gff"):
+        with open(lenChr.name,"r") as lenC :
+            res=""
+            for feature in fileTab2 :
+                fjoin=("__".join(str(feature).split("\t"))).replace(" ","\\s")
+                for line in lenC :
+                    lenghtC=re.search(feature.chrom+"\t(\d+)",line)
+                    if lenghtC :
+                        break
+                lenC.seek(0)
+                if feature.stop+args.flank > int(lenghtC.group(1)): # TODO : unreadable, gotta change that
+                    stop=int(lenghtC.group(1))
+                else :
+                    stop=feature.stop+args.flank
+                if feature.start-args.flank < 0 :
+                    start=0
+                else :
+                    start=feature.start-args.flank
+                res += feature.chrom +"\t"+str(start)+"\t"+ str(stop)+"\t"+fjoin+"\n"
+        BedTool(res, from_string=True, deli="\t").saveas(tabOP)
+        #fileTab2.slop(b=args.flank, g=lenChr.name ,output=tabOP, header=True)
+    elif (fileTab2.file_type == "vcf") :
+        with open(lenChr.name,"r") as lenC :
+            res=""
+            for feature in fileTab2 :
+                fjoin=("__".join(str(feature).split("\t"))).replace(" ","\\s")
                 for line in lenC :
                     lenghtC=re.search(feature.chrom+"\t(\d+)",line)
                     if lenghtC :
@@ -248,12 +295,9 @@ def getFlank() :
                     start=0
                 else :
                     start=feature.start-args.flank-1
-                res += feature.chrom +"\s"+str(start)+"\s"+ str(stop)+"\n"
-        BedTool(res, from_string=True, deli="\s").saveas(tabOP)
-    try :
-        return (tabOPut)
-    except :
-        return (tabOP)
+                res += feature.chrom +"\t"+str(start)+"\t"+ str(stop)+"\t"+fjoin+"\n"
+        BedTool(res, from_string=True, deli="\t").saveas(tabOP)
+    return (tabOP)
 
 def getFasta(tabOP):
     """
@@ -266,11 +310,13 @@ def getFasta(tabOP):
     if args.verbose!=0 :
         print("\n ----- Extracting flanking sequences in '"+args.fasta1+"'. -----")
     if not args.notempf :
-        BedTool(tabOP.name).sequence(fi=args.fasta1).save_seqs(selectedSeq)
+        #BedTool(tabOP.name).sequence(fi=args.fasta1).save_seqs(selectedSeq)
+        BedTool(tabOP).sequence(name=True,fi=args.fasta1).save_seqs(selectedSeq)
     else :
         if args.verbose !=0 :
             print("\n ----- Creating file '"+selectedSeq+"'. ----- ")
-        BedTool(tabOP).sequence(fi=args.fasta1).save_seqs(selectedSeq)
+        #BedTool(tabOP).sequence(fi=args.fasta1).save_seqs(selectedSeq)
+        BedTool(tabOP).sequence(name=True,fi=args.fasta1).save_seqs(selectedSeq)
     return
 
 def index() :
@@ -302,11 +348,11 @@ def align(tabOp):
     getFasta(tabOp)
     if args.notempf and args.verbose !=0 :
           print("\n ----- Creating file '"+alnN+"'. ----- ")
-    with open(alnN,"w") as out:
+    with open(alnN,"w") as alout:
         while True :
             if args.verbose !=0:
                 print("\n ----- Mapping selected sequence to fasta2 using 'bwa mem'. ----- \n")
-            p=Popen(["bwa","mem", args.fasta2, selectedSeq],stdout=out, stderr=PIPE)
+            p=Popen(["bwa","mem", args.fasta2, selectedSeq],stdout=alout, stderr=PIPE)
             err=p.communicate()
             if err[-1].decode("utf-8")[1]=="E" :
                 if args.index == None :
@@ -339,20 +385,21 @@ def parseCigar(sam) :
         lenCig.append(leng)
     return lenCig
 
-def sorting(aln) :
-    fil=[]
-    print(" ----- Sorting file '"+aln+"'. ----- ")
-    with open(aln, "r") as samsoul, open(sortSam,"w") as soulsam :
-        for i in samsoul :
-            if i[0]!="@" :
-                fil.append(i.split("\t"))
-            else :
-                soulsam.write(i)
-        #for i in sorted(samsoul) :
-        #    soulsam.write(i)
-        for i in sorted(fil, key=lambda ok: (ok[0][0],int(ok[0].split("_")[1].split(":")[0]),int(ok[0].split(":")[1].split("-")[0]),int(ok[0].split(":")[1].split("-")[1]))) :
-            soulsam.write("\t".join(i))
-        alnN=sortSam
+#def sorting(aln) :
+#    fil=[]
+#    if args.verbose != 0 :
+#        print(" ----- Sorting file '"+aln+"'. ----- ")
+#    with open(aln, "r") as samsoul, open(sortSam,"w") as soulsam :
+#        for i in samsoul :
+#            if i[0]!="@" :
+#                fil.append(i.split("\t"))
+#            else :
+#                soulsam.write(i)
+#        #for i in sorted(samsoul) :
+#        #    soulsam.write(i)
+#        for i in sorted(fil, key=lambda ok: (ok[0][0],int(ok[0].split("_")[1].split(":")[0]),int(ok[0].split(":")[1].split("-")[0]),int(ok[0].split(":")[1].split("-")[1]))) :
+#            soulsam.write("\t".join(i))
+#        alnN=sortSam
 
 def samToTab() :
     """
@@ -370,12 +417,9 @@ def samToTab() :
         specify with argument --output (but still with [ext]
         as extension). It return the name of the file created.
     """
-    start=0
-    stop=0
     tabou=""
-    lengh=parseCigar(BedTool(alnN))
-    countLine=0
-    okw=False
+    if ext !="vcf" :
+        lengh=parseCigar(BedTool(alnN))
     if (ext=="gff3" and args.typeA != None) or change:
         args.tabinput=tabO
     with open(args.tabinput,"r") as tabi, open(alnN,"r") as sam :
@@ -386,157 +430,38 @@ def samToTab() :
                 continue
             tabou += "# File generated the "+datetime.datetime.now().strftime("%d %b %Y") + " with following command line : \n"+"# "+" ".join(sys.argv)+"\n"
             break
-        tabi.seek(0)
         for f in sam : # samf = alignment file inside Bedtools object
             samf=f.split("\t")
-            try :
-                int(samf[1])
-            except :
+            if samf[0][0]=="@" :
                 continue
-            if int(samf[1])!=0 : # ignoring complementary match (flag 2048)
+            if int(samf[1])!=0 : # Ignoring complementary match (flag 2048)
                 continue
-            res=re.search(":(\d+)-(\d+)",samf[0])
-            for i in tabi :
-                line=i.split("\t")
-                if line[0][0]=="#" :
-                    continue
-                if res :
-                    if ext == "gff3" :
-                        if int(res.group(1)) == int(line[3])-args.flank -1 :
-                            start=int(samf[3])+args.flank
-                            stop=start+lengh[countLine]-(args.flank*2)-1
-                            countLine+=1
-                            okw=True
-                            break
-                        else :
-                            countLine+=1
-                    elif ext == "bed" :
-                        if int(res.group(1)) == int(line[1])-args.flank :
-                            start=int(samf[3])+args.flank
-                            stop=start+lengh[countLine]-(args.flank*2)-1
-                            countLine+=1
-                            okw=True
-                            break
-                        else :
-                            countLine+=1
-                    elif ext == "vcf" :
-                        if int(res.group(1)) == int(line[1])-args.flank-1:
-                            start=int(samf[3])+args.flank
-                            okw=True
-                            break
+            if ext != "vcf" :
+                leng=0
+                res=re.findall("\d+\w",samf[5])
+                for i in res :
+                    if i[-1] in ["M","=","X","I","S"] :
+                        leng+=int(i[:-1])
+            tab=samf[0].replace("\\s"," ").split("__")
+            if ext == "gff3" :
+                tab[3]=int(samf[3])+args.flank
+                tab[4]=int(tab[3])+leng-args.flank
+                tabou+="\s".join(map(str,tab))+"\n"
+            elif ext == "bed" :
+                tab[1]=int(samf[3])+args.flank
+                tab[2]=int(tab[3])+leng-args.flank
+                tabou+="\s".join(map(str,tab))+"\n"
+            elif ext == "vcf" and samf[5]==str(len(tab[3])+(args.flank*2))+"M" :
+                tab[1]=int(samf[3])+args.flank
+                tabou+="\s".join(map(str,tab))+"\n"
             #if f[11][-1]!="0" and f[5]=="101M":     # show ID of sequence which contain a missmatch
             #    print(f[0].split(":")[1]+"\t"+f[12]) 
-            if ext == "vcf" and samf[5]==samf[12].split(":")[-1]+"M" and okw : # perfect match only for snp
-                tabou+=line[0]+"\s"+ str(start) +"\s"+ "\s".join(line[2:11])
-            elif ext == "bed" and okw:
-                tabou+=line[0]+"\s"+ str(start) +"\s"+ str(stop) +"\s"+line[3]+"\n"
-            elif ext == "gff3" and okw:
-                tabou+=line[0]+"\s"+line[1]+"\s"+line[2]+"\s"+ str(start) +"\s"+ str(stop) +"\s"+"\s".join(line[5:8])+"\s"+line[8]+"\n"
-            okw=False
+            #if ext == "vcf" and samf[5]=="101M" and samf[5]==samf[12].split(":")[-1]+"M" and okw : # perfect match only for snp
+            #if ext == "vcf" and samf[5]==str(len(samf[0].split("__")[3])+(args.flank*2))+"M" and okw :
         if args.verbose!=0 :
-            print("\n ----- Creating file '"+args.out+"'. ----- ")
+            print(" ----- Creating file '"+args.out+"'. ----- \n")
         BedTool(tabou,from_string=True, deli="\s").saveas(args.out)
     return (args.out)
-
-#
-#def samToTab() :
-#    """
-#        In order to get the result of alignment usable for
-#        further  use, we create a new tabbed file in the
-#        same format as the inputted tabbed file. This file
-#        is the final output of this program.
-#        First of all, we extract the start and stop position
-#        and remove the flank region to get the initial
-#        annotation length. Then we generate the output file
-#        with these new position and keep all the information
-#        of the original tabbed file.
-#        The name of output file is by defaut
-#        "[fasta2_name]_out.[ext]" or the name that user
-#        specify with argument --output (but still with [ext]
-#        as extension). It return the name of the file created.
-#    """
-#    start=0
-#    stop=0
-#    tabou=""
-#    samff=BedTool(alnN) #ptdr samf c'est pas un fichier, c'est un putain d'objet Bedtools
-#    #print(alnN) #c'est alnN le fichier d'alignement
-#    lengh=parseCigar(samff)
-#    countLine=0
-#    begin = True
-#    lol=0
-#    if (ext=="gff3" and args.typeA != None) or change:
-#        args.tabinput=tabO
-#    with open(args.tabinput,"r") as tabi, open(alnN,"r") as sam :
-#        for i in tabi : # tabi = tabbed file after all modification 
-#            line=i.split("\t")
-#            if line[0][0] == "#" and ext!="vcf":
-#                tabou += i
-#                continue
-#            elif line[0][0:2] == "##" :
-#                tabou += i
-#                continue
-#            else :
-#                if line [0][0] == "#" :
-#                    tabou += i
-#                    continue
-#                tabou += "# File generated the "+datetime.datetime.now().strftime("%d %b %Y") + " with following command line : \n"+"# "+" ".join(sys.argv)+"\n"
-#                break
-#
-#            for f in sam : # samf = alignment file inside Bedtools object
-#                samf=f.split("\t")
-#                try :
-#                    int(samf[1])
-#                except :
-#                    continue
-#                if int(samf[1])!=0 : # ignoring complementary match (flag 2048)
-#                    continue
-#                res=re.search(":(\d+)-(\d+)",samf[0])
-#                for i in tabi :
-#                    line=i.split("\t")
-#                    if res :
-#                        if ext == "gff3" :
-#                            if int(res.group(1)) == int(line[3])-args.flank -1 :
-#                                start=int(samf[3])+args.flank
-#                                stop=start+lengh[countLine]-(args.flank*2)-1
-#                                countLine+=1
-#                                okw=True
-#                                reset = False
-#                                break
-#                        elif ext == "bed" :
-#                            if int(res.group(1)) == int(line[1])-args.flank :
-#                                start=int(samf[3])+args.flank
-#                                stop=start+lengh[countLine]-(args.flank*2)-1
-#                                countLine+=1
-#                                okw=True
-#                                reset = False
-#                                break
-#                        elif ext == "vcf" :
-#                            if int(res.group(1)) == int(line[1])-args.flank-1:
-#                                start=int(samf[3])+args.flank
-#                                okw=True
-#                                reset = False
-#                                break
-#                        else :
-#                            okw=False
-#                            countLine+=1
-#                #print("start ptdr : " + str(start))
-#                #if f[11][-1]!="0" and f[5]=="101M":     # show ID of sequence which contain a missmatch
-#                #    print(f[0].split(":")[1]+"\t"+f[12]) 
-#                if ext == "vcf" and samf[5]==samf[12].split(":")[-1]+"M" and okw: # perfect match only for snp
-#                    tabou+=line[0]+"\s"+ str(start) +"\s"+ "\s".join(line[2:11])
-#                elif ext == "bed" and okw:
-#                    tabou+=line[0]+"\s"+ str(start) +"\s"+ str(stop) +"\s"+line[3]+"\n"
-#                elif ext == "gff3" and okw:
-#                    tabou+=line[0]+"\s"+line[1]+"\s"+line[2]+"\s"+ str(start) +"\s"+ str(stop) +"\s"+"\s".join(line[5:8])+"\s"+line[8]+"\n"
-#        if args.verbose != 0 :
-#            print(" ----- Creating file '"+args.out+"'. ----- \n")
-#        if ext == "vcf" :
-#            BedTool(tabou,from_string=True, deli="\s").saveas(args.out)
-#        elif ext == "bed" :
-#            BedTool(tabou,from_string=True, deli="\s").saveas(args.out)
-#        elif ext == "gff3" :
-#            BedTool(tabou,from_string=True, deli="\s").saveas(args.out)
-#    return (args.out)
 
 def getPosCds(tab) :
     """
@@ -578,6 +503,7 @@ def getPosCds(tab) :
                 cdsStart=int(start)-int(posGene[1])
                 cdsStop=int(stop)-int(posGene[1])
                 if cdsStart > cdsStop :
+                    print(line)
                     warnings.resetwarnings()
                     warnings.filterwarnings("error")
                     warnings.warn("Start > stop",Warning)
@@ -659,14 +585,13 @@ def indexTab(fil) :
 def checkLoss() :
     dicOri=collections.OrderedDict(sorted(indexTab(args.tabinput).items(), key=lambda jm: (jm[0].split("_")[0],int(jm[0].split("_")[-1]))))
     dicNew=collections.OrderedDict(sorted(indexTab(args.out).items(), key=lambda jm: (jm[0].split("_")[0],int(jm[0].split("_")[-1]))))
-    with open("result/statsLoss","w") as lossOut :
-        print(" ----- Creating file 'result/statsLoss'. ----- \n")
+    statFile=args.directory+"/"+".".join(args.fasta1.split(".")[:-1]).split("/")[-1]+"_statsLoss"
+    with open(statFile,"w") as lossOut :
+        print(" ----- Creating file '"+statFile+"'. ----- \n")
         lossOut.write("ID\tREF\tTARGET\tLOSS\t%\n")
         for key in dicOri.keys() :
             if key in dicNew.keys():
                 loss=(int(dicOri[key])-int(dicNew[key]))
-                if loss < 0 :
-                    sys.exit("ERROR : More line than original file")
                 lossOut.write(key+"\t"+str(dicOri[key])+"\t"+str(dicNew[key])+"\t"+str(loss)+"\t"+str("%.2f" % round(loss*100/dicOri[key],2))+"%"+"\n")
     return
 
@@ -679,7 +604,7 @@ if __name__ == "__main__":
     if args.index==2:
         index()
     align(tabOp)
-    sorting(alnN)
+    #sorting(alnN)
     samtotabOut=samToTab()
     if (args.cds and ext=="gff3" and (args.typeA==None or (("gene" in typeAclean or "mrna" in typeAclean) and "cds" in typeAclean))) :
         isComplete(samtotabOut)

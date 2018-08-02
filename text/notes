@@ -124,3 +124,6 @@ données dans l'intro avant de parler des génomes de référence et tout ?
 
 @@@@@ SNP = 1 base qui varie d'une version d'un génome à une autre ? Du coup 100M et pas
 101M accepté ? mais beaucoup de 101M  
+
+##### chain file -> axtChain, chainNet, chainNetSubset (chainNetSubset semble être le plus
+important) 

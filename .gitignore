@@ -1,11 +1,11 @@
 data/
 *~
 *.swp
-doc/
 *.old
 venv/
 __*/
 result/
 *.pyc
-index/
 old/
+tools/
+run_test/
