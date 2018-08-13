@@ -2,6 +2,7 @@ from Bio import SeqIO
 from subprocess import call, Popen, PIPE
 from pybedtools import BedTool
 from version import getVersion, updateTag
+from timeit import Timer
 import sys, os, re, tempfile, argparse, warnings, datetime, collections
 
 parser = argparse.ArgumentParser(add_help=False)
@@ -24,7 +25,6 @@ optional.add_argument("-u", "--update", dest="update", action="store_true", help
 optional.add_argument("-v", "--verbose",dest="verbose", default=1, type=int, choices=[0,1,2], help="Change verbosity level.")
 optional.add_argument("-ver", "--version",dest="version", action="store_true", help="Show version and date of last update then exit.")
 optional.add_argument("-w", "--warning",dest="warn", action="store_true", help="Disable warnings.")
-
 if __name__ == '__main__':
     """
         Some configuration for the argument parser like
@@ -257,8 +257,15 @@ def getFlank() :
     if (fileTab2.file_type == "gff"):
         with open(lenChr.name,"r") as lenC :
             res=""
+            countCds=0
             for feature in fileTab2 :
-                fjoin=("__".join(str(feature).split("\t"))).replace(" ","\\s")
+                taline=str(feature).split("\t")
+                if taline[2]=="CDS" :
+                    countCds+=1
+                    taline[-1]=taline[-1][0:-1]+";Note="+str(countCds)
+                else :
+                    countCds=0
+                fjoin=("__".join(taline)).replace(" ","\\s")
                 for line in lenC :
                     lenghtC=re.search(feature.chrom+"\t(\d+)",line)
                     if lenghtC :
@@ -271,7 +278,7 @@ def getFlank() :
                 if feature.start-args.flank < 0 :
                     start=0
                 else :
-                    start=feature.start-args.flank
+                    start=feature.start+1-args.flank
                 res += feature.chrom +"\t"+str(start)+"\t"+ str(stop)+"\t"+fjoin+"\n"
         BedTool(res, from_string=True, deli="\t").saveas(tabOP)
         #fileTab2.slop(b=args.flank, g=lenChr.name ,output=tabOP, header=True)
@@ -467,8 +474,8 @@ def getPosCds(tab) :
         else it's position of gene) and the relative
         position of CDS within.
         It take a file in gff format and return a
-        dictionary with tuple of position of mRNA and his
-        number (or gene) in keys and list of list of positon
+        dictionary with tuple of position of mRNA (or gene)
+        and his number in keys and list of list of position
         of CDS in value.
     """
     dicoPos={}
@@ -494,19 +501,22 @@ def getPosCds(tab) :
             stop = lineSplit[4]
             if typeA == "gene" or typeA == "mrna" :
                 numGene+=1
-                posGene=(numGene,int(start),int(stop))
+                getags=lineSplit[-1]
+                posGene=(getags,numGene,int(start),int(stop))
                 if posGene not in dicoPos.keys():
                     dicoPos[posGene]=[]
             if typeA == "cds":
                 cdsStart=int(start)-int(posGene[1])
                 cdsStop=int(stop)-int(posGene[1])
                 if cdsStart > cdsStop :
-                    print(line)
                     warnings.resetwarnings()
                     warnings.filterwarnings("error")
                     warnings.warn("Start > stop",Warning)
-                else :
-                    dicoPos[posGene].append([cdsStart,cdsStop])
+                resTag=re.search("ID=(\w+((\.?\w+)?)+)",getags)
+                resTagCds=re.search("Parent=(\w+((\.?\w+)?)+)",lineSplit[-1])
+                if resTag and resTagCds:
+                    if str(resTag.group(1))==str(resTagCds.group(1)) :
+                        dicoPos[posGene].append([cdsStart,cdsStop])
     return dicoPos
 
 def isComplete(samtotabOut) :
@@ -523,45 +533,55 @@ def isComplete(samtotabOut) :
         dicoPos2=getPosCds(samtotabOut)
         outTab = samtotabOut.split("/")[-1]
         geneInt=[]
-        lastG=0
+        #lastG=0
         geneOk=0
+        ok=0
         countG=0
         selectable=False
         filtered = "# File generated the "+datetime.datetime.now().strftime("%d %b %Y") + " with following command line : \n"+"# "+" ".join(sys.argv)+"\n"
         for key1 in dicoPos1.keys() :
             for key2 in dicoPos2.keys() :
-                if key2[0]>lastG :
-                    lastG=key2[0]
-                if key2[0]==key1[0]:
+                if key2[0]==key1[0] :
                     if len(dicoPos1[key1]) == len(dicoPos2[key2]) :
-                        for v in range (0,len(dicoPos1[key1])) :
-                            if dicoPos1[key1][v] == dicoPos2[key2][v] :
-                                geneOk+=1
-                        if geneOk >= len(dicoPos1[key1]) : # here we can add/rm condition to accept or not the mRNA/gene
-                            geneInt.append(key1[0]) # add the mRNA/gene number to the list of "acceptable mRNA/gene to select"
-                            #genePos
-                            geneOk = 0
-                        else :
-                            geneOk = 0
+                        geneInt.append(key1[1])
+                       # for v in range (0,len(dicoPos1[key1])) :
+                       #     print(dicoPos1[key1][v])
+                       #     if dicoPos1[key1][v] == dicoPos2[key2][v] : # TODO : c'est de la merde.
+                       #         geneOk+=1
+                       # print(geneOk)
+                       # if geneOk >= len(dicoPos1[key1]) : # here we can add/rm condition to accept or not the mRNA/gene
+                       #    # add the mRNA/gene number to the list of "acceptable mRNA/gene to select"
+                       #     geneOk = 0
+                       # else :
+                       #     geneOk = 0
         if "gene" in typeAclean :
             typeC="gene"
         elif "mrna" in typeAclean :
             typeC="mrna"
-        for l in range(1,lastG+1) :
-            if l in sorted(geneInt) :
-                with open(samtotabOut,"r") as tabou :
-                    for line in tabou :
-                        if line[0]=="#":
-                            continue
-                        lineS=line.strip().split("\t")
-                        if lineS[2].lower() ==typeC :
-                            selectable=False
-                            countG+=1
-                            if countG==l :
-                                selectable=True
-                        if selectable :
-                            filtered+=("\s".join(lineS))+"\n"
-                    countG=0
+        with open(samtotabOut,"r") as tabou :
+            for line in tabou :
+                if line[0]=="#":
+                    continue
+                lineS=line.strip().split("\t")
+                if lineS[2].lower() == typeC : # TODO : unreadable
+                    resTag=re.search("ID=(\w+((\.?\w+)?)+)",lineS[-1])
+                    if resTag :
+                        geneId=resTag.group(1)
+                if lineS[2] =="CDS" :
+                    resTagCds=re.search("Parent=(\w+((\.?\w+)?)+)",lineS[-1])
+                    if resTagCds :
+                        cdsId=resTagCds.group(1)
+                if lineS[2].lower() ==typeC :
+                    countG+=1
+                    if countG in geneInt :
+                        selectable=True
+                    else :
+                        selectable=False
+                if lineS[2] =="CDS" and geneId!=cdsId :
+                    selectable=False
+                if selectable :
+                    filtered+=("\s".join(lineS))+"\n"
+            countG=0
         if args.verbose != 0 :
             print(" ----- Generating filtered GFF file '"+(args.directory+"/filtered_"+outTab)+"'. -----\n")
         BedTool(filtered, from_string=True, deli="\s").saveas(args.directory+"/filtered_"+outTab)
@@ -586,7 +606,7 @@ def checkLoss() :
     statFile=args.directory+"/"+".".join(args.fasta1.split(".")[:-1]).split("/")[-1]+"_statsLoss"
     with open(statFile,"w") as lossOut :
         print(" ----- Creating file '"+statFile+"'. ----- \n")
-        lossOut.write("ID\tREF\tTARGET\tLOSS\t%\n")
+        lossOut.write("#ID\tREF\tTARGET\tLOSS\t%\n")
         for key in dicOri.keys() :
             if key in dicNew.keys():
                 loss=(int(dicOri[key])-int(dicNew[key]))
@@ -594,6 +614,7 @@ def checkLoss() :
     return
 
 if __name__ == "__main__":
+    tm = datetime.datetime.now()
     checkDependency()
     if args.typeA != None and ext == "gff3" :
         cutGff()
