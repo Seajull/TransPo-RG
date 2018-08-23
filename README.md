@@ -40,12 +40,12 @@ use the option -n (--notempfile).
 
 ----------
 ```
-Version : 0.6.2
-Last update : 13 Aug 2018
+Version : 0.7.0
+Last update : 23 Aug 2018
 
 usage: transpo-rg.py [-f1 FASTA1] [-f2 FASTA2] [-ti TABINPUT] [-b FLANK] [-c]
-                     [-d DIRECTORY] [-h] [-i] [-l] [-n] [-o OUT] [-t TYPEA]
-                     [-u] [-v {0,1,2}] [-ver] [-w]
+                     [-d DIRECTORY] [-h] [-i] [-l] [-n] [-m MISMATCH] [-o OUT]
+                     [-p] [-t TYPEA] [-u] [-v {0,1,2}] [-ver] [-w]
 
 Required arguments :
   -f1 FASTA1, --fasta1 FASTA1
@@ -59,8 +59,8 @@ Optional arguments :
   -b FLANK, --flank FLANK
                         Size of flank region to extract from each side of the
                         annotation (default : 50).
-  -c, --cds             Enable control of postions of CDS inside mRNA (or
-                        gene).
+  -c, --cds             Enable control of number and postions of CDS inside
+                        mRNA (or gene). It generate a new tab file.
   -d DIRECTORY, --directory DIRECTORY
                         Name of the directory where files are generated
                         (default : result).
@@ -70,7 +70,11 @@ Optional arguments :
   -l, --loss            Enable the creation of 'StatsLoss' file which contain
                         percentage of loss.
   -n, --notempfile      Create all file instead of using temporary file.
+  -m MISMATCH, --mismatch MISMATCH
+                        Specify the maximum of mismatch allowed (add option -p
+                        if you want a percentage).
   -o OUT, --output OUT  Output file (same format of tabbed file input).
+  -p, --percentage      Allows use of percentage for option --mismatch
   -t TYPEA, --type TYPEA
                         Only extract annotation of specified type (gff file
                         only) (example : "mRNA exon cds" (case insensitive)).
