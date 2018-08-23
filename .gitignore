@@ -12,3 +12,5 @@ tools/
 run_test/
 galaxy/
 ok_test/
+text/
+test_dir/

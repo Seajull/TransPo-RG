@@ -1,9 +1,0 @@
-galaxydev@cc2-web1.cirad.fr
-
-tools/SouthGreen/
-
-config/tool_conf.xml
-
-~/scripts/galaxy restart -> pour restart galaxy après modif *_conf 
-
-site dev : cc2-web1.cirad.fr/galaxydev/
