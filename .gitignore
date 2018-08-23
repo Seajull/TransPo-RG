@@ -8,7 +8,6 @@ __*/
 result/
 *.pyc
 old/
-tools/
 run_test/
 galaxy/
 ok_test/

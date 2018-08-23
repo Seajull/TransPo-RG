@@ -28,6 +28,7 @@ directory you want.
 If you want to keep all the intermediate file like alignment file (in SAM), you can
 use the option -n (--notempfile).
 
+![workflow of TPRG](image/cds250.png)
 
 ### Requires :  
 
