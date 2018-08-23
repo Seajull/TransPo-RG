@@ -9,5 +9,5 @@ result/
 old/
 tools/
 run_test/
-TPRGV3/
-TPRGV3vcfFalsed/
+galaxy/
+ok_test/

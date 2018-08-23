@@ -6,19 +6,13 @@ parser = argparse.ArgumentParser()
 parser.add_argument("-t1", "--tabinput1", dest="tabinput1", default=None, help="Input du fichier tabulé associé à fasta 1.")
 parser.add_argument("-t2", "--tabinput2", dest="tabinput2", default=None, help="Input du fichier tabulé associé à fasta 1.")
 args = parser.parse_args()
-typeY="cds,mrna"
+typeY="cds,gene"
 ext="gff3"
 typ=(re.findall("[a-zA-Z0-9]+",typeY))
 typeAclean=[l.lower() for l in typ]
 
 ts=datetime.datetime.now()
 def cutGff() :
-    """
-        If the argument --typeA is specified, we need to cut
-        the gff in order to keep only specified type. We use
-        lower() function on each type in order to be case
-        insensitive.
-    """
     global typeAclean
     print("\n ----- Extracting GFF's annotation which match '"+",".join(typeAclean)+"'. -----")
     with open(args.tabinput1,"r") as inpTab, open("tabO","w") as out:
@@ -29,11 +23,10 @@ def cutGff() :
     return
 
 def getPosCds(tab) :
-    typeA="mrna"
+    typeA="gene"
     dicoPos={}
     posGene=()
     global typeAclean
-    typeD=True
     with open(tab,"r") as out :
         numGene=0
         for line in out :
@@ -41,8 +34,6 @@ def getPosCds(tab) :
                 continue
             lineSplit=line.split("\t")
             typeA = lineSplit[2].lower()
-            if typeD and typeA == "gene" :
-                continue
             start = lineSplit[3]
             stop = lineSplit[4]
             if typeA == "gene" or typeA == "mrna" :
@@ -58,8 +49,8 @@ def getPosCds(tab) :
                     warnings.resetwarnings()
                     warnings.filterwarnings("error")
                     warnings.warn("Start > stop",Warning)
-                resTag=re.search("ID=(\w+((\.?\w+)?)+)",getags)
-                resTagCds=re.search("Parent=(\w+((\.?\w+)?)+)",lineSplit[-1])
+                resTag=re.search("ID=(\w+)",getags)
+                resTagCds=re.search("Parent=(\w+)",lineSplit[-1])
                 if resTag and resTagCds:
                     if str(resTag.group(1))==str(resTagCds.group(1)) :
                         dicoPos[posGene].append([cdsStart,cdsStop])
@@ -90,7 +81,7 @@ def isComplete() :
             for key2 in dicoPos2.keys() :
                 if key2[0]==key1[0] :
                     if len(dicoPos1[key1]) == len(dicoPos2[key2]) :
-                        geneInt.append(key1[1])
+                        geneInt.append(key2[1])
                        # for v in range (0,len(dicoPos1[key1])) :
                        #     print(dicoPos1[key1][v])
                        #     if dicoPos1[key1][v] == dicoPos2[key2][v] : # TODO : c'est de la merde.
@@ -104,6 +95,7 @@ def isComplete() :
 
         tu=datetime.datetime.now()
         print(tu-ts)
+        print(geneInt)
         if "gene" in typeAclean :
             typeC="gene"
         elif "mrna" in typeAclean :
@@ -114,11 +106,11 @@ def isComplete() :
                     continue
                 lineS=line.strip().split("\t")
                 if lineS[2].lower() == typeC : # TODO : unreadable
-                    resTag=re.search("ID=(\w+((\.?\w+)?)+)",lineS[-1])
+                    resTag=re.search("ID=(\w+)",lineS[-1])
                     if resTag :
                         geneId=resTag.group(1)
                 if lineS[2] =="CDS" :
-                    resTagCds=re.search("Parent=(\w+((\.?\w+)?)+)",lineS[-1])
+                    resTagCds=re.search("Parent=(\w+)",lineS[-1])
                     if resTagCds :
                         cdsId=resTagCds.group(1)
                 if lineS[2].lower() == typeC : # TODO : unreadable
@@ -144,3 +136,17 @@ def isComplete() :
 
 cutGff()
 isComplete()
+
+dicoPos2=getPosCds(args.tabinput2)
+for k,v in dicoPos2.items() :
+    res = re.search("Sb01g022180",str(k))
+    if res :
+        print(k,v)
+        le=len(v)
+dicoPos1=getPosCds("tabO")
+for k,v in dicoPos1.items() :
+    res = re.search("Sb01g022180",str(k))
+    if res :
+        print(k,v)
+        if le == len(v) :
+           print("ok")

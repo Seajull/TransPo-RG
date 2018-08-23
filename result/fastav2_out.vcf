@@ -5,8 +5,10 @@
 ##FORMAT=<ID=AD,Number=.,Type=Integer,Description="Allelic depths for the ref and alt alleles in the order listed">
 ##FORMAT=<ID=PL,Number=G,Type=Integer,Description="Normalized, Phred-scaled likelihoods for genotypes as defined in the VCF specification">
 #CHROM	POS	ID	REF	ALT	QUAL	FILTER	INFO	FORMAT	s10
-# File generated the 26 Jul 2018 with following command line : 
-# transpo-rg.py -f1 data/fasta/fastav1.fasta -f2 data/fasta/fastav2.fasta -ti data/tab/v1.vcf -n -v 2 -l
+# File generated the 21 Aug 2018 with following command line : 
+# transpo-rg.py -f1 data/fasta/fastav1.fasta -f2 data/fasta/fastav2.fasta -ti data/tab/v1.vcf -p
+chromosome_1	86	.	A	C	49.77	.	AC=1;AF=0.500;AN=2;BaseQRankSum=-1.004;ClippingRankSum=1.917;DP=23;FS=3.358;MLEAC=1;MLEAF=0.500;MQ=32.28;MQ0=0;MQRankSum=-0.091;QD=2.16;ReadPosRankSum=-1.734	GT:AD:DP:GQ:PL	0/1:12,2:14:78:78,0,1525
+chromosome_1	128	.	C	A	233.77	.	AC=1;AF=0.500;AN=2;BaseQRankSum=-0.296;ClippingRankSum=-1.678;DP=19;FS=3.123;MLEAC=1;MLEAF=0.500;MQ=31.20;MQ0=0;MQRankSum=-1.086;QD=12.30;ReadPosRankSum=-0.691	GT:AD:DP:GQ:PL	0/1:2,11:13:99:262,0,128
 chromosome_1	19048	.	TA	C	930.77	.	AC=2;AF=1.00;AN=2;DP=23;FS=0.000;MLEAC=2;MLEAF=1.00;MQ=59.19;MQ0=0;QD=35.74	GT:AD:DP:GQ:PL	1/1:0,23:23:69:959,69,0
 chromosome_1	32668	.	C	T	73.77	.	AC=1;AF=0.500;AN=2;BaseQRankSum=0.731;ClippingRankSum=-0.546;DP=17;FS=20.792;MLEAC=1;MLEAF=0.500;MQ=39.45;MQ0=0;MQRankSum=-0.895;QD=4.34;ReadPosRankSum=-0.296	GT:AD:DP:GQ:PL	0/1:7,3:10:99:102,0,389
 chromosome_1	32683	.	G	A	67.77	.	AC=1;AF=0.500;AN=2;BaseQRankSum=-0.067;ClippingRankSum=-0.762;DP=15;FS=15.563;MLEAC=1;MLEAF=0.500;MQ=36.36;MQ0=0;MQRankSum=-0.762;QD=4.52;ReadPosRankSum=-1.666	GT:AD:DP:GQ:PL	0/1:7,2:9:96:96,0,457
@@ -68,6 +70,7 @@ chromosome_1	285045	.	C	T	529.77	.	AC=2;AF=1.00;AN=2;DP=14;FS=0.000;MLEAC=2;MLEA
 chromosome_1	292897	.	C	T	84.77	.	AC=1;AF=0.500;AN=2;BaseQRankSum=-0.717;ClippingRankSum=-0.717;DP=11;FS=3.424;MLEAC=1;MLEAF=0.500;MQ=46.25;MQ0=0;MQRankSum=-2.637;QD=7.71;ReadPosRankSum=0.825	GT:AD:DP:GQ:PL	0/1:6,5:11:99:113,0,218
 chromosome_1	293321	.	A	T	168.77	.	AC=1;AF=0.500;AN=2;BaseQRankSum=-0.368;ClippingRankSum=0.053;DP=16;FS=0.000;MLEAC=1;MLEAF=0.500;MQ=45.24;MQ0=0;MQRankSum=-3.413;QD=10.55;ReadPosRankSum=0.053	GT:AD:DP:GQ:PL	0/1:8,8:16:99:197,0,260
 chromosome_1	315203	.	C	T	712.77	.	AC=2;AF=1.00;AN=2;BaseQRankSum=1.103;ClippingRankSum=0.788;DP=22;FS=3.010;MLEAC=2;MLEAF=1.00;MQ=49.71;MQ0=0;MQRankSum=-1.261;QD=32.40;ReadPosRankSum=0.315	GT:AD:DP:GQ:PL	1/1:1,21:22:30:741,30,0
+chromosome_1	326951	.	C	G	811.77	.	AC=2;AF=1.00;AN=2;DP=22;FS=0.000;MLEAC=2;MLEAF=1.00;MQ=42.25;MQ0=0;QD=26.18	GT:AD:DP:GQ:PL	1/1:0,22:22:66:840,66,0
 chromosome_1	330201	.	T	C	614.77	.	AC=2;AF=1.00;AN=2;DP=16;FS=0.000;MLEAC=2;MLEAF=1.00;MQ=60.00;MQ0=0;QD=29.27	GT:AD:DP:GQ:PL	1/1:0,16:16:48:643,48,0
 chromosome_1	330228	.	A	G	599.77	.	AC=2;AF=1.00;AN=2;DP=17;FS=0.000;MLEAC=2;MLEAF=1.00;MQ=54.32;MQ0=0;QD=35.32	GT:AD:DP:GQ:PL	1/1:0,17:17:51:628,51,0
 chromosome_1	330583	.	A	G	715.77	.	AC=2;AF=1.00;AN=2;DP=18;FS=0.000;MLEAC=2;MLEAF=1.00;MQ=55.72;MQ0=0;QD=31.03	GT:AD:DP:GQ:PL	1/1:0,18:18:54:744,54,0

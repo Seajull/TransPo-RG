@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 from Bio import SeqIO
 from subprocess import call, Popen, PIPE
 from pybedtools import BedTool
@@ -13,13 +14,15 @@ required.add_argument("-f1", "--fasta1", dest="fasta1",default=None, help="Input
 required.add_argument("-f2", "--fasta2", dest="fasta2", default=None, help="Input of genome fasta2 (target) <fasta>.")
 required.add_argument("-ti", "--tabinput", dest="tabinput", default=None, help="Input of tabbed file related to fasta1 <bed/gff/vcf>")
 optional.add_argument("-b", "--flank", dest="flank", type=int, default=50, help="Size of flank region to extract from each side of the annotation (default : 50).")
-optional.add_argument("-c", "--cds",dest="cds", action="store_true", help="Enable control of postions of CDS inside mRNA (or gene).")
+optional.add_argument("-c", "--cds",dest="cds", action="store_true", help="Enable control of number and postions of CDS inside mRNA (or gene). It generate a new tab file.")
 optional.add_argument("-d", "--directory", dest="directory", default="result", help="Name of the directory where files are generated (default : result).")
 optional.add_argument("-h", "--help", action="help", default=argparse.SUPPRESS,help="Show this help message then exit.")
 optional.add_argument("-i", "--index",dest="index", default=None, action="count", help="Create the index of fasta2 if it doesn't exist (-ii for forcing).")
 optional.add_argument("-l", "--loss",dest="loss", action="store_true", help="Enable the creation of 'StatsLoss' file which contain percentage of loss.")
 optional.add_argument("-n", "--notempfile",dest="notempf", action="store_true", help="Create all file instead of using temporary file.")
+optional.add_argument("-m", "--mismatch",dest="mismatch", default=None, type=int, help="Specify the maximum of mismatch allowed (add option -p if you want a percentage).")
 optional.add_argument("-o", "--output", dest="out", default=None, help="Output file (same format of tabbed file input).")
+optional.add_argument("-p", "--percentage",dest="percentage", action="store_true", help="Allows use of percentage for option --mismatch")
 optional.add_argument("-t", "--type",dest="typeA", default=None, help="Only extract annotation of specified type (gff file only) (example : \"mRNA exon cds\" (case insensitive)).")
 optional.add_argument("-u", "--update", dest="update", action="store_true", help="Update the .version file by checking the git log")
 optional.add_argument("-v", "--verbose",dest="verbose", default=1, type=int, choices=[0,1,2], help="Change verbosity level.")
@@ -70,11 +73,13 @@ if __name__ == '__main__':
     except :
         pass
 
+    if args.mismatch == None :
+        if args.percentage :
+            warnings.warn("Argument --percentage is ignored because argument mismatch is missing.",Warning)
+
     # Creating tempfile (or file if args --notempfile is enable)
     tabOut=tempfile.NamedTemporaryFile()
     tabO=tabOut.name
-    sortS=tempfile.NamedTemporaryFile()
-    sortSam=sortS.name
     if not args.notempf :
         tabOPut=tempfile.NamedTemporaryFile()
         tabOP=tabOPut.name
@@ -134,25 +139,28 @@ def checkDependency() :
         modules but it need further test or a more generic
         test.
     """
-    mod=tempfile.NamedTemporaryFile()
-    listMod=mod.name
-    with open(listMod,"r+") as out :
-        call(["module list"],shell=True,stderr=out)
-        out.seek(0)
-        for line in out :
-            res=re.findall("\)\s([^\s]+)\s+",line)
-            if "listM" in locals() :
-                for i in res :
-                    listM.append(i)
-            else :
-                listM=res
+    p=Popen(["module list"],shell=True, stderr=PIPE)
+    outs,err=p.communicate()
+    listM=re.findall("\w+/\w+/(?:\d+\.?)+",str(err))
+#    mod=tempfile.NamedTemporaryFile()
+#    listMod=mod.name
+#    with open(listMod,"r+") as out :
+#        call(["module list"],shell=True,stderr=out)
+#        out.seek(0)
+#        for line in out :
+#            res=re.findall("\)\s([^\s]+)\s+",line)
+#            if "listM" in locals() :
+#                for i in res :
+#                    listM.append(i)
+#            else :
+#                listM=res
     mandatoryMod=["bioinfo/bwa/0.7.15","bioinfo/bedtools/2.24.0"]
     goInstall=""
     for i in mandatoryMod:
         if i not in listM :
             goInstall += ("/".join(i.split("/")[1:]))+"  "
     if goInstall :
-        sys.exit("ERROR : please, install following tools : " + goInstall)
+        sys.exit("ERROR ! Please, install following tools : " + goInstall)
     return
 
 def parseFa() :
@@ -191,7 +199,11 @@ def prefix() :
                     s+=hasht
                 else :
                     break
-            for feat in fileTab :
+        with open(args.tabinput) as fileTab :
+            for ft in fileTab :
+                feat=ft.split("\t")
+                if ft[0]=="#" :
+                    pass
                 numc=re.search("[^\d]?(\d+)$",feat[0])
                 if numc :
                     s+= first_seq.id[0:-1]+numc.group(1)+"\s"+("\s".join(feat[1:])+"\n")
@@ -357,7 +369,7 @@ def align(tabOp):
         while True :
             if args.verbose !=0:
                 print("\n ----- Mapping selected sequence to fasta2 using 'bwa mem'. ----- \n")
-            p=Popen(["bwa","mem", args.fasta2, selectedSeq],stdout=alout, stderr=PIPE)
+            p=Popen(["bwa","mem",args.fasta2, selectedSeq],stdout=alout, stderr=PIPE)
             err=p.communicate()
             if err[-1].decode("utf-8")[1]=="E" :
                 if args.index == None :
@@ -373,38 +385,22 @@ def align(tabOp):
             print(err[-1].decode("utf-8"))
     return
 
-def parseCigar(sam) :
+def mdParser(lineAln):
     """
-        This function parse the CIGAR code in alignment file
-        in order to get the length of the match.
+        Parse the md tag in the alignment file (format SAM)
+        in order to filter by perfect match (count perfect
+        match).
     """
-    lenCig=[]
-    for i in sam :
-        if int(i[1]) != 0: # Ignoring complementary match (flag 2048)
-            continue
-        leng=0
-        res =re.findall("\d+\w",i[5])
-        for i in res :
-            if i[-1] in ["M","=","X","I","S"] :
-                leng+=int(i[:-1])
-        lenCig.append(leng)
-    return lenCig
+    line=lineAln.split("\t")
+    if line[12][0:2]!="MD" :
+        return 0
+    md=line[12].split(":")[-1]
+    count=re.findall("\d+",md)
+    tot=0
+    for c in count :
+        tot+=int(c)
+    return tot
 
-#def sorting(aln) :
-#    fil=[]
-#    if args.verbose != 0 :
-#        print(" ----- Sorting file '"+aln+"'. ----- ")
-#    with open(aln, "r") as samsoul, open(sortSam,"w") as soulsam :
-#        for i in samsoul :
-#            if i[0]!="@" :
-#                fil.append(i.split("\t"))
-#            else :
-#                soulsam.write(i)
-#        #for i in sorted(samsoul) :
-#        #    soulsam.write(i)
-#        for i in sorted(fil, key=lambda ok: (ok[0][0],int(ok[0].split("_")[1].split(":")[0]),int(ok[0].split(":")[1].split("-")[0]),int(ok[0].split(":")[1].split("-")[1]))) :
-#            soulsam.write("\t".join(i))
-#        alnN=sortSam
 
 def samToTab() :
     """
@@ -423,8 +419,6 @@ def samToTab() :
         as extension). It return the name of the file created.
     """
     tabou=""
-    if ext !="vcf" :
-        lengh=parseCigar(BedTool(alnN))
     if (ext=="gff3" and args.typeA != None) or change:
         args.tabinput=tabO
     with open(args.tabinput,"r") as tabi, open(alnN,"r") as sam :
@@ -436,27 +430,43 @@ def samToTab() :
             tabou += "# File generated the "+datetime.datetime.now().strftime("%d %b %Y") + " with following command line : \n"+"# "+" ".join(sys.argv)+"\n"
             break
         for f in sam : # samf = alignment file inside Bedtools object
+            isMd = True
             samf=f.split("\t")
             if samf[0][0]=="@" :
                 continue
             if int(samf[1])!=0 : # Ignoring complementary match (flag 2048)
                 continue
-            if ext != "vcf" :
+            leng=0
+            res=re.findall("\d+\w",samf[5])
+            for i in res :
+                if i[-1] in ["M","=","X","I","S"] :
+                    leng+=int(i[:-1])
+            if leng > args.flank :
+                leng=leng-args.flank
+            else :
                 leng=0
-                res=re.findall("\d+\w",samf[5])
-                for i in res :
-                    if i[-1] in ["M","=","X","I","S"] :
-                        leng+=int(i[:-1])
+            countM=mdParser(f) # countM is the number of perfect match for a alignment
+            if args.mismatch != None :
+                if not args.percentage :
+                    if countM >= leng-args.mismatch :
+                        isMd = True
+                    else :
+                        isMd = False
+                else :
+                    if countM >= leng-((args.mismatch*leng)/100) :
+                        isMd = True
+                    else :
+                        isMd = False
             tab=samf[0].replace("\\s"," ").split("__")
-            if ext == "gff3" :
+            if ext == "gff3" and isMd:
                 tab[3]=int(samf[3])+args.flank
                 tab[4]=int(tab[3])+leng-args.flank
                 tabou+="\s".join(map(str,tab))+"\n"
-            elif ext == "bed" :
+            elif ext == "bed" and isMd:
                 tab[1]=int(samf[3])+args.flank
                 tab[2]=int(tab[1])+leng-args.flank
                 tabou+="\s".join(map(str,tab))+"\n"
-            elif ext == "vcf" and samf[5]==str(len(tab[3])+(args.flank*2))+"M" :
+            elif ext == "vcf" and isMd : #samf[5]==str(len(tab[3])+(args.flank*2))+"M" :
                 tab[1]=int(samf[3])+args.flank
                 tabou+="\s".join(map(str,tab))+"\n"
             #if f[11][-1]!="0" and f[5]=="101M":     # show ID of sequence which contain a missmatch
@@ -508,12 +518,12 @@ def getPosCds(tab) :
             if typeA == "cds":
                 cdsStart=int(start)-int(posGene[1])
                 cdsStop=int(stop)-int(posGene[1])
-                if cdsStart > cdsStop :
-                    warnings.resetwarnings()
-                    warnings.filterwarnings("error")
-                    warnings.warn("Start > stop",Warning)
-                resTag=re.search("ID=(\w+((\.?\w+)?)+)",getags)
-                resTagCds=re.search("Parent=(\w+((\.?\w+)?)+)",lineSplit[-1])
+               # if cdsStart > cdsStop :
+               #     warnings.resetwarnings()
+               #     warnings.filterwarnings("error")
+               #     warnings.warn("Start > stop",Warning)
+                resTag=re.search("ID=(\w+)",getags)
+                resTagCds=re.search("Parent=(\w+)",lineSplit[-1])
                 if resTag and resTagCds:
                     if str(resTag.group(1))==str(resTagCds.group(1)) :
                         dicoPos[posGene].append([cdsStart,cdsStop])
@@ -543,7 +553,7 @@ def isComplete(samtotabOut) :
             for key2 in dicoPos2.keys() :
                 if key2[0]==key1[0] :
                     if len(dicoPos1[key1]) == len(dicoPos2[key2]) :
-                        geneInt.append(key1[1])
+                        geneInt.append(key2[1])
                        # for v in range (0,len(dicoPos1[key1])) :
                        #     print(dicoPos1[key1][v])
                        #     if dicoPos1[key1][v] == dicoPos2[key2][v] : # TODO : c'est de la merde.
@@ -564,11 +574,11 @@ def isComplete(samtotabOut) :
                     continue
                 lineS=line.strip().split("\t")
                 if lineS[2].lower() == typeC : # TODO : unreadable
-                    resTag=re.search("ID=(\w+((\.?\w+)?)+)",lineS[-1])
+                    resTag=re.search("ID=(\w+)",lineS[-1])
                     if resTag :
                         geneId=resTag.group(1)
                 if lineS[2] =="CDS" :
-                    resTagCds=re.search("Parent=(\w+((\.?\w+)?)+)",lineS[-1])
+                    resTagCds=re.search("Parent=(\w+)",lineS[-1])
                     if resTagCds :
                         cdsId=resTagCds.group(1)
                 if lineS[2].lower() ==typeC :
@@ -588,6 +598,9 @@ def isComplete(samtotabOut) :
     return
 
 def indexTab(fil) :
+    """
+        Index the output tab file by chromosome.
+    """
     dico={}
     with open(fil,"r") as ok :
         for i in ok :
@@ -601,8 +614,20 @@ def indexTab(fil) :
     return(dico)
 
 def checkLoss() :
-    dicOri=collections.OrderedDict(sorted(indexTab(args.tabinput).items(), key=lambda jm: (jm[0].split("_")[0],int(jm[0].split("_")[-1]))))
-    dicNew=collections.OrderedDict(sorted(indexTab(args.out).items(), key=lambda jm: (jm[0].split("_")[0],int(jm[0].split("_")[-1]))))
+    """
+        Check the difference of number of line between the
+        output tab file to the input tab file and show the
+        percentage of loss per chromosome.
+        Write those stats in [tab_input_name]_statsloss.
+        It's a tab separate file with 5 columns :
+                ID  REF  TARGET  LOSS  %
+    """
+    try :
+        dicOri=collections.OrderedDict(sorted(indexTab(args.tabinput).items(), key=lambda jm: (int(jm[0].split("_")[0]))))
+        dicNew=collections.OrderedDict(sorted(indexTab(args.out).items(), key=lambda jm: (int(jm[0].split("_")[0]))))
+    except :
+        dicOri=collections.OrderedDict(sorted(indexTab(args.tabinput).items(), key=lambda jm: (jm[0].split("_")[0],int(jm[0].split("_")[-1]))))
+        dicNew=collections.OrderedDict(sorted(indexTab(args.out).items(), key=lambda jm: (jm[0].split("_")[0],int(jm[0].split("_")[-1]))))
     statFile=args.directory+"/"+".".join(args.fasta1.split(".")[:-1]).split("/")[-1]+"_statsLoss"
     with open(statFile,"w") as lossOut :
         print(" ----- Creating file '"+statFile+"'. ----- \n")

@@ -98,3 +98,33 @@ chromosome_1    phytozome       exon    2164    2829    .       +       .       
 chromosome_1    phytozome       CDS     2164    2829    .       +       0       Parent=Sb01g000200.1
 chromosome_1    phytozome       gene    11418   14814   .       -       .       ID=Sb01g000210;Name=Sb01g000210;Note=similar to RabGAP/TBC domain-containing protein%2C putative%2C expressed
 chromosome_1    phytozome       mRNA    11418   14814   .       -       .       ID=Sb01g000210.1;Parent=Sb01g000210;Dbxref=Phytozome:1949294,KOG:KOG2197,TAIR:AT4G27100.1,MSU:LOC_Os11g37690.1;Name=Sb01g000210.1;Note=similar to RabGAP/TBC domain-containing protein%2C putative%2C expressed;Ontology_term=GO:0005097,GO:0032313,GO:0005622
+
+
+Rufipogon FASTA :
+    /gs7k1/projects/DAR/RGH/Oryza_rufipogon/Oryza_rufipogon.OR_W1943.dna.toplevel.fa
+
+
+Glaberrima (riz africain)
+    FASTA
+        /gs7k1/projects/DAR/RGH/Oryza_glaberrima/Oryza_glaberrima.AGI1.1.dna.toplevel.fa
+    VCF
+        /gs7k1/projects/DAR/RGH/Oryza_glaberrima/oryza_glaberrima_incl_consequences.vcf.gz
+
+Nipponbare
+    FASTA
+        /gs7k1/projects/DAR/RGH/Oryza_sativa_Nipponbare/Oryza_sativa_Nipponbare_7.0.assembly.fasta
+    VCF
+        /gs7k1/projects/DAR/RGH/Oryza_sativa_Nipponbare/oryza_sativa_incl_consequences.vcf.gz
+
+
+
+
+
+
+
+
+
+
+
+
+

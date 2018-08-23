@@ -9,7 +9,7 @@ with open(sys.argv[1]) as j :
         line=i.split("\t")
         if line[0][0]=="#" :
             continue
-        if line[2]=="mRNA" :
+        if line[2]=="gene" :
             numGENE+=1
             sli[numGENE]=[]
             if numGENE == 17346 :
